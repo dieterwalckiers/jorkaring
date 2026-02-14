@@ -1,0 +1,54 @@
+<script setup lang="ts">
+const { data: siteSettings } = useSiteSettings()
+
+const policyLinks = [
+  { label: 'Algemene voorwaarden', to: '/algemene-voorwaarden' },
+  { label: 'Privacybeleid', to: '/privacybeleid' },
+  { label: 'Cookiebeleid', to: '/cookiebeleid' },
+]
+
+const cmsFooterLinks = computed(() => {
+  const links = siteSettings.value?.footer?.links ?? []
+  return links.map((link) => ({
+    label: link.text,
+    to: link.url,
+  }))
+})
+</script>
+
+<template>
+  <USeparator class="footer-separator" />
+
+  <UFooter class="footer-brand-text">
+    <template #left>
+      <p class="text-sm">
+        &copy; {{ new Date().getFullYear() }} jorkaring
+      </p>
+    </template>
+
+    <UNavigationMenu :items="policyLinks" variant="link" />
+
+    <template #right>
+      <UNavigationMenu
+        v-if="cmsFooterLinks.length"
+        :items="cmsFooterLinks"
+        variant="link"
+      />
+    </template>
+  </UFooter>
+</template>
+
+<style scoped>
+.footer-separator {
+  --ui-border: var(--color-brandsecondarymedium);
+}
+
+.footer-brand-text {
+  color: var(--color-font-brand1);
+}
+
+.footer-brand-text :deep(a),
+.footer-brand-text :deep(button) {
+  color: var(--color-font-brand1);
+}
+</style>

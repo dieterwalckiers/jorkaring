@@ -1,0 +1,80 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: payload
+      POSTGRES_PASSWORD: payload
+      POSTGRES_DB: payload
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - jorkaring
+
+  payload:
+    build:
+      context: ./payload
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3202:3000"
+    volumes:
+      - ./payload/src:/app/src
+      - ./payload/public:/app/public
+      - ./payload/data:/app/data
+      - ./payload/scripts:/app/scripts
+      - ./payload/backups:/app/backups
+      - ./payload/package.json:/app/package.json
+      - payload_node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://payload:payload@postgres:5432/payload
+      - PAYLOAD_SECRET=development-secret-key-change-in-production
+    depends_on:
+      - postgres
+    networks:
+      - jorkaring
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "3201:3000"
+    volumes:
+      - ./web/app:/app/app
+      - ./web/public:/app/public
+      - ./web/nuxt.config.ts:/app/nuxt.config.ts
+    environment:
+      - PAYLOAD_API_URL=http://payload:3000/api
+      - NUXT_PUBLIC_PAYLOAD_API_URL=http://localhost:3202/api
+    depends_on:
+      - payload
+    networks:
+      - jorkaring
+
+  storybook:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    command: pnpm exec storybook dev -p 6006 --host 0.0.0.0 --no-open
+    ports:
+      - "6006:6006"
+    environment:
+      - STORYBOOK=true
+      - NODE_ENV=development
+    volumes:
+      - ./web/app:/app/app
+      - ./web/public:/app/public
+      - ./web/.storybook:/app/.storybook
+      - ./web/nuxt.config.ts:/app/nuxt.config.ts
+    networks:
+      - jorkaring
+
+networks:
+  jorkaring:
+    driver: bridge
+
+volumes:
+  payload_node_modules:
+  postgres_data:

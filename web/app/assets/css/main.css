@@ -1,0 +1,219 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme {
+  /* Component styling */
+  --radius-button: .7rem;
+
+  --color-brandprimarymedium: #f15b4e;
+  --color-brandprimarydark: #6b081d;
+  --color-brandsecondarylight: #efebe7;
+  --color-brandsecondarylight2: #dedfde;
+  --color-brandsecondarymedium: #e3cac0;
+  --color-brandsecondarymedium2: #7c9198;
+
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-warning-700: #b45309;
+
+  --color-error-50: #fef2f2;
+  --color-error-100: #fee2e2;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+  --color-error-700: #b91c1c;
+
+  --color-info-50: #eff6ff;
+  --color-info-100: #dbeafe;
+  --color-info-500: #3b82f6;
+  --color-info-600: #2563eb;
+  --color-info-700: #1d4ed8;
+
+  /* Typography */
+  --color-font: #373031;
+  --color-font-brand1: #6b081d;
+  --color-font-brand2: #f15b4e;
+  --color-font-accent: #8B5A4A;
+  --color-font-highlight: #f15b4e;
+
+  /* Accent */
+  --color-accent: #8B5A4A;
+
+  /* Highlight */
+  --color-highlight: #f15b4e;
+
+  /* Header */
+  --color-header-border: var(--color-brandsecondarymedium);
+}
+
+@source "../../../app/components/**/*.vue";
+@source "../../../app/layouts/**/*.vue";
+@source "../../../app/pages/**/*.vue";
+@source "../../../app/app.vue";
+@source "../../../app/app.config.ts";
+
+/* Force light mode - override dark mode even if system prefers dark */
+html.dark {
+  color-scheme: light !important;
+  --ui-text: var(--ui-color-neutral-900) !important;
+  --ui-text-muted: var(--ui-color-neutral-500) !important;
+  --ui-text-dimmed: var(--ui-color-neutral-400) !important;
+  --ui-bg: transparent !important;
+  --ui-bg-muted: var(--ui-color-neutral-100) !important;
+  --ui-bg-elevated: var(--ui-color-neutral-50) !important;
+  --ui-border: var(--ui-color-neutral-200) !important;
+  --ui-border-muted: var(--ui-color-neutral-200) !important;
+}
+
+/* Make Nuxt UI components transparent so body background shows through */
+:root {
+  --ui-bg: transparent;
+
+  --color-button-font: var(--color-brandprimarydark);
+  --color-button-bg: transparent;
+  --color-button-bg-hover: var(--color-brandsecondarymedium);
+  --color-table-borders: var(--color-brandsecondarymedium);
+  --color-headings: var(--color-brandprimarydark);
+
+  --color-sticky-message-txt: var(--color-brandsecondarylight);
+  --color-sticky-message-bg: var(--color-brandprimarydark);
+}
+
+/* Mobile menu slideover - slightly transparent background */
+[role="dialog"] {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Mobile menu slideover - allow header to expand for logo and add padding */
+[role="dialog"] [data-slot="header"] {
+  height: auto;
+  min-height: var(--ui-header-height);
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: none;
+}
+
+/* Global base font size for all body text (15px * 1.2 = 18px) */
+body {
+  font-size: 18px;
+}
+
+/* Text color classes for rich text content */
+.text-color-gradient {
+  background: linear-gradient(to right, var(--color-brandprimarydark), var(--color-brandprimarymedium));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-color-base {
+  color: var(--color-font);
+}
+
+.text-color-brand1 {
+  color: var(--color-font-brand1);
+}
+
+.text-color-brand2 {
+  color: var(--color-font-brand2);
+}
+
+.text-color-accent {
+  color: var(--color-accent);
+}
+
+.text-color-highlight {
+  color: var(--color-highlight);
+}
+
+/* Legacy support: keep old class for backwards compatibility */
+.gradient-text {
+  background: linear-gradient(to right, var(--color-brandprimarydark), var(--color-brandprimarymedium));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Global heading color */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-headings);
+  font-weight: bold;
+}
+
+/* Custom checkbox - ensure consistent sizing for all states */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  flex-shrink: 0;
+  border: 2px solid #9ca3af;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+/* Custom checkbox - show gradient checkmark image when checked */
+input[type="checkbox"]:checked {
+  background-image: url('/check.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-color: transparent;
+}
+
+/* Styled numbered list with boxed numbers */
+.styled-numbered-list {
+  list-style: none;
+  counter-reset: styled-counter;
+  padding-left: 0;
+}
+
+.styled-numbered-list > li {
+  counter-increment: styled-counter;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.styled-numbered-list > li::before {
+  content: counter(styled-counter);
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  padding: 0 0.25rem;
+  border: 2px solid var(--color-brandprimarydark);
+  border-radius: 0.375rem;
+  color: var(--color-brandprimarydark);
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+/* Numbered list starting at 0 (counter-reset -1 so first increment is 0) */
+.numbered-list-start-zero .styled-numbered-list {
+  counter-reset: styled-counter -1;
+}
+
+/* Button inline style for rich text editor buttons */
+.btn-outline-inline {
+  display: inline-block;
+  border: 2px solid var(--color-button-font);
+  color: var(--color-button-font);
+  background-color: var(--color-button-bg);
+  font-weight: 600;
+  padding: 0.625rem 1.5rem;
+  border-radius: 9999px;
+  transition: background-color 150ms, color 150ms;
+  text-decoration: none;
+}
+
+.btn-outline-inline:hover {
+  background-color: var(--color-button-bg-hover);
+}

@@ -1,0 +1,322 @@
+/* Custom admin styles - WYSIWYG preview matching frontend */
+
+/* Define brand colors to match frontend */
+:root {
+  --color-brandprimarydark: #6b081d;
+  --color-brandprimarymedium: #f15b4e;
+  --color-font: #373031;
+  --color-font-brand1: #6b081d;
+  --color-font-brand2: #f15b4e;
+  --color-accent: #8B5A4A;
+  --color-highlight: #f15b4e;
+  --color-headings: var(--color-brandprimarydark);
+}
+
+/* ===========================================
+   HEADINGS - Color and size matching frontend
+   =========================================== */
+
+/* Heading colors - match frontend's h1-h6 { color: var(--color-headings) } */
+[data-lexical-editor="true"] h1,
+[data-lexical-editor="true"] h2,
+[data-lexical-editor="true"] h3,
+[data-lexical-editor="true"] h4,
+[data-lexical-editor="true"] h5,
+[data-lexical-editor="true"] h6,
+.LexicalEditorTheme__h1,
+.LexicalEditorTheme__h2,
+.LexicalEditorTheme__h3,
+.LexicalEditorTheme__h4,
+.LexicalEditorTheme__h5,
+.LexicalEditorTheme__h6 {
+  color: var(--color-headings) !important;
+  font-weight: bold !important;
+}
+
+/* Heading sizes - match frontend's Tailwind classes */
+[data-lexical-editor="true"] h1,
+.LexicalEditorTheme__h1 {
+  font-size: 2.25rem !important; /* text-4xl */
+  line-height: 2.5rem !important;
+  margin-bottom: 1rem !important;
+}
+
+[data-lexical-editor="true"] h2,
+.LexicalEditorTheme__h2 {
+  font-size: 1.875rem !important; /* text-3xl */
+  line-height: 2.25rem !important;
+  margin-bottom: 1rem !important;
+}
+
+[data-lexical-editor="true"] h3,
+.LexicalEditorTheme__h3 {
+  font-size: 1.5rem !important; /* text-2xl */
+  line-height: 2rem !important;
+  margin-bottom: 1rem !important;
+}
+
+[data-lexical-editor="true"] h4,
+.LexicalEditorTheme__h4 {
+  font-size: 1.25rem !important; /* text-xl */
+  line-height: 1.75rem !important;
+  margin-bottom: 1rem !important;
+}
+
+[data-lexical-editor="true"] h5,
+.LexicalEditorTheme__h5 {
+  font-size: 1.125rem !important; /* text-lg */
+  line-height: 1.75rem !important;
+  margin-bottom: 1rem !important;
+}
+
+[data-lexical-editor="true"] h6,
+.LexicalEditorTheme__h6 {
+  font-size: 1rem !important; /* text-base */
+  line-height: 1.5rem !important;
+  margin-bottom: 1rem !important;
+}
+
+/* ===========================================
+   PARAGRAPHS - Spacing matching frontend
+   =========================================== */
+
+[data-lexical-editor="true"] p,
+.LexicalEditorTheme__paragraph {
+  margin-bottom: 1rem !important;
+}
+
+/* ===========================================
+   LISTS - Styling matching frontend
+   =========================================== */
+
+[data-lexical-editor="true"] ul,
+.LexicalEditorTheme__ul {
+  list-style-type: disc !important;
+  list-style-position: inside !important;
+  margin-bottom: 1rem !important;
+}
+
+[data-lexical-editor="true"] ol,
+.LexicalEditorTheme__ol {
+  list-style-type: decimal !important;
+  list-style-position: inside !important;
+  margin-bottom: 1rem !important;
+}
+
+[data-lexical-editor="true"] li,
+.LexicalEditorTheme__listItem {
+  margin-bottom: 0.25rem !important;
+}
+
+/* Nested list indentation */
+[data-lexical-editor="true"] li ul,
+[data-lexical-editor="true"] li ol {
+  margin-left: 1.5rem !important;
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.25rem !important;
+}
+
+/* ===========================================
+   BLOCKQUOTES - Styling matching frontend
+   =========================================== */
+
+[data-lexical-editor="true"] blockquote,
+.LexicalEditorTheme__quote {
+  border-left: 4px solid #d1d5db !important;
+  padding-left: 1rem !important;
+  margin: 1rem 0 !important;
+  font-style: italic !important;
+  color: #6b7280 !important;
+}
+
+/* ===========================================
+   LINKS - Styling matching frontend
+   =========================================== */
+
+[data-lexical-editor="true"] a,
+.LexicalEditorTheme__link {
+  color: #2563eb !important;
+  text-decoration: underline !important;
+}
+
+[data-lexical-editor="true"] a:hover,
+.LexicalEditorTheme__link:hover {
+  color: #1d4ed8 !important;
+}
+
+/* ===========================================
+   IMAGES - Size and alignment matching frontend
+   =========================================== */
+
+/* Base image styling */
+[data-lexical-editor="true"] .lexical-upload img,
+[data-lexical-editor="true"] [data-lexical-decorator] img {
+  border-radius: 0.5rem;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Image size classes - matching frontend RichTextRenderer sizes (scaled 1.2x) */
+/* These work when Payload adds data attributes or classes based on the size field */
+
+/* Tiny Icon (32px -> 38px scaled) */
+[data-lexical-editor="true"] .upload-size-tiny-icon img,
+[data-lexical-editor="true"] [data-upload-size="tiny-icon"] img {
+  max-width: 38px !important;
+}
+
+/* Small Icon (48px -> 58px scaled) */
+[data-lexical-editor="true"] .upload-size-small-icon img,
+[data-lexical-editor="true"] [data-upload-size="small-icon"] img {
+  max-width: 58px !important;
+}
+
+/* Icon (64px -> 77px scaled) */
+[data-lexical-editor="true"] .upload-size-icon img,
+[data-lexical-editor="true"] [data-upload-size="icon"] img {
+  max-width: 77px !important;
+}
+
+/* Large Icon (100px -> 120px scaled) */
+[data-lexical-editor="true"] .upload-size-large-icon img,
+[data-lexical-editor="true"] [data-upload-size="large-icon"] img {
+  max-width: 120px !important;
+}
+
+/* Tiny (200px -> 240px scaled) */
+[data-lexical-editor="true"] .upload-size-tiny img,
+[data-lexical-editor="true"] [data-upload-size="tiny"] img {
+  max-width: 240px !important;
+}
+
+/* Small (300px -> 360px scaled) */
+[data-lexical-editor="true"] .upload-size-small img,
+[data-lexical-editor="true"] [data-upload-size="small"] img {
+  max-width: 360px !important;
+}
+
+/* Medium (500px -> 600px scaled) - default */
+[data-lexical-editor="true"] .upload-size-medium img,
+[data-lexical-editor="true"] [data-upload-size="medium"] img {
+  max-width: 600px !important;
+}
+
+/* Large (700px -> 840px scaled) */
+[data-lexical-editor="true"] .upload-size-large img,
+[data-lexical-editor="true"] [data-upload-size="large"] img {
+  max-width: 840px !important;
+}
+
+/* Extra Large (900px -> 1080px scaled) */
+[data-lexical-editor="true"] .upload-size-xlarge img,
+[data-lexical-editor="true"] [data-upload-size="xlarge"] img {
+  max-width: 1080px !important;
+}
+
+/* Huge (1200px -> 1440px scaled) */
+[data-lexical-editor="true"] .upload-size-huge img,
+[data-lexical-editor="true"] [data-upload-size="huge"] img {
+  max-width: 1440px !important;
+}
+
+/* Full Width */
+[data-lexical-editor="true"] .upload-size-full img,
+[data-lexical-editor="true"] [data-upload-size="full"] img {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* Image alignment classes */
+[data-lexical-editor="true"] .upload-align-left,
+[data-lexical-editor="true"] [data-upload-alignment="left"] {
+  display: flex !important;
+  justify-content: flex-start !important;
+}
+
+[data-lexical-editor="true"] .upload-align-center,
+[data-lexical-editor="true"] [data-upload-alignment="center"] {
+  display: flex !important;
+  justify-content: center !important;
+}
+
+[data-lexical-editor="true"] .upload-align-right,
+[data-lexical-editor="true"] [data-upload-alignment="right"] {
+  display: flex !important;
+  justify-content: flex-end !important;
+}
+
+/* ===========================================
+   TEXT COLORS - Effects in Lexical rich text editor
+   =========================================== */
+
+/* Gradient text */
+.LexicalEditorTheme__text [style*="--text-color: gradient"],
+.LexicalEditorTheme__text [style*="--gradient-text"],
+[data-lexical-editor="true"] [style*="--text-color: gradient"],
+[data-lexical-editor="true"] [style*="--gradient-text"] {
+  background: linear-gradient(to right, var(--color-brandprimarydark), var(--color-brandprimarymedium));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Base color */
+.LexicalEditorTheme__text [style*="--text-color: base"],
+[data-lexical-editor="true"] [style*="--text-color: base"] {
+  color: var(--color-font) !important;
+}
+
+/* Brand 1 color */
+.LexicalEditorTheme__text [style*="--text-color: brand1"],
+[data-lexical-editor="true"] [style*="--text-color: brand1"] {
+  color: var(--color-font-brand1) !important;
+}
+
+/* Brand 2 color */
+.LexicalEditorTheme__text [style*="--text-color: brand2"],
+[data-lexical-editor="true"] [style*="--text-color: brand2"] {
+  color: var(--color-font-brand2) !important;
+}
+
+/* Accent color */
+.LexicalEditorTheme__text [style*="--text-color: accent"],
+[data-lexical-editor="true"] [style*="--text-color: accent"] {
+  color: var(--color-accent) !important;
+}
+
+/* Highlight color */
+.LexicalEditorTheme__text [style*="--text-color: highlight"],
+[data-lexical-editor="true"] [style*="--text-color: highlight"] {
+  color: var(--color-highlight) !important;
+}
+
+/* ===========================================
+   CODE BLOCKS - Styling matching frontend
+   =========================================== */
+
+[data-lexical-editor="true"] code,
+.LexicalEditorTheme__code {
+  background-color: #f3f4f6 !important;
+  padding: 0.125rem 0.375rem !important;
+  border-radius: 0.25rem !important;
+  font-size: 0.875rem !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+
+[data-lexical-editor="true"] pre,
+.LexicalEditorTheme__codeBlock {
+  background-color: #f3f4f6 !important;
+  padding: 1rem !important;
+  border-radius: 0.5rem !important;
+  overflow-x: auto !important;
+  margin: 1rem 0 !important;
+}
+
+/* ===========================================
+   HORIZONTAL RULE
+   =========================================== */
+
+[data-lexical-editor="true"] hr {
+  margin: 2rem 0 !important;
+  border-color: #e5e7eb !important;
+}
