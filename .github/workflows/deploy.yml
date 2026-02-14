@@ -1,0 +1,84 @@
+name: Build and Deploy
+
+on:
+  # Trigger on content changes from Payload CMS webhook
+  repository_dispatch:
+    types: [content_update]
+
+  # Trigger on code changes
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - '.github/workflows/deploy.yml'
+
+  # Allow manual trigger
+  workflow_dispatch:
+
+# Auto-cancel previous runs when new ones are triggered
+# This prevents queue buildup during:
+# - Multiple rapid content edits in Payload CMS
+# - Bulk content operations (imports, migrations, etc.)
+# Only the most recent deploy will complete, saving CI time and ensuring
+# the deployed site always reflects the latest content state
+concurrency:
+  group: deploy-production
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+          cache-dependency-path: web/pnpm-lock.yaml
+
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: web/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('web/pnpm-lock.yaml') }}
+
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        working-directory: web
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Nuxt build
+        uses: actions/cache@v4
+        with:
+          path: web/.nuxt
+          key: ${{ runner.os }}-nuxt-${{ hashFiles('web/**/*.vue', 'web/**/*.ts', 'web/nuxt.config.ts', 'web/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-nuxt-
+
+      - name: Generate static site
+        working-directory: web
+        env:
+          # Both needed: PAYLOAD_API_URL for server-side rendering, NUXT_PUBLIC_PAYLOAD_API_URL for client
+          PAYLOAD_API_URL: ${{ secrets.PAYLOAD_API_URL }}
+          NUXT_PUBLIC_PAYLOAD_API_URL: ${{ secrets.PAYLOAD_API_URL }}
+          NODE_OPTIONS: '--max-old-space-size=8192'
+        run: pnpm run generate
+
+      - name: Deploy to FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: web/.output/public/
+          server-dir: ${{ secrets.FTP_SERVER_DIR || './' }}
