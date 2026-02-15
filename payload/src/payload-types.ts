@@ -1148,6 +1148,397 @@ export interface SiteSetting {
      */
     closeable?: boolean | null;
   };
+  /**
+   * Configure a landing/entrance page that appears when visitors hit the root URL. It replaces the normal home page and hides the header/footer.
+   */
+  splashPage?: {
+    /**
+     * When enabled, visitors will see the splash page instead of the normal home page
+     */
+    enabled?: boolean | null;
+    /**
+     * Centers all content horizontally and vertically in a full-screen (100vw x 100vh) wrapper
+     */
+    centered?: boolean | null;
+    /**
+     * Add and arrange content blocks for the splash page
+     */
+    content?:
+      | (
+          | {
+              /**
+               * Tally form ID (from the Tally embed URL, e.g. "81x1GP")
+               */
+              tallyFormId: string;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'contactForm';
+            }
+          | {
+              /**
+               * Add content cells to the grid
+               */
+              cells: {
+                /**
+                 * Cell content
+                 */
+                content: {
+                  root: {
+                    type: string;
+                    children: {
+                      type: any;
+                      version: number;
+                      [k: string]: unknown;
+                    }[];
+                    direction: ('ltr' | 'rtl') | null;
+                    format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                    indent: number;
+                    version: number;
+                  };
+                  [k: string]: unknown;
+                };
+                id?: string | null;
+              }[];
+              /**
+               * Number of columns on desktop
+               */
+              numberOfColumns?: ('2' | '3' | '4' | '5') | null;
+              /**
+               * Horizontal text alignment within cells
+               */
+              horizontalAlignment?: ('left' | 'center' | 'right') | null;
+              /**
+               * Vertical alignment of cells
+               */
+              verticalAlignment?: ('top' | 'center' | 'bottom') | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'contentGrid';
+            }
+          | {
+              /**
+               * The main headline text
+               */
+              headline?: string | null;
+              /**
+               * Supporting text below the headline
+               */
+              subheadline?: string | null;
+              /**
+               * Background image for the hero section
+               */
+              backgroundImage?: (number | null) | Media;
+              /**
+               * Vertical focal point in % (0 = top, 50 = center, 100 = bottom)
+               */
+              focalPointY?: number | null;
+              /**
+               * Text alignment within the hero
+               */
+              alignment?: ('left' | 'center' | 'right') | null;
+              /**
+               * Height of the hero section
+               */
+              height?: ('small' | 'medium' | 'large' | 'xl' | 'xxl') | null;
+              /**
+               * Call-to-action buttons (max 2)
+               */
+              links?:
+                | {
+                    label: string;
+                    /**
+                     * URL or path (e.g., /contact or https://example.com)
+                     */
+                    url: string;
+                    variant?: ('solid' | 'outline' | 'ghost') | null;
+                    id?: string | null;
+                  }[]
+                | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'hero';
+            }
+          | {
+              /**
+               * Heading text, e.g. "Subscribe to our newsletter"
+               */
+              heading?: string | null;
+              /**
+               * Optional supporting text below the heading
+               */
+              description?: string | null;
+              /**
+               * Text for the submit button
+               */
+              buttonLabel?: string | null;
+              /**
+               * Placeholder text for the email input, e.g. "Your email address"
+               */
+              emailPlaceholder?: string | null;
+              /**
+               * Message shown after successful subscription
+               */
+              successMessage?: string | null;
+              /**
+               * Mailchimp form action URL (from embed code), e.g. "https://yourlist.us1.list-manage.com/subscribe/post?u=...&id=..."
+               */
+              mailchimpActionUrl: string;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'newsletterSignup';
+            }
+          | {
+              content: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              };
+              width?: ('1/4' | '1/3' | 'half' | '2/3' | '3/4' | 'full') | null;
+              /**
+               * When enabled, the block will be rendered with absolute positioning inside a relative wrapper.
+               */
+              renderFloating?: boolean | null;
+              /**
+               * CSS value for vertical offset, e.g. "20px", "3em", "-10px"
+               */
+              floatingOffset?: string | null;
+              /**
+               * Vertical margin above and below the block
+               */
+              margin?: ('none' | 'small' | 'medium' | 'large') | null;
+              /**
+               * Background color for this block
+               */
+              backgroundColor?: string | null;
+              /**
+               * Apply rounded corners to the block
+               */
+              roundedCorners?: boolean | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'richText';
+            }
+          | {
+              /**
+               * The height of the spacer
+               */
+              height: 'xxxs' | 'xxs' | 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl' | 'xxxl';
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'spacer';
+            }
+          | {
+              /**
+               * Title and description text (use headings for the title)
+               */
+              text: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              };
+              /**
+               * Call-to-action buttons
+               */
+              buttons?:
+                | {
+                    /**
+                     * Button text
+                     */
+                    caption: string;
+                    /**
+                     * URL or path (e.g., /contact or https://example.com)
+                     */
+                    link: string;
+                    id?: string | null;
+                  }[]
+                | null;
+              /**
+               * Choose between image or video for the visual element
+               */
+              mediaType?: ('image' | 'video') | null;
+              /**
+               * The image to display
+               */
+              image?: (number | null) | Media;
+              /**
+               * Horizontal focal point in % (0 = left, 50 = center, 100 = right)
+               */
+              focalPointX?: number | null;
+              /**
+               * Vertical focal point in % (0 = top, 50 = center, 100 = bottom)
+               */
+              focalPointY?: number | null;
+              /**
+               * Vimeo video ID (e.g., "123456789" from vimeo.com/123456789)
+               */
+              vimeoId?: string | null;
+              /**
+               * Poster image shown before the video plays
+               */
+              videoPoster?: (number | null) | Media;
+              /**
+               * Call-to-action text displayed over the video poster
+               */
+              videoCtaCaption?: string | null;
+              /**
+               * Position of the media relative to the text
+               */
+              imagePosition?: ('left' | 'right') | null;
+              /**
+               * Width percentage of the media section (20-80%)
+               */
+              imagePercentage?: number | null;
+              /**
+               * How to size the image: fixed aspect ratio or natural dimensions
+               */
+              imageSizingMode?: ('ratio' | 'natural') | null;
+              /**
+               * Aspect ratio of the image (width/height)
+               */
+              imageRatio?:
+                | ('2/3' | '3/4' | '4/5' | '5/6' | '9/10' | '1/1' | '10/9' | '6/5' | '5/4' | '4/3' | '3/2')
+                | null;
+              /**
+               * Vertical margin above and below the image
+               */
+              imageVerticalMargin?: ('none' | 'small' | 'medium' | 'large') | null;
+              /**
+               * Horizontal margin on left and right of the image
+               */
+              imageHorizontalMargin?: ('none' | 'small' | 'medium' | 'large') | null;
+              /**
+               * Maximum size of the image (maintains natural aspect ratio)
+               */
+              imageSize?:
+                | (
+                    | 'tiny-icon'
+                    | 'small-icon'
+                    | 'icon'
+                    | 'large-icon'
+                    | 'tiny'
+                    | 'small'
+                    | 'medium'
+                    | 'large'
+                    | 'xlarge'
+                    | 'huge'
+                  )
+                | null;
+              /**
+               * Margin around the text container (centered within text section)
+               */
+              textContainerMargin?: ('none' | 'small' | 'medium' | 'large') | null;
+              /**
+               * Background color for this block
+               */
+              backgroundColor?: string | null;
+              /**
+               * Color stretches horizontally across the full page width (content stays within container)
+               */
+              fullBleed?: boolean | null;
+              /**
+               * Apply rounded corners to the entire block
+               */
+              roundedCorners?: boolean | null;
+              /**
+               * Text is collapsed to the height of the media with a fade effect. A "Lees meer" button expands it.
+               */
+              collapsedByDefault?: boolean | null;
+              /**
+               * If checked, numbered lists in this block start at 0 instead of 1
+               */
+              startNumberedListAtZero?: boolean | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'splitTextImage';
+            }
+          | {
+              /**
+               * Enter table data in CSV format. Each line is a row, columns separated by commas.
+               */
+              csvData: string;
+              /**
+               * Show borders between cells
+               */
+              showBorders?: boolean | null;
+              /**
+               * First row are column titles (styled differently)
+               */
+              firstRowAreTitles?: boolean | null;
+              /**
+               * Last row cells are clickable buttons
+               */
+              lastRowAreButtons?: boolean | null;
+              /**
+               * Button links in CSV format (one link per column, e.g., "/page1,/page2,/page3")
+               */
+              buttonLinksCsv?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'table';
+            }
+          | {
+              /**
+               * Add testimonials to display in the carousel
+               */
+              testimonials: {
+                /**
+                 * The testimonial quote text
+                 */
+                quote: string;
+                /**
+                 * Name of the person giving the testimonial (e.g. "John Doe (Company)")
+                 */
+                name: string;
+                id?: string | null;
+              }[];
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'testimonials';
+            }
+          | {
+              /**
+               * Vimeo video ID (e.g., "123456789" from vimeo.com/123456789)
+               */
+              vimeoId: string;
+              /**
+               * Poster image shown before the video plays
+               */
+              posterImage: number | Media;
+              /**
+               * Call-to-action button text that appears over the poster image
+               */
+              ctaCaption?: string | null;
+              /**
+               * Width of the video player
+               */
+              width?: ('half' | '2/3' | '3/4' | 'full') | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: 'video';
+            }
+        )[]
+      | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1202,6 +1593,158 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | {
         content?: T;
         closeable?: T;
+      };
+  splashPage?:
+    | T
+    | {
+        enabled?: T;
+        centered?: T;
+        content?:
+          | T
+          | {
+              contactForm?:
+                | T
+                | {
+                    tallyFormId?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              contentGrid?:
+                | T
+                | {
+                    cells?:
+                      | T
+                      | {
+                          content?: T;
+                          id?: T;
+                        };
+                    numberOfColumns?: T;
+                    horizontalAlignment?: T;
+                    verticalAlignment?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              hero?:
+                | T
+                | {
+                    headline?: T;
+                    subheadline?: T;
+                    backgroundImage?: T;
+                    focalPointY?: T;
+                    alignment?: T;
+                    height?: T;
+                    links?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          variant?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                    blockName?: T;
+                  };
+              newsletterSignup?:
+                | T
+                | {
+                    heading?: T;
+                    description?: T;
+                    buttonLabel?: T;
+                    emailPlaceholder?: T;
+                    successMessage?: T;
+                    mailchimpActionUrl?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              richText?:
+                | T
+                | {
+                    content?: T;
+                    width?: T;
+                    renderFloating?: T;
+                    floatingOffset?: T;
+                    margin?: T;
+                    backgroundColor?: T;
+                    roundedCorners?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              spacer?:
+                | T
+                | {
+                    height?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              splitTextImage?:
+                | T
+                | {
+                    text?: T;
+                    buttons?:
+                      | T
+                      | {
+                          caption?: T;
+                          link?: T;
+                          id?: T;
+                        };
+                    mediaType?: T;
+                    image?: T;
+                    focalPointX?: T;
+                    focalPointY?: T;
+                    vimeoId?: T;
+                    videoPoster?: T;
+                    videoCtaCaption?: T;
+                    imagePosition?: T;
+                    imagePercentage?: T;
+                    imageSizingMode?: T;
+                    imageRatio?: T;
+                    imageVerticalMargin?: T;
+                    imageHorizontalMargin?: T;
+                    imageSize?: T;
+                    textContainerMargin?: T;
+                    backgroundColor?: T;
+                    fullBleed?: T;
+                    roundedCorners?: T;
+                    collapsedByDefault?: T;
+                    startNumberedListAtZero?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              table?:
+                | T
+                | {
+                    csvData?: T;
+                    showBorders?: T;
+                    firstRowAreTitles?: T;
+                    lastRowAreButtons?: T;
+                    buttonLinksCsv?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              testimonials?:
+                | T
+                | {
+                    testimonials?:
+                      | T
+                      | {
+                          quote?: T;
+                          name?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                    blockName?: T;
+                  };
+              video?:
+                | T
+                | {
+                    vimeoId?: T;
+                    posterImage?: T;
+                    ctaCaption?: T;
+                    width?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+            };
       };
   updatedAt?: T;
   createdAt?: T;

@@ -4,6 +4,12 @@ import type { Page, PagesResponse } from '~/types/page'
 const apiUrl = usePayloadApiUrl()
 const { data: siteSettings } = useSiteSettings()
 
+const splashBlocks = computed(() =>
+  siteSettings.value?.splashPage?.enabled ? siteSettings.value.splashPage.content ?? [] : []
+)
+
+const showSplash = computed(() => splashBlocks.value.length > 0)
+
 // Use native fetch to avoid $fetch caching issues during SSG
 const { data: response } = await useAsyncData(
   'page-index-home',
@@ -36,7 +42,13 @@ useSeoMeta({
 </script>
 
 <template>
-  <UContainer>
+  <!-- Splash page: full viewport, no container -->
+  <div v-if="showSplash" class="h-dvh w-dvw" :class="siteSettings?.splashPage?.centered ? 'flex items-center justify-center' : ''">
+    <BlocksBlockRenderer :blocks="splashBlocks" />
+  </div>
+
+  <!-- Normal home page -->
+  <UContainer v-else>
     <!-- Default welcome when no home page exists -->
     <UPageHero
       v-if="!page"

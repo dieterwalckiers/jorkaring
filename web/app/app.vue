@@ -5,6 +5,13 @@ import { resolveColor } from '~/utils/resolveColor'
 
 const { data: siteSettings } = useSiteSettings()
 const payloadBaseUrl = usePayloadBaseUrl()
+const route = useRoute()
+
+const splashActive = computed(() =>
+  route.path === '/'
+  && !!siteSettings.value?.splashPage?.enabled
+  && !!siteSettings.value.splashPage.content?.length
+)
 
 const faviconUrl = computed(() => {
   const favicon = siteSettings.value?.favicon
@@ -63,7 +70,7 @@ useHead(() => ({
 
 <template>
   <UApp>
-    <TheHeader />
+    <TheHeader v-if="!splashActive" />
 
     <UMain>
       <NuxtLayout>
@@ -71,7 +78,7 @@ useHead(() => ({
       </NuxtLayout>
     </UMain>
 
-    <TheFooter />
+    <TheFooter v-if="!splashActive" />
 
     <StickyMessage
       v-if="siteSettings?.stickyMessage?.content"

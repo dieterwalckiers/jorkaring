@@ -1,4 +1,5 @@
 import type { Media } from './media'
+import type { ContentBlock } from './blocks'
 
 export type ContainerWidth = 'narrower' | 'default' | 'wider'
 export type HeaderMenuAlignment = 'left' | 'center' | 'right'
@@ -44,6 +45,12 @@ export interface SiteCookieConsent {
   policyLinkText?: string
 }
 
+export interface SplashPage {
+  enabled?: boolean
+  centered?: boolean
+  content?: ContentBlock[]
+}
+
 export interface SiteSettings {
   id: string
   siteTitle: string
@@ -54,6 +61,7 @@ export interface SiteSettings {
   headContent?: SiteHeadContent
   cookieConsent?: SiteCookieConsent
   stickyMessage?: SiteStickyMessage
+  splashPage?: SplashPage
   createdAt: string
   updatedAt: string
 }

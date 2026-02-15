@@ -91,7 +91,7 @@ export function useSiteSettings() {
 
   const result = useFetch<SiteSettings>(`${apiUrl}/globals/site-settings`, {
     query: {
-      depth: 1, // Include media relation
+      depth: 2, // Include media relations and nested block media
     },
     key: 'siteSettings',
     dedupe: 'defer',
