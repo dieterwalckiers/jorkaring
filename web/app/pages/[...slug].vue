@@ -32,6 +32,9 @@ const { data: response, error } = await useAsyncData(
 
 const page = computed<Page | null>(() => response.value?.docs?.[0] || null)
 
+const { setCurrentPage } = useCurrentPage()
+watch(page, (p) => setCurrentPage(p), { immediate: true })
+
 const siteTitle = computed(() => siteSettings.value?.siteTitle ?? '')
 
 useHead(() => ({

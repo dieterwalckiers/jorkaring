@@ -84,6 +84,19 @@ export const Pages: CollectionConfig = {
       },
     },
     {
+      name: 'menuFilter',
+      type: 'relationship',
+      relationTo: 'pages',
+      hasMany: true,
+      admin: {
+        description: 'If set, only these pages will appear in the main menu when viewing this page. Leave empty to show the full menu.',
+      },
+      filterOptions: ({ id }) => ({
+        showInMenu: { equals: true },
+        id: { not_equals: id },
+      }),
+    },
+    {
       name: 'content',
       type: 'blocks',
       blocks: [ContactForm, ContentGrid, Hero, NewsletterSignup, RichText, Spacer, SplitTextImage, Table, Testimonials, Video],

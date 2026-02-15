@@ -17,6 +17,7 @@ interface ToolbarItem {
 }
 
 const route = useRoute()
+const { currentPage } = useCurrentPage()
 const apiUrl = usePayloadApiUrl()
 const payloadBaseUrl = usePayloadBaseUrl()
 
@@ -190,7 +191,18 @@ const headerStyle = computed(() => {
 
 const navItems = computed<NavItem[]>(() => {
   const pages = response.value?.docs ?? []
-  return pages.map((page) => {
+  const menuFilter = currentPage.value?.menuFilter
+
+  const filteredPages = (menuFilter && menuFilter.length > 0)
+    ? (() => {
+        const allowedIds = new Set(menuFilter.map((ref) =>
+          typeof ref === 'object' && ref !== null ? ref.id : ref
+        ))
+        return pages.filter((page) => allowedIds.has(page.id))
+      })()
+    : pages
+
+  return filteredPages.map((page) => {
     const isHome = page.slug === 'home'
     const pagePath = isHome ? '/' : `/${page.slug}`
     return {

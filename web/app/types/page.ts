@@ -1,5 +1,11 @@
 import type { ContentBlock } from './blocks'
 
+export interface PageRef {
+  id: string
+  title: string
+  slug: string
+}
+
 export interface PageSeo {
   description?: string
 }
@@ -13,6 +19,7 @@ export interface Page {
   showInToolbar?: boolean
   toolbarLabel?: string
   toolbarOrder?: number
+  menuFilter?: PageRef[]
   content?: ContentBlock[]
   seo?: PageSeo
   createdAt: string
