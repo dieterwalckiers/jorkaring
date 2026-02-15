@@ -1,16 +1,36 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
-@theme {
-  /* Component styling */
-  --radius-button: .7rem;
-
+/*
   --color-brandprimarymedium: #f15b4e;
   --color-brandprimarydark: #6b081d;
   --color-brandsecondarylight: #efebe7;
   --color-brandsecondarylight2: #dedfde;
   --color-brandsecondarymedium: #e3cac0;
   --color-brandsecondarymedium2: #7c9198;
+
+  --color-font: #373031;
+  --color-font-brand1: #6b081d;
+  --color-font-brand2: #f15b4e;
+  --color-font-accent: #8B5A4A;
+  --color-font-highlight: #f15b4e;
+
+  --color-accent: #8B5A4A;
+
+  --color-highlight: #f15b4e;
+*/
+
+@theme {
+  /* Component styling */
+  --radius-button: .7rem;
+
+  --color-brandprimarymedium: #5E6E83;
+  --color-brandprimarydark: #5E6E83;
+
+  --color-brandsecondarylight: #B6C9BB;
+  --color-brandsecondarylight2: #BFEDC1;
+  --color-brandsecondarymedium: #EA8928;
+  --color-brandsecondarymedium2: #656565;
 
   --color-warning-50: #fffbeb;
   --color-warning-100: #fef3c7;
