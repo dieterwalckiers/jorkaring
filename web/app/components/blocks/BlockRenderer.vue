@@ -12,6 +12,7 @@ defineProps<{
       <BlocksContactFormBlock v-if="block.blockType === 'contactForm'" :block="block" />
       <BlocksContentGridBlock v-else-if="block.blockType === 'contentGrid'" :block="block" />
       <BlocksHeroBlock v-else-if="block.blockType === 'hero'" :block="block" />
+      <BlocksLogoMarqueeBlock v-else-if="block.blockType === 'logoMarquee'" :block="block" />
       <BlocksNewsletterSignupBlock v-else-if="block.blockType === 'newsletterSignup'" :block="block" />
       <BlocksRichTextBlock v-else-if="block.blockType === 'richText'" :block="block" />
       <BlocksSpacerBlock v-else-if="block.blockType === 'spacer'" :block="block" />

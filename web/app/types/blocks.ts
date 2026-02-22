@@ -130,6 +130,21 @@ export interface VideoBlock {
   width?: VideoWidth
 }
 
+export interface LogoMarqueeItem {
+  id?: string
+  image: Media | string
+  alt?: string
+}
+
+export interface LogoMarqueeBlock {
+  id: string
+  blockType: 'logoMarquee'
+  logos: LogoMarqueeItem[]
+  logoSize?: 'small' | 'medium' | 'large'
+  speed?: 'slow' | 'medium' | 'fast'
+  pauseOnHover?: boolean
+}
+
 export interface NewsletterSignupBlock {
   id: string
   blockType: 'newsletterSignup'
@@ -142,4 +157,4 @@ export interface NewsletterSignupBlock {
 }
 
 // Union type for all block types - add more as they are created
-export type ContentBlock = ContactFormBlock | ContentGridBlock | HeroBlock | NewsletterSignupBlock | RichTextBlock | SpacerBlock | SplitTextImageBlock | TableBlock | TestimonialsBlock | VideoBlock
+export type ContentBlock = ContactFormBlock | ContentGridBlock | HeroBlock | LogoMarqueeBlock | NewsletterSignupBlock | RichTextBlock | SpacerBlock | SplitTextImageBlock | TableBlock | TestimonialsBlock | VideoBlock

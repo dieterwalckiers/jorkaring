@@ -1,6 +1,7 @@
 export { ContactForm } from './ContactForm'
 export { ContentGrid } from './ContentGrid'
 export { Hero } from './Hero'
+export { LogoMarquee } from './LogoMarquee'
 export { NewsletterSignup } from './NewsletterSignup'
 export { RichText } from './RichText'
 export { Spacer } from './Spacer'

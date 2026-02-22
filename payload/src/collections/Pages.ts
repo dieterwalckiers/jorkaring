@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { triggerDeploy } from '../hooks/triggerDeploy'
-import { ContactForm, ContentGrid, Hero, NewsletterSignup, RichText, Spacer, SplitTextImage, Table, Testimonials, Video } from '../blocks'
+import { ContactForm, ContentGrid, Hero, LogoMarquee, NewsletterSignup, RichText, Spacer, SplitTextImage, Table, Testimonials, Video } from '../blocks'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -99,7 +99,7 @@ export const Pages: CollectionConfig = {
     {
       name: 'content',
       type: 'blocks',
-      blocks: [ContactForm, ContentGrid, Hero, NewsletterSignup, RichText, Spacer, SplitTextImage, Table, Testimonials, Video],
+      blocks: [ContactForm, ContentGrid, Hero, LogoMarquee, NewsletterSignup, RichText, Spacer, SplitTextImage, Table, Testimonials, Video],
       admin: {
         description: 'Add and arrange content blocks for this page',
       },

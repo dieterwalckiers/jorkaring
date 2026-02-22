@@ -255,6 +255,37 @@ export interface Page {
           }
         | {
             /**
+             * Add logo images to scroll in the marquee (minimum 3)
+             */
+            logos: {
+              /**
+               * Logo image (transparent PNG or SVG recommended)
+               */
+              image: number | Media;
+              /**
+               * Alt text for the logo (overrides media alt text)
+               */
+              alt?: string | null;
+              id?: string | null;
+            }[];
+            /**
+             * Uniform height of the logos
+             */
+            logoSize?: ('small' | 'medium' | 'large') | null;
+            /**
+             * Scrolling speed of the marquee
+             */
+            speed?: ('slow' | 'medium' | 'fast') | null;
+            /**
+             * Pause the marquee when the user hovers over it
+             */
+            pauseOnHover?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'logoMarquee';
+          }
+        | {
+            /**
              * Heading text, e.g. "Subscribe to our newsletter"
              */
             heading?: string | null;
@@ -768,6 +799,22 @@ export interface PagesSelect<T extends boolean = true> {
                     variant?: T;
                     id?: T;
                   };
+              id?: T;
+              blockName?: T;
+            };
+        logoMarquee?:
+          | T
+          | {
+              logos?:
+                | T
+                | {
+                    image?: T;
+                    alt?: T;
+                    id?: T;
+                  };
+              logoSize?: T;
+              speed?: T;
+              pauseOnHover?: T;
               id?: T;
               blockName?: T;
             };
