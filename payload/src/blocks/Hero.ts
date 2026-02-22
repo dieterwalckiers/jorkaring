@@ -1,4 +1,5 @@
 import type { Block } from 'payload'
+import { HeroHeadline, HeroSubheadline, HeroRichText, HeroCta, HeroSpacer } from './hero'
 
 export const Hero: Block = {
   slug: 'hero',
@@ -7,20 +8,6 @@ export const Hero: Block = {
     plural: 'Heroes',
   },
   fields: [
-    {
-      name: 'headline',
-      type: 'text',
-      admin: {
-        description: 'The main headline text',
-      },
-    },
-    {
-      name: 'subheadline',
-      type: 'textarea',
-      admin: {
-        description: 'Supporting text below the headline',
-      },
-    },
     {
       name: 'backgroundImage',
       type: 'upload',
@@ -70,37 +57,12 @@ export const Hero: Block = {
       },
     },
     {
-      name: 'links',
-      type: 'array',
-      maxRows: 2,
+      name: 'content',
+      type: 'blocks',
+      blocks: [HeroHeadline, HeroSubheadline, HeroRichText, HeroCta, HeroSpacer],
       admin: {
-        description: 'Call-to-action buttons (max 2)',
+        description: 'Add and arrange content within the hero',
       },
-      fields: [
-        {
-          name: 'label',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'url',
-          type: 'text',
-          required: true,
-          admin: {
-            description: 'URL or path (e.g., /contact or https://example.com)',
-          },
-        },
-        {
-          name: 'variant',
-          type: 'select',
-          defaultValue: 'solid',
-          options: [
-            { label: 'Solid (Primary)', value: 'solid' },
-            { label: 'Outline', value: 'outline' },
-            { label: 'Ghost', value: 'ghost' },
-          ],
-        },
-      ],
     },
   ],
 }

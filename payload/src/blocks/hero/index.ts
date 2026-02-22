@@ -1,0 +1,5 @@
+export { HeroHeadline } from './HeroHeadline'
+export { HeroSubheadline } from './HeroSubheadline'
+export { HeroRichText } from './HeroRichText'
+export { HeroCta } from './HeroCta'
+export { HeroSpacer } from './HeroSpacer'

@@ -212,14 +212,6 @@ export interface Page {
           }
         | {
             /**
-             * The main headline text
-             */
-            headline?: string | null;
-            /**
-             * Supporting text below the headline
-             */
-            subheadline?: string | null;
-            /**
              * Background image for the hero section
              */
             backgroundImage?: (number | null) | Media;
@@ -236,18 +228,79 @@ export interface Page {
              */
             height?: ('small' | 'medium' | 'large' | 'xl' | 'xxl') | null;
             /**
-             * Call-to-action buttons (max 2)
+             * Add and arrange content within the hero
              */
-            links?:
-              | {
-                  label: string;
-                  /**
-                   * URL or path (e.g., /contact or https://example.com)
-                   */
-                  url: string;
-                  variant?: ('solid' | 'outline' | 'ghost') | null;
-                  id?: string | null;
-                }[]
+            content?:
+              | (
+                  | {
+                      /**
+                       * The main headline text
+                       */
+                      text: string;
+                      id?: string | null;
+                      blockName?: string | null;
+                      blockType: 'heroHeadline';
+                    }
+                  | {
+                      /**
+                       * Supporting text below the headline
+                       */
+                      text: string;
+                      id?: string | null;
+                      blockName?: string | null;
+                      blockType: 'heroSubheadline';
+                    }
+                  | {
+                      content: {
+                        root: {
+                          type: string;
+                          children: {
+                            type: any;
+                            version: number;
+                            [k: string]: unknown;
+                          }[];
+                          direction: ('ltr' | 'rtl') | null;
+                          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                          indent: number;
+                          version: number;
+                        };
+                        [k: string]: unknown;
+                      };
+                      /**
+                       * Content width and alignment within the hero
+                       */
+                      layout?: ('full' | 'left' | 'right') | null;
+                      id?: string | null;
+                      blockName?: string | null;
+                      blockType: 'heroRichText';
+                    }
+                  | {
+                      /**
+                       * Call-to-action buttons (max 4)
+                       */
+                      links: {
+                        label: string;
+                        /**
+                         * URL or path (e.g., /contact or https://example.com)
+                         */
+                        url: string;
+                        variant?: ('solid' | 'outline' | 'ghost') | null;
+                        id?: string | null;
+                      }[];
+                      id?: string | null;
+                      blockName?: string | null;
+                      blockType: 'heroCta';
+                    }
+                  | {
+                      /**
+                       * Height of the spacer within the hero
+                       */
+                      height: 'xs' | 'small' | 'medium' | 'large' | 'xl';
+                      id?: string | null;
+                      blockName?: string | null;
+                      blockType: 'heroSpacer';
+                    }
+                )[]
               | null;
             id?: string | null;
             blockName?: string | null;
@@ -785,19 +838,56 @@ export interface PagesSelect<T extends boolean = true> {
         hero?:
           | T
           | {
-              headline?: T;
-              subheadline?: T;
               backgroundImage?: T;
               focalPointY?: T;
               alignment?: T;
               height?: T;
-              links?:
+              content?:
                 | T
                 | {
-                    label?: T;
-                    url?: T;
-                    variant?: T;
-                    id?: T;
+                    heroHeadline?:
+                      | T
+                      | {
+                          text?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    heroSubheadline?:
+                      | T
+                      | {
+                          text?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    heroRichText?:
+                      | T
+                      | {
+                          content?: T;
+                          layout?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    heroCta?:
+                      | T
+                      | {
+                          links?:
+                            | T
+                            | {
+                                label?: T;
+                                url?: T;
+                                variant?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    heroSpacer?:
+                      | T
+                      | {
+                          height?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                   };
               id?: T;
               blockName?: T;
@@ -1264,14 +1354,6 @@ export interface SiteSetting {
             }
           | {
               /**
-               * The main headline text
-               */
-              headline?: string | null;
-              /**
-               * Supporting text below the headline
-               */
-              subheadline?: string | null;
-              /**
                * Background image for the hero section
                */
               backgroundImage?: (number | null) | Media;
@@ -1288,18 +1370,79 @@ export interface SiteSetting {
                */
               height?: ('small' | 'medium' | 'large' | 'xl' | 'xxl') | null;
               /**
-               * Call-to-action buttons (max 2)
+               * Add and arrange content within the hero
                */
-              links?:
-                | {
-                    label: string;
-                    /**
-                     * URL or path (e.g., /contact or https://example.com)
-                     */
-                    url: string;
-                    variant?: ('solid' | 'outline' | 'ghost') | null;
-                    id?: string | null;
-                  }[]
+              content?:
+                | (
+                    | {
+                        /**
+                         * The main headline text
+                         */
+                        text: string;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'heroHeadline';
+                      }
+                    | {
+                        /**
+                         * Supporting text below the headline
+                         */
+                        text: string;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'heroSubheadline';
+                      }
+                    | {
+                        content: {
+                          root: {
+                            type: string;
+                            children: {
+                              type: any;
+                              version: number;
+                              [k: string]: unknown;
+                            }[];
+                            direction: ('ltr' | 'rtl') | null;
+                            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                            indent: number;
+                            version: number;
+                          };
+                          [k: string]: unknown;
+                        };
+                        /**
+                         * Content width and alignment within the hero
+                         */
+                        layout?: ('full' | 'left' | 'right') | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'heroRichText';
+                      }
+                    | {
+                        /**
+                         * Call-to-action buttons (max 4)
+                         */
+                        links: {
+                          label: string;
+                          /**
+                           * URL or path (e.g., /contact or https://example.com)
+                           */
+                          url: string;
+                          variant?: ('solid' | 'outline' | 'ghost') | null;
+                          id?: string | null;
+                        }[];
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'heroCta';
+                      }
+                    | {
+                        /**
+                         * Height of the spacer within the hero
+                         */
+                        height: 'xs' | 'small' | 'medium' | 'large' | 'xl';
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'heroSpacer';
+                      }
+                  )[]
                 | null;
               id?: string | null;
               blockName?: string | null;
@@ -1674,19 +1817,56 @@ export interface SiteSettingsSelect<T extends boolean = true> {
               hero?:
                 | T
                 | {
-                    headline?: T;
-                    subheadline?: T;
                     backgroundImage?: T;
                     focalPointY?: T;
                     alignment?: T;
                     height?: T;
-                    links?:
+                    content?:
                       | T
                       | {
-                          label?: T;
-                          url?: T;
-                          variant?: T;
-                          id?: T;
+                          heroHeadline?:
+                            | T
+                            | {
+                                text?: T;
+                                id?: T;
+                                blockName?: T;
+                              };
+                          heroSubheadline?:
+                            | T
+                            | {
+                                text?: T;
+                                id?: T;
+                                blockName?: T;
+                              };
+                          heroRichText?:
+                            | T
+                            | {
+                                content?: T;
+                                layout?: T;
+                                id?: T;
+                                blockName?: T;
+                              };
+                          heroCta?:
+                            | T
+                            | {
+                                links?:
+                                  | T
+                                  | {
+                                      label?: T;
+                                      url?: T;
+                                      variant?: T;
+                                      id?: T;
+                                    };
+                                id?: T;
+                                blockName?: T;
+                              };
+                          heroSpacer?:
+                            | T
+                            | {
+                                height?: T;
+                                id?: T;
+                                blockName?: T;
+                              };
                         };
                     id?: T;
                     blockName?: T;

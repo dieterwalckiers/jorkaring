@@ -14,23 +14,56 @@ export interface ContentGridBlock {
   verticalAlignment?: 'top' | 'center' | 'bottom'
 }
 
-export interface HeroLink {
+export interface HeroHeadlineBlock {
+  id: string
+  blockType: 'heroHeadline'
+  text: string
+}
+
+export interface HeroSubheadlineBlock {
+  id: string
+  blockType: 'heroSubheadline'
+  text: string
+}
+
+export type HeroRichTextLayout = 'full' | 'left' | 'right'
+
+export interface HeroRichTextBlock {
+  id: string
+  blockType: 'heroRichText'
+  content: unknown
+  layout?: HeroRichTextLayout
+}
+
+export interface HeroCtaLink {
+  id?: string
   label: string
   url: string
   variant?: 'solid' | 'outline' | 'ghost'
-  id?: string
 }
+
+export interface HeroCtaBlock {
+  id: string
+  blockType: 'heroCta'
+  links: HeroCtaLink[]
+}
+
+export interface HeroSpacerBlock {
+  id: string
+  blockType: 'heroSpacer'
+  height: 'xs' | 'small' | 'medium' | 'large' | 'xl'
+}
+
+export type HeroContentBlock = HeroHeadlineBlock | HeroSubheadlineBlock | HeroRichTextBlock | HeroCtaBlock | HeroSpacerBlock
 
 export interface HeroBlock {
   id: string
   blockType: 'hero'
-  headline?: string
-  subheadline?: string
   backgroundImage?: Media | string
   focalPointY?: number
   alignment?: 'left' | 'center' | 'right'
   height?: 'small' | 'medium' | 'large' | 'xl' | 'xxl'
-  links?: HeroLink[]
+  content?: HeroContentBlock[]
 }
 
 export type RichTextWidth = '1/4' | '1/3' | 'half' | '2/3' | '3/4' | 'full'

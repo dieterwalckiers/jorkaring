@@ -6,19 +6,7 @@ const props = defineProps<{
   block: HeroBlockType
 }>()
 
-const alignmentClass = computed(() => {
-  switch (props.block.alignment) {
-    case 'left':
-      return 'left'
-    case 'right':
-      return 'right'
-    default:
-      return 'center'
-  }
-})
-
 const heightClass = computed(() => {
-  // Responsive heights: smaller on mobile, full size on md+
   switch (props.block.height) {
     case 'small':
       return 'min-h-48 md:min-h-64'
@@ -33,21 +21,13 @@ const heightClass = computed(() => {
   }
 })
 
-const links = computed(() => {
-  if (!props.block.links) return []
-  return props.block.links.map((link) => ({
-    label: link.label,
-    to: link.url,
-    variant: link.variant || 'solid',
-    size: 'lg' as const,
-  }))
-})
-
 const backgroundImage = computed<Media | null>(() => {
   if (!props.block.backgroundImage) return null
   if (typeof props.block.backgroundImage === 'string') return null
   return props.block.backgroundImage
 })
+
+const hasBackground = computed(() => Boolean(backgroundImage.value))
 </script>
 
 <template>
@@ -57,20 +37,25 @@ const backgroundImage = computed<Media | null>(() => {
       v-if="backgroundImage"
       :media="backgroundImage"
       sizes="100vw"
-      :alt="block.headline || ''"
+      alt=""
       :object-position="`center ${block.focalPointY ?? 50}%`"
       cover
       priority
       class="z-0"
     />
-    <UPageHero
-      :title="block.headline"
-      :description="block.subheadline"
-      :links="links"
-      :align="alignmentClass"
-      :ui="backgroundImage ? { title: 'text-white', description: 'text-white/80' } : {}"
-      :class="backgroundImage ? 'relative z-10 h-full' : 'h-full'"
-    />
+    <div
+      class="relative z-10 h-full flex items-center"
+      :class="heightClass"
+    >
+      <div class="container mx-auto px-4 py-8 w-full">
+        <BlocksHeroBlockRenderer
+          v-if="block.content?.length"
+          :blocks="block.content"
+          :alignment="block.alignment"
+          :has-background="hasBackground"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
