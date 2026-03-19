@@ -267,6 +267,7 @@ async function restoreContent(): Promise<void> {
         await payload.create({
           collection: 'pages',
           data: pageData as Record<string, unknown>,
+          draft: true,
         })
         restoredCount++
       } catch (error) {
