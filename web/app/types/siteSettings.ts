@@ -14,7 +14,9 @@ export interface SiteStyling {
   logoSize?: LogoSize
   headerBackgroundColor?: string
   backgroundColor?: string
-  googleFont?: string
+  googleFontBody?: string
+  googleFontH1?: string
+  googleFontHeadings?: string
 }
 
 export interface FooterLink {
@@ -51,6 +53,22 @@ export interface SplashPage {
   content?: ContentBlock[]
 }
 
+export interface SiteThemeColors {
+  color1?: string
+  color2?: string
+  color3?: string
+  color4?: string
+  color5?: string
+  color6?: string
+  font?: string
+  fontBrand1?: string
+  fontBrand2?: string
+  fontAccent?: string
+  fontHighlight?: string
+  accent?: string
+  highlight?: string
+}
+
 export interface SiteSettings {
   id: string
   siteTitle: string
@@ -62,6 +80,7 @@ export interface SiteSettings {
   cookieConsent?: SiteCookieConsent
   stickyMessage?: SiteStickyMessage
   splashPage?: SplashPage
+  themeColors?: SiteThemeColors
   createdAt: string
   updatedAt: string
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Media } from '~/types/media'
-import type { ContainerWidth } from '~/types/siteSettings'
+import type { ContainerWidth, SiteThemeColors } from '~/types/siteSettings'
 import { resolveColor } from '~/utils/resolveColor'
 
 const { data: siteSettings } = useSiteSettings()
@@ -29,15 +29,45 @@ const backgroundColor = computed(() => {
   return resolved !== 'transparent' ? resolved : undefined
 })
 
-const googleFont = computed(() => {
-  return siteSettings.value?.styling?.googleFont
+const googleFontBody = computed(() => siteSettings.value?.styling?.googleFontBody)
+const googleFontH1 = computed(() => siteSettings.value?.styling?.googleFontH1)
+const googleFontHeadings = computed(() => siteSettings.value?.styling?.googleFontHeadings)
+
+const googleFontUrls = computed(() => {
+  const fonts = new Set<string>()
+  if (googleFontBody.value) fonts.add(googleFontBody.value)
+  if (googleFontH1.value) fonts.add(googleFontH1.value)
+  if (googleFontHeadings.value) fonts.add(googleFontHeadings.value)
+
+  if (fonts.size === 0) return []
+
+  // Build a single URL with all font families for efficient loading
+  const families = Array.from(fonts)
+    .map(font => `family=${font.replace(/\s+/g, '+')}:wght@400;600;700`)
+    .join('&')
+  return [`https://fonts.googleapis.com/css2?${families}&display=swap`]
 })
 
-const googleFontUrl = computed(() => {
-  if (!googleFont.value) return undefined
-  const fontName = googleFont.value.replace(/\s+/g, '+')
-  // Only load essential weights (400, 600, 700) with display=swap for fast rendering
-  return `https://fonts.googleapis.com/css2?family=${fontName}:wght@400;600;700&display=swap`
+const fontStyles = computed(() => {
+  const styles: string[] = []
+
+  if (googleFontBody.value) {
+    styles.push(`body { font-family: '${googleFontBody.value}', sans-serif; }`)
+  }
+
+  if (googleFontH1.value) {
+    styles.push(`h1 { font-family: '${googleFontH1.value}', sans-serif; }`)
+  } else if (googleFontBody.value) {
+    styles.push(`h1 { font-family: '${googleFontBody.value}', sans-serif; }`)
+  }
+
+  if (googleFontHeadings.value) {
+    styles.push(`h2, h3, h4, h5, h6 { font-family: '${googleFontHeadings.value}', sans-serif; }`)
+  } else if (googleFontBody.value) {
+    styles.push(`h2, h3, h4, h5, h6 { font-family: '${googleFontBody.value}', sans-serif; }`)
+  }
+
+  return styles.join('\n')
 })
 
 const containerWidthMap: Record<ContainerWidth, string> = {
@@ -51,18 +81,54 @@ const containerWidth = computed(() => {
   return containerWidthMap[width]
 })
 
+/** Map from SiteThemeColors keys to CSS variable names */
+const themeColorCssVarMap: Record<keyof SiteThemeColors, string> = {
+  color1: '--color-1',
+  color2: '--color-2',
+  color3: '--color-3',
+  color4: '--color-4',
+  color5: '--color-5',
+  color6: '--color-6',
+  font: '--color-font',
+  fontBrand1: '--color-font-brand1',
+  fontBrand2: '--color-font-brand2',
+  fontAccent: '--color-font-accent',
+  fontHighlight: '--color-font-highlight',
+  accent: '--color-accent',
+  highlight: '--color-highlight',
+}
+
+const themeColorOverrides = computed(() => {
+  const colors = siteSettings.value?.themeColors
+  if (!colors) return ''
+
+  const overrides: string[] = []
+  for (const [key, cssVar] of Object.entries(themeColorCssVarMap)) {
+    const value = colors[key as keyof SiteThemeColors]
+    if (value) {
+      overrides.push(`  ${cssVar}: ${value};`)
+    }
+  }
+
+  if (overrides.length === 0) return ''
+  return `:root {\n${overrides.join('\n')}\n}`
+})
+
 useHead(() => ({
   link: [
     ...(faviconUrl.value ? [{ rel: 'icon', href: faviconUrl.value }] : []),
-    ...(googleFontUrl.value ? [{ rel: 'stylesheet', href: googleFontUrl.value }] : []),
+    ...googleFontUrls.value.map(href => ({ rel: 'stylesheet', href })),
   ],
   style: [
     { innerHTML: `:root { --ui-container: ${containerWidth.value}; }` },
     ...(backgroundColor.value
       ? [{ innerHTML: `body { background-color: ${backgroundColor.value}; }` }]
       : []),
-    ...(googleFont.value
-      ? [{ innerHTML: `body { font-family: '${googleFont.value}', sans-serif; }` }]
+    ...(fontStyles.value
+      ? [{ innerHTML: fontStyles.value }]
+      : []),
+    ...(themeColorOverrides.value
+      ? [{ innerHTML: themeColorOverrides.value }]
       : []),
   ],
 }))

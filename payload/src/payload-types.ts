@@ -1195,9 +1195,17 @@ export interface SiteSetting {
      */
     backgroundColor?: string | null;
     /**
-     * Google Font name to use for all text (e.g., "Roboto", "Open Sans", "Lato"). Leave empty for system default.
+     * Google Font for body text (e.g., "Roboto", "Open Sans"). Leave empty for system default.
      */
-    googleFont?: string | null;
+    googleFontBody?: string | null;
+    /**
+     * Google Font for H1 headings (e.g., "Playfair Display", "Montserrat"). Leave empty to use body font.
+     */
+    googleFontH1?: string | null;
+    /**
+     * Google Font for H2-H6 headings (e.g., "Raleway", "Oswald"). Leave empty to use body font.
+     */
+    googleFontHeadings?: string | null;
   };
   /**
    * Footer configuration options
@@ -1729,6 +1737,63 @@ export interface SiteSetting {
         )[]
       | null;
   };
+  /**
+   * Customize your brand colors. These override the default theme colors across the entire site.
+   */
+  themeColors?: {
+    /**
+     * Default: #5E6E83
+     */
+    color1?: string | null;
+    /**
+     * Default: #5E6E83
+     */
+    color2?: string | null;
+    /**
+     * Default: #B6C9BB
+     */
+    color3?: string | null;
+    /**
+     * Default: #BFEDC1
+     */
+    color4?: string | null;
+    /**
+     * Default: #EA8928
+     */
+    color5?: string | null;
+    /**
+     * Default: #656565
+     */
+    color6?: string | null;
+    /**
+     * Default: #373031
+     */
+    font?: string | null;
+    /**
+     * Default: #6b081d
+     */
+    fontBrand1?: string | null;
+    /**
+     * Default: #f15b4e
+     */
+    fontBrand2?: string | null;
+    /**
+     * Default: #8B5A4A
+     */
+    fontAccent?: string | null;
+    /**
+     * Default: #f15b4e
+     */
+    fontHighlight?: string | null;
+    /**
+     * Default: #8B5A4A
+     */
+    accent?: string | null;
+    /**
+     * Default: #f15b4e
+     */
+    highlight?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1750,7 +1815,9 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         logoSize?: T;
         headerBackgroundColor?: T;
         backgroundColor?: T;
-        googleFont?: T;
+        googleFontBody?: T;
+        googleFontH1?: T;
+        googleFontHeadings?: T;
       };
   footer?:
     | T
@@ -1972,6 +2039,23 @@ export interface SiteSettingsSelect<T extends boolean = true> {
                     blockName?: T;
                   };
             };
+      };
+  themeColors?:
+    | T
+    | {
+        color1?: T;
+        color2?: T;
+        color3?: T;
+        color4?: T;
+        color5?: T;
+        color6?: T;
+        font?: T;
+        fontBrand1?: T;
+        fontBrand2?: T;
+        fontAccent?: T;
+        fontHighlight?: T;
+        accent?: T;
+        highlight?: T;
       };
   updatedAt?: T;
   createdAt?: T;

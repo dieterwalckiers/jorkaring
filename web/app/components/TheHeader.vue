@@ -78,7 +78,8 @@ const showBorder = computed(() => {
 
 const headerBackgroundColor = computed(() => {
   const raw = siteSettings.value?.styling?.headerBackgroundColor
-  return resolveColorToHex(raw)
+  const cmsColors = siteSettings.value?.themeColors as Record<string, string | undefined> | undefined
+  return resolveColorToHex(raw, cmsColors)
 })
 
 // Height values in rem (numeric for calculations)
@@ -339,7 +340,7 @@ const hasToolbarItems = computed(() => toolbarItems.value.length > 0)
   bottom: -2px;
   width: 100%;
   height: 2px;
-  background: linear-gradient(to right, var(--color-brandprimarydark), var(--color-brandprimarymedium));
+  background: linear-gradient(to right, var(--color-2), var(--color-1));
   transform: scaleX(0);
   transition: transform 0.2s ease;
 }

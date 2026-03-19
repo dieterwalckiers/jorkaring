@@ -60,7 +60,7 @@ async function navigate(direction: 'up' | 'down') {
 </script>
 
 <template>
-  <section class="testimonials-block bg-brandsecondarymedium py-6 md:py-10 px-4 md:px-16 rounded-3xl">
+  <section class="testimonials-block bg-color-5 py-6 md:py-10 px-4 md:px-16 rounded-3xl">
     <div class="max-w-4xl mx-auto flex items-center gap-4 md:gap-8">
       <!-- Testimonial content with height animation -->
       <div

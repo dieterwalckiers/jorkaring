@@ -1,36 +1,33 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
-/*
-  --color-brandprimarymedium: #f15b4e;
-  --color-brandprimarydark: #6b081d;
-  --color-brandsecondarylight: #efebe7;
-  --color-brandsecondarylight2: #dedfde;
-  --color-brandsecondarymedium: #e3cac0;
-  --color-brandsecondarymedium2: #7c9198;
+@theme {
+  /* Component styling */
+  --radius-button: .7rem;
 
+  /* Theme colors (CMS-editable) */
+  --color-1: #5E6E83;
+  --color-2: #5E6E83;
+  --color-3: #B6C9BB;
+  --color-4: #BFEDC1;
+  --color-5: #EA8928;
+  --color-6: #656565;
+
+  /* Typography */
   --color-font: #373031;
   --color-font-brand1: #6b081d;
   --color-font-brand2: #f15b4e;
   --color-font-accent: #8B5A4A;
   --color-font-highlight: #f15b4e;
 
+  /* Accent */
   --color-accent: #8B5A4A;
 
+  /* Highlight */
   --color-highlight: #f15b4e;
-*/
 
-@theme {
-  /* Component styling */
-  --radius-button: .7rem;
-
-  --color-brandprimarymedium: #5E6E83;
-  --color-brandprimarydark: #5E6E83;
-
-  --color-brandsecondarylight: #B6C9BB;
-  --color-brandsecondarylight2: #BFEDC1;
-  --color-brandsecondarymedium: #EA8928;
-  --color-brandsecondarymedium2: #656565;
+  /* Header */
+  --color-header-border: var(--color-5);
 
   --color-warning-50: #fffbeb;
   --color-warning-100: #fef3c7;
@@ -49,22 +46,6 @@
   --color-info-500: #3b82f6;
   --color-info-600: #2563eb;
   --color-info-700: #1d4ed8;
-
-  /* Typography */
-  --color-font: #373031;
-  --color-font-brand1: #6b081d;
-  --color-font-brand2: #f15b4e;
-  --color-font-accent: #8B5A4A;
-  --color-font-highlight: #f15b4e;
-
-  /* Accent */
-  --color-accent: #8B5A4A;
-
-  /* Highlight */
-  --color-highlight: #f15b4e;
-
-  /* Header */
-  --color-header-border: var(--color-brandsecondarymedium);
 }
 
 @source "../../../app/components/**/*.vue";
@@ -90,14 +71,14 @@ html.dark {
 :root {
   --ui-bg: transparent;
 
-  --color-button-font: var(--color-brandprimarydark);
+  --color-button-font: var(--color-2);
   --color-button-bg: transparent;
-  --color-button-bg-hover: var(--color-brandsecondarymedium);
-  --color-table-borders: var(--color-brandsecondarymedium);
-  --color-headings: var(--color-brandprimarydark);
+  --color-button-bg-hover: var(--color-5);
+  --color-table-borders: var(--color-5);
+  --color-headings: var(--color-2);
 
-  --color-sticky-message-txt: var(--color-brandsecondarylight);
-  --color-sticky-message-bg: var(--color-brandprimarydark);
+  --color-sticky-message-txt: var(--color-3);
+  --color-sticky-message-bg: var(--color-2);
 }
 
 /* Mobile menu slideover - slightly transparent background */
@@ -121,7 +102,7 @@ body {
 
 /* Text color classes for rich text content */
 .text-color-gradient {
-  background: linear-gradient(to right, var(--color-brandprimarydark), var(--color-brandprimarymedium));
+  background: linear-gradient(to right, var(--color-2), var(--color-1));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -149,7 +130,7 @@ body {
 
 /* Legacy support: keep old class for backwards compatibility */
 .gradient-text {
-  background: linear-gradient(to right, var(--color-brandprimarydark), var(--color-brandprimarymedium));
+  background: linear-gradient(to right, var(--color-2), var(--color-1));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -208,9 +189,9 @@ input[type="checkbox"]:checked {
   min-width: 1.75rem;
   height: 1.75rem;
   padding: 0 0.25rem;
-  border: 2px solid var(--color-brandprimarydark);
+  border: 2px solid var(--color-2);
   border-radius: 0.375rem;
-  color: var(--color-brandprimarydark);
+  color: var(--color-2);
   font-weight: 600;
   font-size: 0.875rem;
   line-height: 1;
@@ -236,4 +217,5 @@ input[type="checkbox"]:checked {
 
 .btn-outline-inline:hover {
   background-color: var(--color-button-bg-hover);
+  color: white;
 }

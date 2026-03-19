@@ -1,14 +1,23 @@
 'use client'
 
-import { useCallback, useState, useEffect } from 'react'
-import { useField, FieldLabel, TextInput } from '@payloadcms/ui'
+import { useCallback, useState, useEffect, useMemo } from 'react'
+import { useField, useConfig, FieldLabel, TextInput } from '@payloadcms/ui'
 import type { TextFieldClientComponent } from 'payload'
 import {
   THEME_COLORS,
-  CUSTOM_COLOR_KEY,
   isThemeColorKey,
-  resolveColorToHex,
 } from '../config/themeColors'
+import type { ThemeColor } from '../config/themeColors'
+
+/** Map from THEME_COLORS key to themeColors field name in site-settings */
+const THEME_COLOR_FIELD_MAP: Record<string, string> = {
+  color1: 'color1',
+  color2: 'color2',
+  color3: 'color3',
+  color4: 'color4',
+  color5: 'color5',
+  color6: 'color6',
+}
 
 /**
  * Color swatch component for displaying a single color option
@@ -56,6 +65,40 @@ function ColorSwatch({
  */
 export const ColorField: TextFieldClientComponent = ({ field, path }) => {
   const { value, setValue } = useField<string>({ path })
+  const { config } = useConfig()
+
+  // Fetch CMS theme colors from site-settings
+  const [cmsColors, setCmsColors] = useState<Record<string, string>>({})
+  useEffect(() => {
+    const apiPath = config.routes?.api || '/api'
+    fetch(`${config.serverURL || ''}${apiPath}/globals/site-settings?depth=0`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.themeColors) {
+          const colors: Record<string, string> = {}
+          for (const [key, val] of Object.entries(data.themeColors)) {
+            if (typeof val === 'string' && val) {
+              colors[key] = val
+            }
+          }
+          setCmsColors(colors)
+        }
+      })
+      .catch(() => {
+        // Silently fall back to hardcoded defaults
+      })
+  }, [config.routes?.api, config.serverURL])
+
+  // Merge CMS theme colors into the static THEME_COLORS for display
+  const displayColors: ThemeColor[] = useMemo(() => {
+    return THEME_COLORS.map((color) => {
+      const fieldName = THEME_COLOR_FIELD_MAP[color.key]
+      if (fieldName && cmsColors[fieldName]) {
+        return { ...color, hex: cmsColors[fieldName] }
+      }
+      return color
+    })
+  }, [cmsColors])
 
   // Determine if current value is a theme color or custom
   const isCustomValue = value ? !isThemeColorKey(value) && value !== '' : false
@@ -99,8 +142,13 @@ export const ColorField: TextFieldClientComponent = ({ field, path }) => {
     [setValue]
   )
 
-  // Get current preview color
-  const previewHex = resolveColorToHex(value)
+  // Get current preview color using CMS-aware colors
+  const previewHex = useMemo(() => {
+    if (!value) return 'transparent'
+    const match = displayColors.find((c) => c.key === value)
+    if (match) return match.hex
+    return value
+  }, [value, displayColors])
 
   return (
     <div className="field-type text" style={{ marginBottom: '1rem' }}>
@@ -128,7 +176,7 @@ export const ColorField: TextFieldClientComponent = ({ field, path }) => {
           alignItems: 'center',
         }}
       >
-        {THEME_COLORS.map((color) => (
+        {displayColors.map((color) => (
           <div
             key={color.key}
             style={{
@@ -153,7 +201,7 @@ export const ColorField: TextFieldClientComponent = ({ field, path }) => {
                 lineHeight: '1.1',
               }}
             >
-              {color.label.replace('Brand ', '').replace('Secondary ', '')}
+              {color.label}
             </span>
           </div>
         ))}
@@ -255,7 +303,7 @@ export const ColorField: TextFieldClientComponent = ({ field, path }) => {
             }}
           />
           <span>
-            {THEME_COLORS.find((c) => c.key === value)?.label || value}
+            {displayColors.find((c) => c.key === value)?.label || value}
           </span>
         </div>
       )}

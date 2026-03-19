@@ -2,14 +2,14 @@
 
 /* Define brand colors to match frontend */
 :root {
-  --color-brandprimarydark: #6b081d;
-  --color-brandprimarymedium: #f15b4e;
+  --color-1: #5E6E83;
+  --color-2: #5E6E83;
   --color-font: #373031;
   --color-font-brand1: #6b081d;
   --color-font-brand2: #f15b4e;
   --color-accent: #8B5A4A;
   --color-highlight: #f15b4e;
-  --color-headings: var(--color-brandprimarydark);
+  --color-headings: var(--color-2);
 }
 
 /* ===========================================
@@ -254,7 +254,7 @@
 .LexicalEditorTheme__text [style*="--gradient-text"],
 [data-lexical-editor="true"] [style*="--text-color: gradient"],
 [data-lexical-editor="true"] [style*="--gradient-text"] {
-  background: linear-gradient(to right, var(--color-brandprimarydark), var(--color-brandprimarymedium));
+  background: linear-gradient(to right, var(--color-2), var(--color-1));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

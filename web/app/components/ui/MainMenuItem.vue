@@ -45,7 +45,7 @@ defineProps<Props>()
   bottom: -2px;
   width: 100%;
   height: 2px;
-  background: linear-gradient(to right, var(--color-brandprimarydark), var(--color-brandprimarymedium));
+  background: linear-gradient(to right, var(--color-2), var(--color-1));
   transform: scaleX(0);
   transition: transform 0.2s ease;
 }

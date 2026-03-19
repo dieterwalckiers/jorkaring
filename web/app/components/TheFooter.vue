@@ -40,7 +40,7 @@ const cmsFooterLinks = computed(() => {
 
 <style scoped>
 .footer-separator {
-  --ui-border: var(--color-brandsecondarymedium);
+  --ui-border: var(--color-5);
 }
 
 .footer-brand-text {

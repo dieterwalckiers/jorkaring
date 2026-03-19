@@ -91,10 +91,9 @@ export const Pages: CollectionConfig = {
       admin: {
         description: 'If set, only these pages will appear in the main menu when viewing this page. Leave empty to show the full menu.',
       },
-      filterOptions: ({ id }) => ({
+      filterOptions: {
         showInMenu: { equals: true },
-        id: { not_equals: id },
-      }),
+      },
     },
     {
       name: 'content',

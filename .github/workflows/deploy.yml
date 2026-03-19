@@ -25,8 +25,13 @@ concurrency:
   group: deploy-production
   cancel-in-progress: true
 
+# Required for GitHub Pages deployment
+permissions:
+  pages: write
+  id-token: write
+
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -74,11 +79,19 @@ jobs:
           NODE_OPTIONS: '--max-old-space-size=8192'
         run: pnpm run generate
 
-      - name: Deploy to FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: web/.output/public/
-          server-dir: ${{ secrets.FTP_SERVER_DIR || './' }}
+          path: web/.output/public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

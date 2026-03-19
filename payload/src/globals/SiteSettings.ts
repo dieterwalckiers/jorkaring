@@ -12,6 +12,7 @@ import {
 } from '@payloadcms/richtext-lexical'
 import { triggerDeploy } from '../hooks/triggerDeploy'
 import { createColorField } from '../fields/colorField'
+import { createHexColorField } from '../fields/hexColorField'
 import { ContactForm, ContentGrid, Hero, NewsletterSignup, RichText, Spacer, SplitTextImage, Table, Testimonials, Video } from '../blocks'
 
 export const SiteSettings: GlobalConfig = {
@@ -146,11 +147,27 @@ export const SiteSettings: GlobalConfig = {
                   description: 'Background color for the website',
                 }),
                 {
-                  name: 'googleFont',
+                  name: 'googleFontBody',
                   type: 'text',
-                  label: 'Google Font',
+                  label: 'Body Text Font',
                   admin: {
-                    description: 'Google Font name to use for all text (e.g., "Roboto", "Open Sans", "Lato"). Leave empty for system default.',
+                    description: 'Google Font for body text (e.g., "Roboto", "Open Sans"). Leave empty for system default.',
+                  },
+                },
+                {
+                  name: 'googleFontH1',
+                  type: 'text',
+                  label: 'Main Header (H1) Font',
+                  admin: {
+                    description: 'Google Font for H1 headings (e.g., "Playfair Display", "Montserrat"). Leave empty to use body font.',
+                  },
+                },
+                {
+                  name: 'googleFontHeadings',
+                  type: 'text',
+                  label: 'Other Headers (H2-H6) Font',
+                  admin: {
+                    description: 'Google Font for H2-H6 headings (e.g., "Raleway", "Oswald"). Leave empty to use body font.',
                   },
                 },
               ],
@@ -360,6 +377,116 @@ export const SiteSettings: GlobalConfig = {
                     condition: (data) => data?.splashPage?.enabled,
                   },
                 },
+              ],
+            },
+          ],
+        },
+        {
+          label: 'Theme Colors',
+          fields: [
+            {
+              name: 'themeColors',
+              type: 'group',
+              label: false,
+              admin: {
+                description: 'Customize your brand colors. These override the default theme colors across the entire site.',
+              },
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    createHexColorField({
+                      name: 'color1',
+                      label: 'Color 1',
+                      defaultValue: '#5E6E83',
+                    }),
+                    createHexColorField({
+                      name: 'color2',
+                      label: 'Color 2',
+                      defaultValue: '#5E6E83',
+                    }),
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    createHexColorField({
+                      name: 'color3',
+                      label: 'Color 3',
+                      defaultValue: '#B6C9BB',
+                    }),
+                    createHexColorField({
+                      name: 'color4',
+                      label: 'Color 4',
+                      defaultValue: '#BFEDC1',
+                    }),
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    createHexColorField({
+                      name: 'color5',
+                      label: 'Color 5',
+                      defaultValue: '#EA8928',
+                    }),
+                    createHexColorField({
+                      name: 'color6',
+                      label: 'Color 6',
+                      defaultValue: '#656565',
+                    }),
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    createHexColorField({
+                      name: 'font',
+                      label: 'Font Color',
+                      defaultValue: '#373031',
+                    }),
+                    createHexColorField({
+                      name: 'fontBrand1',
+                      label: 'Font Brand 1',
+                      defaultValue: '#6b081d',
+                    }),
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    createHexColorField({
+                      name: 'fontBrand2',
+                      label: 'Font Brand 2',
+                      defaultValue: '#f15b4e',
+                    }),
+                    createHexColorField({
+                      name: 'fontAccent',
+                      label: 'Font Accent',
+                      defaultValue: '#8B5A4A',
+                    }),
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    createHexColorField({
+                      name: 'fontHighlight',
+                      label: 'Font Highlight',
+                      defaultValue: '#f15b4e',
+                    }),
+                    createHexColorField({
+                      name: 'accent',
+                      label: 'Accent',
+                      defaultValue: '#8B5A4A',
+                    }),
+                  ],
+                },
+                createHexColorField({
+                  name: 'highlight',
+                  label: 'Highlight',
+                  defaultValue: '#f15b4e',
+                }),
               ],
             },
           ],

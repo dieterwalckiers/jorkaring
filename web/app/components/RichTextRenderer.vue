@@ -237,7 +237,7 @@ function renderNode(node: LexicalNode): string {
     }
 
     case 'horizontalrule': {
-      return '<hr class="my-8 border-[var(--color-brandsecondarymedium)]" />'
+      return '<hr class="my-8 border-[var(--color-5)]" />'
     }
 
     case 'linebreak': {

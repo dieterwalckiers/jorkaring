@@ -24,7 +24,7 @@ export default defineNuxtConfig({
 
   app: {
     // Use root path for Storybook, custom path for production
-    baseURL: process.env.STORYBOOK === 'true' ? '/' : '/jorka/',
+    baseURL: '/',
     head: {
       link: [
         // Preconnect to Google Fonts for faster font loading
