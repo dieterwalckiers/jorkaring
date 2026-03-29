@@ -4,10 +4,12 @@ import type { Media } from '~/types/media'
 import type { HeaderMenuAlignment, HeaderHeight, LogoSize } from '~/types/siteSettings'
 import MainMenuItem from '~/components/ui/MainMenuItem.vue'
 import { resolveColorToHex, isHexColor } from '~/utils/resolveColor'
+import { slugify } from '~/utils/slugify'
 
 interface NavItem {
   label: string
-  to: string
+  to?: string
+  href?: string
   active?: boolean
 }
 
@@ -190,12 +192,25 @@ const headerStyle = computed(() => {
   return style
 })
 
+const inPageMenuItems = computed<NavItem[]>(() => {
+  const blocks = currentPage.value?.content
+  if (!blocks) return []
+  return blocks
+    .filter((b): b is import('~/types/blocks').InPageMenuTitleBlock => b.blockType === 'inPageMenuTitle')
+    .map((b) => ({
+      label: b.title,
+      href: `#${slugify(b.title)}`,
+    }))
+})
+
 const navItems = computed<NavItem[]>(() => {
   const pages = response.value?.docs ?? []
   const menuFilter = currentPage.value?.menuFilter
 
-  const filteredPages = (menuFilter && menuFilter.length > 0)
+  const isFiltering = currentPage.value?.filterMainMenu
+  const filteredPages = isFiltering
     ? (() => {
+        if (!menuFilter || menuFilter.length === 0) return []
         const allowedIds = new Set(menuFilter.map((ref) =>
           typeof ref === 'object' && ref !== null ? ref.id : ref
         ))
@@ -203,7 +218,7 @@ const navItems = computed<NavItem[]>(() => {
       })()
     : pages
 
-  return filteredPages.map((page) => {
+  const pageItems: NavItem[] = filteredPages.map((page) => {
     const isHome = page.slug === 'home'
     const pagePath = isHome ? '/' : `/${page.slug}`
     return {
@@ -212,6 +227,8 @@ const navItems = computed<NavItem[]>(() => {
       active: route.path === pagePath,
     }
   })
+
+  return [...pageItems, ...inPageMenuItems.value]
 })
 
 const toolbarItems = computed<ToolbarItem[]>(() => {
@@ -247,9 +264,10 @@ const hasToolbarItems = computed(() => toolbarItems.value.length > 0)
         <nav v-if="menuAlignment === 'left'" class="hidden md:flex items-center gap-6 nav-items">
           <MainMenuItem
             v-for="item in navItems"
-            :key="item.to"
+            :key="item.to || item.href"
             :label="item.label"
             :to="item.to"
+            :href="item.href"
             :active="item.active"
           />
         </nav>
@@ -280,9 +298,10 @@ const hasToolbarItems = computed(() => toolbarItems.value.length > 0)
         <nav v-if="menuAlignment === 'right'" class="hidden md:flex items-center gap-6 nav-items">
           <MainMenuItem
             v-for="item in navItems"
-            :key="item.to"
+            :key="item.to || item.href"
             :label="item.label"
             :to="item.to"
+            :href="item.href"
             :active="item.active"
           />
         </nav>

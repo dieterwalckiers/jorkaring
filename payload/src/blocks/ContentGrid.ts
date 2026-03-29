@@ -2,6 +2,7 @@ import type { Block } from 'payload'
 
 export const ContentGrid: Block = {
   slug: 'contentGrid',
+  imageURL: '/blocks/contentgrid.png',
   labels: {
     singular: 'Content Grid',
     plural: 'Content Grids',

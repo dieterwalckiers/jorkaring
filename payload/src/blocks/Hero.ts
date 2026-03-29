@@ -3,6 +3,7 @@ import { HeroHeadline, HeroSubheadline, HeroRichText, HeroCta, HeroSpacer } from
 
 export const Hero: Block = {
   slug: 'hero',
+  imageURL: '/blocks/hero.png',
   labels: {
     singular: 'Hero',
     plural: 'Heroes',
@@ -26,6 +27,33 @@ export const Hero: Block = {
         description: 'Vertical focal point in % (0 = top, 50 = center, 100 = bottom)',
         placeholder: '50',
         condition: (_, siblingData) => Boolean(siblingData?.backgroundImage),
+      },
+    },
+    {
+      name: 'overlay',
+      type: 'select',
+      defaultValue: 'none',
+      options: [
+        { label: 'None', value: 'none' },
+        { label: 'Darken', value: 'darken' },
+        { label: 'Lighten', value: 'lighten' },
+      ],
+      admin: {
+        description: 'Apply a dark or light overlay on the background image to improve text readability',
+        condition: (_, siblingData) => Boolean(siblingData?.backgroundImage),
+      },
+    },
+    {
+      name: 'overlayStrength',
+      type: 'number',
+      min: 0,
+      max: 100,
+      defaultValue: 40,
+      admin: {
+        description: 'Overlay strength in % (0 = transparent, 100 = fully opaque)',
+        placeholder: '40',
+        condition: (_, siblingData) =>
+          Boolean(siblingData?.backgroundImage) && siblingData?.overlay && siblingData.overlay !== 'none',
       },
     },
     {

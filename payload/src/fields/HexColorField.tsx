@@ -2,18 +2,29 @@
 
 import { useCallback, useState, useEffect } from 'react'
 import { useField, FieldLabel } from '@payloadcms/ui'
-import type { TextFieldClientComponent } from 'payload'
+import type { TextFieldClientComponent, TextFieldClientProps } from 'payload'
+
+interface HexColorFieldProps extends TextFieldClientProps {
+  labelFieldName?: string
+}
 
 /**
  * Hex color picker field for defining theme color values.
  * Uses native <input type="color"> plus a text input for direct hex entry.
  *
- * Unlike ColorField (which picks FROM theme colors), this field is for
- * DEFINING theme color values in Site Settings.
+ * When a `labelFieldName` is provided via clientProps, also renders an
+ * editable name input so CMS users can give each color a meaningful label.
  */
-export const HexColorField: TextFieldClientComponent = ({ field, path }) => {
+export const HexColorField: React.FC<HexColorFieldProps> = ({ field, path, labelFieldName }) => {
   const { value, setValue } = useField<string>({ path })
   const [localHex, setLocalHex] = useState(value || '#000000')
+
+  // Derive the sibling label field path (e.g. 'themeColors.color1' → 'themeColors.color1Label')
+  const labelPath = labelFieldName && path
+    ? path.replace(/[^.]+$/, labelFieldName)
+    : undefined
+  const labelField = useField<string>({ path: labelPath || '' })
+  const hasLabelField = Boolean(labelFieldName && labelPath)
 
   useEffect(() => {
     if (value && value !== localHex) {
@@ -45,26 +56,20 @@ export const HexColorField: TextFieldClientComponent = ({ field, path }) => {
     if (/^#[0-9A-Fa-f]{6}$/.test(localHex)) {
       setValue(localHex)
     } else {
-      // Reset to last valid value
       setLocalHex(value || '#000000')
     }
   }, [localHex, value, setValue])
 
+  const handleLabelChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      labelField.setValue(e.target.value)
+    },
+    [labelField],
+  )
+
   return (
     <div className="field-type text" style={{ marginBottom: '1rem' }}>
       <FieldLabel label={field.label} required={field.required} path={path} />
-
-      {field.admin?.description && (
-        <div
-          style={{
-            fontSize: '12px',
-            color: '#666',
-            marginBottom: '8px',
-          }}
-        >
-          {field.admin.description as string}
-        </div>
-      )}
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
         {/* Native color picker */}
@@ -91,7 +96,7 @@ export const HexColorField: TextFieldClientComponent = ({ field, path }) => {
           onBlur={handleTextBlur}
           placeholder="#000000"
           style={{
-            width: '120px',
+            width: '100px',
             padding: '6px 10px',
             border: '1px solid #ccc',
             borderRadius: '4px',
@@ -112,6 +117,23 @@ export const HexColorField: TextFieldClientComponent = ({ field, path }) => {
           }}
           title={`Preview: ${value}`}
         />
+
+        {/* Inline label/name input */}
+        {hasLabelField && (
+          <input
+            type="text"
+            value={(labelField.value as string) || ''}
+            onChange={handleLabelChange}
+            placeholder="Name"
+            style={{
+              flex: 1,
+              padding: '6px 10px',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              fontSize: '14px',
+            }}
+          />
+        )}
       </div>
     </div>
   )

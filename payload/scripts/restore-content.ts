@@ -247,16 +247,25 @@ async function restoreContent(): Promise<void> {
     }
   }
 
-  // Step 5: Restore pages
+  // Step 5: Restore pages (two passes — create first, then set page-to-page relationships)
   console.log('\n📄 Restoring pages...')
+  const pageIdMap = new Map<number, number>()
+  const pagesWithMenuFilter: Array<{ oldId: number; menuFilter: number[] }> = []
   try {
     const pagesContent = await fs.readFile(path.join(backupDir, 'pages.json'), 'utf-8')
     const pages = JSON.parse(pagesContent) as PageDoc[]
     let restoredCount = 0
 
+    // Pass 1: Create pages without menuFilter
     for (const page of pages) {
+      const oldId = page.id
       // Remove fields that Payload manages
-      const { id, createdAt, updatedAt, ...pageData } = page
+      const { id, createdAt, updatedAt, menuFilter, ...pageData } = page
+
+      // Track pages that have menuFilter for second pass
+      if (Array.isArray(menuFilter) && menuFilter.length > 0) {
+        pagesWithMenuFilter.push({ oldId, menuFilter: menuFilter as number[] })
+      }
 
       // Remap media IDs in content blocks
       if (pageData.content) {
@@ -264,17 +273,45 @@ async function restoreContent(): Promise<void> {
       }
 
       try {
-        await payload.create({
+        const created = await payload.create({
           collection: 'pages',
           data: pageData as Record<string, unknown>,
           draft: true,
         })
+        pageIdMap.set(oldId, created.id as number)
         restoredCount++
       } catch (error) {
         console.warn(`   ⚠ Failed to restore page "${page.title}":`, (error as Error).message)
       }
     }
     console.log(`   ✓ ${restoredCount}/${pages.length} pages restored`)
+
+    // Pass 2: Set menuFilter relationships with remapped IDs
+    if (pagesWithMenuFilter.length > 0) {
+      console.log('\n🔗 Restoring page relationships (menuFilter)...')
+      for (const { oldId, menuFilter } of pagesWithMenuFilter) {
+        const newId = pageIdMap.get(oldId)
+        if (!newId) continue
+
+        const remappedFilter = menuFilter
+          .map((oldRefId) => pageIdMap.get(oldRefId))
+          .filter((id): id is number => id !== undefined)
+
+        if (remappedFilter.length === 0) continue
+
+        try {
+          await payload.update({
+            collection: 'pages',
+            id: newId,
+            data: { menuFilter: remappedFilter } as Record<string, unknown>,
+            draft: true,
+          })
+        } catch (error) {
+          console.warn(`   ⚠ Failed to set menuFilter for page id=${newId}:`, (error as Error).message)
+        }
+      }
+      console.log(`   ✓ ${pagesWithMenuFilter.length} menuFilter relationships restored`)
+    }
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
       console.log('   ⚠ No pages.json found (skipping)')

@@ -107,15 +107,25 @@ function getFontSize(style: string | undefined): string | null {
   return null
 }
 
-// Map color value to CSS class
+// Map color value to CSS class (matches Site Settings → Theme Colors)
 function getTextColorClass(color: string): string {
   const colorClasses: Record<string, string> = {
     gradient: 'text-color-gradient',
+    color1: 'text-color-1',
+    color2: 'text-color-2',
+    color3: 'text-color-3',
+    color4: 'text-color-4',
+    color5: 'text-color-5',
+    color6: 'text-color-6',
     base: 'text-color-base',
     brand1: 'text-color-brand1',
     brand2: 'text-color-brand2',
+    fontAccent: 'text-color-font-accent',
+    fontHighlight: 'text-color-font-highlight',
     accent: 'text-color-accent',
     highlight: 'text-color-highlight',
+    black: 'text-color-black',
+    white: 'text-color-white',
   }
   return colorClasses[color] || ''
 }

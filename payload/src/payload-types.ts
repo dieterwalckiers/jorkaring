@@ -152,7 +152,11 @@ export interface Page {
    */
   toolbarOrder?: number | null;
   /**
-   * If set, only these pages will appear in the main menu when viewing this page. Leave empty to show the full menu.
+   * When enabled, only the pages selected below will appear in the main menu when viewing this page. If none are selected, no page menu items will be shown (in-page menu titles are always shown).
+   */
+  filterMainMenu?: boolean | null;
+  /**
+   * Select which pages appear in the main menu when viewing this page. Leave empty to hide all page menu items.
    */
   menuFilter?: (number | Page)[] | null;
   /**
@@ -162,12 +166,16 @@ export interface Page {
     | (
         | {
             /**
-             * Tally form ID (from the Tally embed URL, e.g. "81x1GP")
+             * Calendly URL (e.g. "https://calendly.com/<username>/<event>?hide_event_type_details=1&hide_gdpr_banner=1")
              */
-            tallyFormId: string;
+            url: string;
+            /**
+             * Inline CSS style for the Calendly widget container
+             */
+            style?: string | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'contactForm';
+            blockType: 'calendlyEmbed';
           }
         | {
             /**
@@ -219,6 +227,14 @@ export interface Page {
              * Vertical focal point in % (0 = top, 50 = center, 100 = bottom)
              */
             focalPointY?: number | null;
+            /**
+             * Apply a dark or light overlay on the background image to improve text readability
+             */
+            overlay?: ('none' | 'darken' | 'lighten') | null;
+            /**
+             * Overlay strength in % (0 = transparent, 100 = fully opaque)
+             */
+            overlayStrength?: number | null;
             /**
              * Text alignment within the hero
              */
@@ -308,6 +324,15 @@ export interface Page {
           }
         | {
             /**
+             * This title will appear as a menu item in the main navigation, scrolling to this position on click
+             */
+            title: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'inPageMenuTitle';
+          }
+        | {
+            /**
              * Add logo images to scroll in the marquee (minimum 3)
              */
             logos: {
@@ -336,35 +361,6 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'logoMarquee';
-          }
-        | {
-            /**
-             * Heading text, e.g. "Subscribe to our newsletter"
-             */
-            heading?: string | null;
-            /**
-             * Optional supporting text below the heading
-             */
-            description?: string | null;
-            /**
-             * Text for the submit button
-             */
-            buttonLabel?: string | null;
-            /**
-             * Placeholder text for the email input, e.g. "Your email address"
-             */
-            emailPlaceholder?: string | null;
-            /**
-             * Message shown after successful subscription
-             */
-            successMessage?: string | null;
-            /**
-             * Mailchimp form action URL (from embed code), e.g. "https://yourlist.us1.list-manage.com/subscribe/post?u=...&id=..."
-             */
-            mailchimpActionUrl: string;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'newsletterSignup';
           }
         | {
             content: {
@@ -549,31 +545,6 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'splitTextImage';
-          }
-        | {
-            /**
-             * Enter table data in CSV format. Each line is a row, columns separated by commas.
-             */
-            csvData: string;
-            /**
-             * Show borders between cells
-             */
-            showBorders?: boolean | null;
-            /**
-             * First row are column titles (styled differently)
-             */
-            firstRowAreTitles?: boolean | null;
-            /**
-             * Last row cells are clickable buttons
-             */
-            lastRowAreButtons?: boolean | null;
-            /**
-             * Button links in CSV format (one link per column, e.g., "/page1,/page2,/page3")
-             */
-            buttonLinksCsv?: string | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'table';
           }
         | {
             /**
@@ -809,14 +780,16 @@ export interface PagesSelect<T extends boolean = true> {
   showInToolbar?: T;
   toolbarLabel?: T;
   toolbarOrder?: T;
+  filterMainMenu?: T;
   menuFilter?: T;
   content?:
     | T
     | {
-        contactForm?:
+        calendlyEmbed?:
           | T
           | {
-              tallyFormId?: T;
+              url?: T;
+              style?: T;
               id?: T;
               blockName?: T;
             };
@@ -840,6 +813,8 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               backgroundImage?: T;
               focalPointY?: T;
+              overlay?: T;
+              overlayStrength?: T;
               alignment?: T;
               height?: T;
               content?:
@@ -892,6 +867,13 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        inPageMenuTitle?:
+          | T
+          | {
+              title?: T;
+              id?: T;
+              blockName?: T;
+            };
         logoMarquee?:
           | T
           | {
@@ -905,18 +887,6 @@ export interface PagesSelect<T extends boolean = true> {
               logoSize?: T;
               speed?: T;
               pauseOnHover?: T;
-              id?: T;
-              blockName?: T;
-            };
-        newsletterSignup?:
-          | T
-          | {
-              heading?: T;
-              description?: T;
-              buttonLabel?: T;
-              emailPlaceholder?: T;
-              successMessage?: T;
-              mailchimpActionUrl?: T;
               id?: T;
               blockName?: T;
             };
@@ -971,17 +941,6 @@ export interface PagesSelect<T extends boolean = true> {
               roundedCorners?: T;
               collapsedByDefault?: T;
               startNumberedListAtZero?: T;
-              id?: T;
-              blockName?: T;
-            };
-        table?:
-          | T
-          | {
-              csvData?: T;
-              showBorders?: T;
-              firstRowAreTitles?: T;
-              lastRowAreButtons?: T;
-              buttonLinksCsv?: T;
               id?: T;
               blockName?: T;
             };
@@ -1370,6 +1329,14 @@ export interface SiteSetting {
                */
               focalPointY?: number | null;
               /**
+               * Apply a dark or light overlay on the background image to improve text readability
+               */
+              overlay?: ('none' | 'darken' | 'lighten') | null;
+              /**
+               * Overlay strength in % (0 = transparent, 100 = fully opaque)
+               */
+              overlayStrength?: number | null;
+              /**
                * Text alignment within the hero
                */
               alignment?: ('left' | 'center' | 'right') | null;
@@ -1738,9 +1705,22 @@ export interface SiteSetting {
       | null;
   };
   /**
-   * Customize your brand colors. These override the default theme colors across the entire site.
+   * Customize your brand colors. These override the default theme colors across the entire site. Use the "Name" fields to give each color a meaningful label (e.g. "Brand Red").
    */
   themeColors?: {
+    color1Label?: string | null;
+    color2Label?: string | null;
+    color3Label?: string | null;
+    color4Label?: string | null;
+    color5Label?: string | null;
+    color6Label?: string | null;
+    fontLabel?: string | null;
+    fontBrand1Label?: string | null;
+    fontBrand2Label?: string | null;
+    fontAccentLabel?: string | null;
+    fontHighlightLabel?: string | null;
+    accentLabel?: string | null;
+    highlightLabel?: string | null;
     /**
      * Default: #5E6E83
      */
@@ -1886,6 +1866,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
                 | {
                     backgroundImage?: T;
                     focalPointY?: T;
+                    overlay?: T;
+                    overlayStrength?: T;
                     alignment?: T;
                     height?: T;
                     content?:
@@ -2043,6 +2025,19 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   themeColors?:
     | T
     | {
+        color1Label?: T;
+        color2Label?: T;
+        color3Label?: T;
+        color4Label?: T;
+        color5Label?: T;
+        color6Label?: T;
+        fontLabel?: T;
+        fontBrand1Label?: T;
+        fontBrand2Label?: T;
+        fontAccentLabel?: T;
+        fontHighlightLabel?: T;
+        accentLabel?: T;
+        highlightLabel?: T;
         color1?: T;
         color2?: T;
         color3?: T;

@@ -3,6 +3,7 @@ import { createColorField } from '../fields/colorField'
 
 export const RichText: Block = {
   slug: 'richText',
+  imageURL: '/blocks/richtext.png',
   labels: {
     singular: 'Rich Text',
     plural: 'Rich Text',

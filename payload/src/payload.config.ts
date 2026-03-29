@@ -23,6 +23,9 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      providers: ['@/components/ThemeColorProvider#ThemeColorProvider'],
+    },
   },
   collections: [Pages, Media, Users],
   globals: [SiteSettings],

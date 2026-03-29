@@ -2,6 +2,7 @@ import type { Block } from 'payload'
 
 export const Testimonials: Block = {
   slug: 'testimonials',
+  imageURL: '/blocks/testimonials.png',
   labels: {
     singular: 'Testimonials',
     plural: 'Testimonials',

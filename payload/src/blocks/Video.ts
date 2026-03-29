@@ -2,6 +2,7 @@ import type { Block } from 'payload'
 
 export const Video: Block = {
   slug: 'video',
+  imageURL: '/blocks/video.png',
   labels: {
     singular: 'Video',
     plural: 'Videos',

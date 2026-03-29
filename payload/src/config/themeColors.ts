@@ -57,6 +57,18 @@ export const THEME_COLORS: ThemeColor[] = [
     hex: '#656565',
     cssVar: 'color-6',
   },
+  {
+    key: 'black',
+    label: 'Black',
+    hex: '#000000',
+    cssVar: 'black',
+  },
+  {
+    key: 'white',
+    label: 'White',
+    hex: '#ffffff',
+    cssVar: 'white',
+  },
 ]
 
 /** Special option for custom hex input */

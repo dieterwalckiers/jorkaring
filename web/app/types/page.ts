@@ -19,6 +19,7 @@ export interface Page {
   showInToolbar?: boolean
   toolbarLabel?: string
   toolbarOrder?: number
+  filterMainMenu?: boolean
   menuFilter?: PageRef[]
   content?: ContentBlock[]
   seo?: PageSeo

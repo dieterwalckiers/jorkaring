@@ -4,25 +4,58 @@ import { createClientFeature } from '@payloadcms/richtext-lexical/client'
 import { $patchStyleText } from '@lexical/selection'
 import { $getSelection, $isRangeSelection, type LexicalEditor } from 'lexical'
 
-// Color options with their CSS variable colors (matching Tailwind theme)
+/**
+ * Module-level cache for custom color labels fetched from Site Settings.
+ * Populated once on first load; used by toolbar dropdown label functions.
+ */
+let customLabels: Record<string, string> = {}
+let labelFetchInitiated = false
+
+function initLabelFetch() {
+  if (labelFetchInitiated) return
+  labelFetchInitiated = true
+  fetch('/api/globals/site-settings?depth=0')
+    .then((res) => res.json())
+    .then((data) => {
+      if (data?.themeColors) {
+        for (const [key, val] of Object.entries(data.themeColors)) {
+          if (key.endsWith('Label') && typeof val === 'string' && val) {
+            // Strip 'Label' suffix to get the color key (e.g. 'color1Label' → 'color1')
+            customLabels[key.replace(/Label$/, '')] = val
+          }
+        }
+      }
+    })
+    .catch(() => {
+      // Silently fall back to default labels
+    })
+}
+
+// Start fetching labels as soon as this module loads
+initLabelFetch()
+
+/**
+ * Color options matching Site Settings → Theme Colors.
+ * The cssValue is stored in Lexical nodes and mapped to CSS classes on the frontend.
+ */
 const COLOR_OPTIONS = [
   { key: 'gradient', label: 'Gradient', cssValue: 'gradient' },
-  { key: 'base', label: 'Base', cssValue: 'base' },
-  { key: 'brand1', label: 'Brand 1', cssValue: 'brand1' },
-  { key: 'brand2', label: 'Brand 2', cssValue: 'brand2' },
+  { key: 'color1', label: 'Color 1', cssValue: 'color1' },
+  { key: 'color2', label: 'Color 2', cssValue: 'color2' },
+  { key: 'color3', label: 'Color 3', cssValue: 'color3' },
+  { key: 'color4', label: 'Color 4', cssValue: 'color4' },
+  { key: 'color5', label: 'Color 5', cssValue: 'color5' },
+  { key: 'color6', label: 'Color 6', cssValue: 'color6' },
+  { key: 'font', label: 'Font Color', cssValue: 'base' },
+  { key: 'fontBrand1', label: 'Font Brand 1', cssValue: 'brand1' },
+  { key: 'fontBrand2', label: 'Font Brand 2', cssValue: 'brand2' },
+  { key: 'fontAccent', label: 'Font Accent', cssValue: 'fontAccent' },
+  { key: 'fontHighlight', label: 'Font Highlight', cssValue: 'fontHighlight' },
   { key: 'accent', label: 'Accent', cssValue: 'accent' },
   { key: 'highlight', label: 'Highlight', cssValue: 'highlight' },
+  { key: 'black', label: 'Black', cssValue: 'black' },
+  { key: 'white', label: 'White', cssValue: 'white' },
 ] as const
-
-// CSS colors for rendering in the dropdown (matching main.css theme)
-const DISPLAY_COLORS: Record<string, string> = {
-  gradient: 'linear-gradient(to right, #6b081d, #f15b4e)',
-  base: '#373031',
-  brand1: '#6b081d',
-  brand2: '#f15b4e',
-  accent: '#8B5A4A',
-  highlight: '#f15b4e',
-}
 
 // Main dropdown icon - "A" with colorful underline
 const TEXT_COLOR_ICON = (
@@ -38,8 +71,8 @@ const TEXT_COLOR_ICON = (
   >
     <defs>
       <linearGradient id="textColorIcon" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stopColor="#6b081d" />
-        <stop offset="100%" stopColor="#f15b4e" />
+        <stop offset="0%" stopColor="var(--color-1, #6b081d)" />
+        <stop offset="100%" stopColor="var(--color-2, #f15b4e)" />
       </linearGradient>
     </defs>
     <text
@@ -55,7 +88,6 @@ const TEXT_COLOR_ICON = (
     <path d="M4 20h16" stroke="url(#textColorIcon)" strokeWidth="3" />
   </svg>
 )
-
 
 // Apply or toggle text color
 function applyTextColor(editor: LexicalEditor, colorValue: string) {
@@ -95,10 +127,10 @@ function applyTextColor(editor: LexicalEditor, colorValue: string) {
   })
 }
 
-// Create dropdown items for both toolbar types
+// Create dropdown items with dynamic labels from Site Settings
 const dropdownItems = COLOR_OPTIONS.map((option) => ({
   key: option.key,
-  label: option.label,
+  label: () => customLabels[option.key] || option.label,
   onSelect: ({ editor }: { editor: LexicalEditor }) => {
     applyTextColor(editor, option.cssValue)
   },

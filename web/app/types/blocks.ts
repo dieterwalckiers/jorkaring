@@ -1,5 +1,12 @@
 import type { Media } from './media'
 
+export interface CalendlyEmbedBlock {
+  id: string
+  blockType: 'calendlyEmbed'
+  url: string
+  style?: string
+}
+
 export interface ContentGridCell {
   id?: string
   content: unknown // Rich text content (Lexical format)
@@ -61,6 +68,8 @@ export interface HeroBlock {
   blockType: 'hero'
   backgroundImage?: Media | string
   focalPointY?: number
+  overlay?: 'none' | 'darken' | 'lighten'
+  overlayStrength?: number
   alignment?: 'left' | 'center' | 'right'
   height?: 'small' | 'medium' | 'large' | 'xl' | 'xxl'
   content?: HeroContentBlock[]
@@ -140,6 +149,12 @@ export interface TestimonialsBlock {
   testimonials: Testimonial[]
 }
 
+export interface InPageMenuTitleBlock {
+  id: string
+  blockType: 'inPageMenuTitle'
+  title: string
+}
+
 export interface SpacerBlock {
   id: string
   blockType: 'spacer'
@@ -190,4 +205,4 @@ export interface NewsletterSignupBlock {
 }
 
 // Union type for all block types - add more as they are created
-export type ContentBlock = ContactFormBlock | ContentGridBlock | HeroBlock | LogoMarqueeBlock | NewsletterSignupBlock | RichTextBlock | SpacerBlock | SplitTextImageBlock | TableBlock | TestimonialsBlock | VideoBlock
+export type ContentBlock = CalendlyEmbedBlock | ContactFormBlock | ContentGridBlock | HeroBlock | InPageMenuTitleBlock | LogoMarqueeBlock | NewsletterSignupBlock | RichTextBlock | SpacerBlock | SplitTextImageBlock | TableBlock | TestimonialsBlock | VideoBlock

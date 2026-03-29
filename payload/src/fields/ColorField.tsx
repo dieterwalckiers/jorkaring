@@ -9,7 +9,7 @@ import {
 } from '../config/themeColors'
 import type { ThemeColor } from '../config/themeColors'
 
-/** Map from THEME_COLORS key to themeColors field name in site-settings */
+/** Map from THEME_COLORS key to themeColors hex field name in site-settings */
 const THEME_COLOR_FIELD_MAP: Record<string, string> = {
   color1: 'color1',
   color2: 'color2',
@@ -17,6 +17,16 @@ const THEME_COLOR_FIELD_MAP: Record<string, string> = {
   color4: 'color4',
   color5: 'color5',
   color6: 'color6',
+}
+
+/** Map from THEME_COLORS key to themeColors label field name in site-settings */
+const THEME_COLOR_LABEL_MAP: Record<string, string> = {
+  color1: 'color1Label',
+  color2: 'color2Label',
+  color3: 'color3Label',
+  color4: 'color4Label',
+  color5: 'color5Label',
+  color6: 'color6Label',
 }
 
 /**
@@ -89,14 +99,19 @@ export const ColorField: TextFieldClientComponent = ({ field, path }) => {
       })
   }, [config.routes?.api, config.serverURL])
 
-  // Merge CMS theme colors into the static THEME_COLORS for display
+  // Merge CMS theme colors (hex values and custom labels) into the static THEME_COLORS for display
   const displayColors: ThemeColor[] = useMemo(() => {
     return THEME_COLORS.map((color) => {
-      const fieldName = THEME_COLOR_FIELD_MAP[color.key]
-      if (fieldName && cmsColors[fieldName]) {
-        return { ...color, hex: cmsColors[fieldName] }
+      let updated = color
+      const hexField = THEME_COLOR_FIELD_MAP[color.key]
+      if (hexField && cmsColors[hexField]) {
+        updated = { ...updated, hex: cmsColors[hexField] }
       }
-      return color
+      const labelField = THEME_COLOR_LABEL_MAP[color.key]
+      if (labelField && cmsColors[labelField]) {
+        updated = { ...updated, label: cmsColors[labelField] }
+      }
+      return updated
     })
   }, [cmsColors])
 

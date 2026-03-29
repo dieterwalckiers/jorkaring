@@ -247,6 +247,7 @@
 
 /* ===========================================
    TEXT COLORS - Effects in Lexical rich text editor
+   Matches Site Settings → Theme Colors
    =========================================== */
 
 /* Gradient text */
@@ -260,34 +261,84 @@
   background-clip: text;
 }
 
-/* Base color */
+/* Color 1–6 */
+.LexicalEditorTheme__text [style*="--text-color: color1"],
+[data-lexical-editor="true"] [style*="--text-color: color1"] {
+  color: var(--color-1) !important;
+}
+.LexicalEditorTheme__text [style*="--text-color: color2"],
+[data-lexical-editor="true"] [style*="--text-color: color2"] {
+  color: var(--color-2) !important;
+}
+.LexicalEditorTheme__text [style*="--text-color: color3"],
+[data-lexical-editor="true"] [style*="--text-color: color3"] {
+  color: var(--color-3) !important;
+}
+.LexicalEditorTheme__text [style*="--text-color: color4"],
+[data-lexical-editor="true"] [style*="--text-color: color4"] {
+  color: var(--color-4) !important;
+}
+.LexicalEditorTheme__text [style*="--text-color: color5"],
+[data-lexical-editor="true"] [style*="--text-color: color5"] {
+  color: var(--color-5) !important;
+}
+.LexicalEditorTheme__text [style*="--text-color: color6"],
+[data-lexical-editor="true"] [style*="--text-color: color6"] {
+  color: var(--color-6) !important;
+}
+
+/* Font Color (base) */
 .LexicalEditorTheme__text [style*="--text-color: base"],
 [data-lexical-editor="true"] [style*="--text-color: base"] {
   color: var(--color-font) !important;
 }
 
-/* Brand 1 color */
+/* Font Brand 1 */
 .LexicalEditorTheme__text [style*="--text-color: brand1"],
 [data-lexical-editor="true"] [style*="--text-color: brand1"] {
   color: var(--color-font-brand1) !important;
 }
 
-/* Brand 2 color */
+/* Font Brand 2 */
 .LexicalEditorTheme__text [style*="--text-color: brand2"],
 [data-lexical-editor="true"] [style*="--text-color: brand2"] {
   color: var(--color-font-brand2) !important;
 }
 
-/* Accent color */
+/* Font Accent */
+.LexicalEditorTheme__text [style*="--text-color: fontAccent"],
+[data-lexical-editor="true"] [style*="--text-color: fontAccent"] {
+  color: var(--color-font-accent) !important;
+}
+
+/* Font Highlight */
+.LexicalEditorTheme__text [style*="--text-color: fontHighlight"],
+[data-lexical-editor="true"] [style*="--text-color: fontHighlight"] {
+  color: var(--color-font-highlight) !important;
+}
+
+/* Accent */
 .LexicalEditorTheme__text [style*="--text-color: accent"],
 [data-lexical-editor="true"] [style*="--text-color: accent"] {
   color: var(--color-accent) !important;
 }
 
-/* Highlight color */
+/* Highlight */
 .LexicalEditorTheme__text [style*="--text-color: highlight"],
 [data-lexical-editor="true"] [style*="--text-color: highlight"] {
   color: var(--color-highlight) !important;
+}
+
+/* Black */
+.LexicalEditorTheme__text [style*="--text-color: black"],
+[data-lexical-editor="true"] [style*="--text-color: black"] {
+  color: #000000 !important;
+}
+
+/* White */
+.LexicalEditorTheme__text [style*="--text-color: white"],
+[data-lexical-editor="true"] [style*="--text-color: white"] {
+  color: #ffffff !important;
 }
 
 /* ===========================================

@@ -9,9 +9,11 @@ defineProps<{
 <template>
   <div class="blocks-container space-y-8">
     <template v-for="block in blocks" :key="block.id">
-      <BlocksContactFormBlock v-if="block.blockType === 'contactForm'" :block="block" />
+      <BlocksCalendlyEmbedBlock v-if="block.blockType === 'calendlyEmbed'" :block="block" />
+      <BlocksContactFormBlock v-else-if="block.blockType === 'contactForm'" :block="block" />
       <BlocksContentGridBlock v-else-if="block.blockType === 'contentGrid'" :block="block" />
       <BlocksHeroBlock v-else-if="block.blockType === 'hero'" :block="block" />
+      <BlocksInPageMenuTitleBlock v-else-if="block.blockType === 'inPageMenuTitle'" :block="block" />
       <BlocksLogoMarqueeBlock v-else-if="block.blockType === 'logoMarquee'" :block="block" />
       <BlocksNewsletterSignupBlock v-else-if="block.blockType === 'newsletterSignup'" :block="block" />
       <BlocksRichTextBlock v-else-if="block.blockType === 'richText'" :block="block" />

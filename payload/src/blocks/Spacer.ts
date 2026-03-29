@@ -2,6 +2,7 @@ import type { Block } from 'payload'
 
 export const Spacer: Block = {
   slug: 'spacer',
+  imageURL: '/blocks/spacer.png',
   labels: {
     singular: 'Spacer',
     plural: 'Spacers',

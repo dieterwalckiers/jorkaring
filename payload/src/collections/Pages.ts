@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { triggerDeploy } from '../hooks/triggerDeploy'
-import { ContactForm, ContentGrid, Hero, LogoMarquee, NewsletterSignup, RichText, Spacer, SplitTextImage, Table, Testimonials, Video } from '../blocks'
+import { pageBlocks } from '../blocks'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -84,12 +84,21 @@ export const Pages: CollectionConfig = {
       },
     },
     {
+      name: 'filterMainMenu',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'When enabled, only the pages selected below will appear in the main menu when viewing this page. If none are selected, no page menu items will be shown (in-page menu titles are always shown).',
+      },
+    },
+    {
       name: 'menuFilter',
       type: 'relationship',
       relationTo: 'pages',
       hasMany: true,
       admin: {
-        description: 'If set, only these pages will appear in the main menu when viewing this page. Leave empty to show the full menu.',
+        description: 'Select which pages appear in the main menu when viewing this page. Leave empty to hide all page menu items.',
+        condition: (data) => data?.filterMainMenu,
       },
       filterOptions: {
         showInMenu: { equals: true },
@@ -98,7 +107,7 @@ export const Pages: CollectionConfig = {
     {
       name: 'content',
       type: 'blocks',
-      blocks: [ContactForm, ContentGrid, Hero, LogoMarquee, NewsletterSignup, RichText, Spacer, SplitTextImage, Table, Testimonials, Video],
+      blocks: pageBlocks,
       admin: {
         description: 'Add and arrange content blocks for this page',
       },

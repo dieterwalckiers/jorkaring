@@ -3,6 +3,7 @@ import { createColorField } from '../fields/colorField'
 
 export const SplitTextImage: Block = {
   slug: 'splitTextImage',
+  imageURL: '/blocks/splittextimage.png',
   labels: {
     singular: 'Split Text + Media',
     plural: 'Split Text + Media',

@@ -6,6 +6,11 @@ import * as migration_20260222_153634 from './20260222_153634';
 import * as migration_20260222_165716 from './20260222_165716';
 import * as migration_20260317_203604_add_theme_colors from './20260317_203604_add_theme_colors';
 import * as migration_20260317_215230 from './20260317_215230';
+import * as migration_20260326_205722 from './20260326_205722';
+import * as migration_20260326_210217 from './20260326_210217';
+import * as migration_20260326_211523 from './20260326_211523';
+import * as migration_20260329_074214 from './20260329_074214';
+import * as migration_20260329_074840 from './20260329_074840';
 
 export const migrations = [
   {
@@ -46,6 +51,31 @@ export const migrations = [
   {
     up: migration_20260317_215230.up,
     down: migration_20260317_215230.down,
-    name: '20260317_215230'
+    name: '20260317_215230',
+  },
+  {
+    up: migration_20260326_205722.up,
+    down: migration_20260326_205722.down,
+    name: '20260326_205722',
+  },
+  {
+    up: migration_20260326_210217.up,
+    down: migration_20260326_210217.down,
+    name: '20260326_210217',
+  },
+  {
+    up: migration_20260326_211523.up,
+    down: migration_20260326_211523.down,
+    name: '20260326_211523',
+  },
+  {
+    up: migration_20260329_074214.up,
+    down: migration_20260329_074214.down,
+    name: '20260329_074214',
+  },
+  {
+    up: migration_20260329_074840.up,
+    down: migration_20260329_074840.down,
+    name: '20260329_074840'
   },
 ];

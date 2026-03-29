@@ -28,6 +28,14 @@ const backgroundImage = computed<Media | null>(() => {
 })
 
 const hasBackground = computed(() => Boolean(backgroundImage.value))
+
+const overlayStyle = computed(() => {
+  const overlay = props.block.overlay
+  if (!overlay || overlay === 'none') return null
+  const strength = (props.block.overlayStrength ?? 40) / 100
+  const color = overlay === 'darken' ? '0, 0, 0' : '255, 255, 255'
+  return { backgroundColor: `rgba(${color}, ${strength})` }
+})
 </script>
 
 <template>
@@ -42,6 +50,11 @@ const hasBackground = computed(() => Boolean(backgroundImage.value))
       cover
       priority
       class="z-0"
+    />
+    <div
+      v-if="overlayStyle"
+      class="absolute inset-0 z-[1]"
+      :style="overlayStyle"
     />
     <div
       class="relative z-10 h-full flex items-center"

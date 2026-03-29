@@ -58,6 +58,8 @@ The core content model is a **block-based page builder**:
 
 When adding a new block: define it in `payload/src/blocks/`, register it in `payload/src/collections/Pages.ts`, create a Vue component in `web/app/components/blocks/`, add a case in `BlockRenderer.vue`, and extend the types in `web/app/types/blocks.ts`.
 
+Block visibility in the admin UI is controlled by the `hiddenBlockSlugs` array in `payload/src/blocks/index.ts`. Add a block's slug there to hide it from the editor. `Pages.ts` imports the filtered `pageBlocks` list, so no other file needs to change.
+
 ### API Communication (`web/app/composables/usePayload.ts`)
 
 - **Server-side** rendering uses `config.payloadApiUrl` (Docker internal URL: `http://payload:3000/api`)

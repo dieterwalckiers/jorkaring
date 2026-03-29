@@ -2,10 +2,22 @@
 interface Props {
   label: string
   to?: string
+  href?: string
   active?: boolean
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+
+function scrollToAnchor(e: Event) {
+  e.preventDefault()
+  const id = props.href?.replace('#', '')
+  if (!id) return
+  const el = document.getElementById(id)
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' })
+    history.replaceState(null, '', props.href!)
+  }
+}
 </script>
 
 <template>
@@ -17,6 +29,15 @@ defineProps<Props>()
   >
     {{ label }}
   </NuxtLink>
+  <a
+    v-else-if="href"
+    :href="href"
+    class="main-menu-item"
+    :class="{ 'main-menu-item--active': active }"
+    @click="scrollToAnchor"
+  >
+    {{ label }}
+  </a>
   <span
     v-else
     class="main-menu-item"

@@ -101,32 +101,38 @@ body {
 }
 
 /* Text color classes for rich text content */
-.text-color-gradient {
+/* Descendant selectors override prose typography styles (e.g. .prose strong) */
+
+.text-color-gradient,
+.text-color-gradient * {
   background: linear-gradient(to right, var(--color-2), var(--color-1));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.text-color-base {
-  color: var(--color-font);
-}
+/* Color 1–6 */
+.text-color-1, .text-color-1 * { color: var(--color-1); }
+.text-color-2, .text-color-2 * { color: var(--color-2); }
+.text-color-3, .text-color-3 * { color: var(--color-3); }
+.text-color-4, .text-color-4 * { color: var(--color-4); }
+.text-color-5, .text-color-5 * { color: var(--color-5); }
+.text-color-6, .text-color-6 * { color: var(--color-6); }
 
-.text-color-brand1 {
-  color: var(--color-font-brand1);
-}
+/* Font colors */
+.text-color-base, .text-color-base * { color: var(--color-font); }
+.text-color-brand1, .text-color-brand1 * { color: var(--color-font-brand1); }
+.text-color-brand2, .text-color-brand2 * { color: var(--color-font-brand2); }
+.text-color-font-accent, .text-color-font-accent * { color: var(--color-font-accent); }
+.text-color-font-highlight, .text-color-font-highlight * { color: var(--color-font-highlight); }
 
-.text-color-brand2 {
-  color: var(--color-font-brand2);
-}
+/* Accent & Highlight */
+.text-color-accent, .text-color-accent * { color: var(--color-accent); }
+.text-color-highlight, .text-color-highlight * { color: var(--color-highlight); }
 
-.text-color-accent {
-  color: var(--color-accent);
-}
-
-.text-color-highlight {
-  color: var(--color-highlight);
-}
+/* Black & White */
+.text-color-black, .text-color-black * { color: #000000; }
+.text-color-white, .text-color-white * { color: #ffffff; }
 
 /* Legacy support: keep old class for backwards compatibility */
 .gradient-text {
