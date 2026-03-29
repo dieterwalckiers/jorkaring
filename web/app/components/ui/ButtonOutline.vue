@@ -55,6 +55,6 @@ const isExternal = computed(() => isExternalUrl(props.to) || isExternalUrl(props
 
 .btn-outline.btn-outline:hover {
   background-color: var(--color-button-bg-hover);
-  color: white;
+  color: var(--color-button-font-hover);
 }
 </style>

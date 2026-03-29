@@ -66,7 +66,7 @@ function scrollToAnchor(e: Event) {
   bottom: -2px;
   width: 100%;
   height: 2px;
-  background: linear-gradient(to right, var(--color-2), var(--color-1));
+  background: linear-gradient(to right, var(--color-theme2), var(--color-theme1));
   transform: scaleX(0);
   transition: transform 0.2s ease;
 }
@@ -78,7 +78,7 @@ function scrollToAnchor(e: Event) {
 
 .main-menu-item:hover,
 .main-menu-item--active {
-  color: var(--color-font-highlight);
+  color: var(--color-font-accent);
 }
 
 /* Mobile menu - larger font and more spacing */

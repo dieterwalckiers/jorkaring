@@ -111,19 +111,16 @@ function getFontSize(style: string | undefined): string | null {
 function getTextColorClass(color: string): string {
   const colorClasses: Record<string, string> = {
     gradient: 'text-color-gradient',
-    color1: 'text-color-1',
-    color2: 'text-color-2',
-    color3: 'text-color-3',
-    color4: 'text-color-4',
-    color5: 'text-color-5',
-    color6: 'text-color-6',
+    theme1: 'text-color-theme1',
+    theme2: 'text-color-theme2',
+    theme3: 'text-color-theme3',
+    theme4: 'text-color-theme4',
+    theme5: 'text-color-theme5',
+    theme6: 'text-color-theme6',
+    theme7: 'text-color-theme7',
+    theme8: 'text-color-theme8',
     base: 'text-color-base',
-    brand1: 'text-color-brand1',
-    brand2: 'text-color-brand2',
-    fontAccent: 'text-color-font-accent',
-    fontHighlight: 'text-color-font-highlight',
     accent: 'text-color-accent',
-    highlight: 'text-color-highlight',
     black: 'text-color-black',
     white: 'text-color-white',
   }
@@ -247,7 +244,7 @@ function renderNode(node: LexicalNode): string {
     }
 
     case 'horizontalrule': {
-      return '<hr class="my-8 border-[var(--color-5)]" />'
+      return '<hr class="my-8 border-[var(--color-table-borders)]" />'
     }
 
     case 'linebreak': {

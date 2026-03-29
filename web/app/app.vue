@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Media } from '~/types/media'
 import type { ContainerWidth, SiteThemeColors } from '~/types/siteSettings'
-import { resolveColor } from '~/utils/resolveColor'
 
 const { data: siteSettings } = useSiteSettings()
 const payloadBaseUrl = usePayloadBaseUrl()
@@ -21,12 +20,6 @@ const faviconUrl = computed(() => {
   if (!url) return undefined
   if (url.startsWith('http://') || url.startsWith('https://')) return url
   return `${payloadBaseUrl}${url}`
-})
-
-const backgroundColor = computed(() => {
-  const raw = siteSettings.value?.styling?.backgroundColor
-  const resolved = resolveColor(raw)
-  return resolved !== 'transparent' ? resolved : undefined
 })
 
 const googleFontBody = computed(() => siteSettings.value?.styling?.googleFontBody)
@@ -83,19 +76,27 @@ const containerWidth = computed(() => {
 
 /** Map from SiteThemeColors keys to CSS variable names */
 const themeColorCssVarMap: Record<keyof SiteThemeColors, string> = {
-  color1: '--color-1',
-  color2: '--color-2',
-  color3: '--color-3',
-  color4: '--color-4',
-  color5: '--color-5',
-  color6: '--color-6',
+  // System
+  mainBg: '--color-main-bg',
   font: '--color-font',
-  fontBrand1: '--color-font-brand1',
-  fontBrand2: '--color-font-brand2',
   fontAccent: '--color-font-accent',
-  fontHighlight: '--color-font-highlight',
-  accent: '--color-accent',
-  highlight: '--color-highlight',
+  headings: '--color-headings',
+  buttonFont: '--color-button-font',
+  buttonBg: '--color-button-bg',
+  buttonFontHover: '--color-button-font-hover',
+  buttonBgHover: '--color-button-bg-hover',
+  tableBorders: '--color-table-borders',
+  stickyMessageTxt: '--color-sticky-message-txt',
+  stickyMessageBg: '--color-sticky-message-bg',
+  // Theme
+  theme1: '--color-theme1',
+  theme2: '--color-theme2',
+  theme3: '--color-theme3',
+  theme4: '--color-theme4',
+  theme5: '--color-theme5',
+  theme6: '--color-theme6',
+  theme7: '--color-theme7',
+  theme8: '--color-theme8',
 }
 
 const themeColorOverrides = computed(() => {
@@ -121,9 +122,6 @@ useHead(() => ({
   ],
   style: [
     { innerHTML: `:root { --ui-container: ${containerWidth.value}; }` },
-    ...(backgroundColor.value
-      ? [{ innerHTML: `body { background-color: ${backgroundColor.value}; }` }]
-      : []),
     ...(fontStyles.value
       ? [{ innerHTML: fontStyles.value }]
       : []),

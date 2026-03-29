@@ -20,7 +20,7 @@ function initLabelFetch() {
       if (data?.themeColors) {
         for (const [key, val] of Object.entries(data.themeColors)) {
           if (key.endsWith('Label') && typeof val === 'string' && val) {
-            // Strip 'Label' suffix to get the color key (e.g. 'color1Label' → 'color1')
+            // Strip 'Label' suffix to get the color key (e.g. 'theme1Label' → 'theme1')
             customLabels[key.replace(/Label$/, '')] = val
           }
         }
@@ -39,20 +39,16 @@ initLabelFetch()
  * The cssValue is stored in Lexical nodes and mapped to CSS classes on the frontend.
  */
 const COLOR_OPTIONS = [
-  { key: 'gradient', label: 'Gradient', cssValue: 'gradient' },
-  { key: 'color1', label: 'Color 1', cssValue: 'color1' },
-  { key: 'color2', label: 'Color 2', cssValue: 'color2' },
-  { key: 'color3', label: 'Color 3', cssValue: 'color3' },
-  { key: 'color4', label: 'Color 4', cssValue: 'color4' },
-  { key: 'color5', label: 'Color 5', cssValue: 'color5' },
-  { key: 'color6', label: 'Color 6', cssValue: 'color6' },
+  { key: 'theme1', label: 'Theme 1', cssValue: 'theme1' },
+  { key: 'theme2', label: 'Theme 2', cssValue: 'theme2' },
+  { key: 'theme3', label: 'Theme 3', cssValue: 'theme3' },
+  { key: 'theme4', label: 'Theme 4', cssValue: 'theme4' },
+  { key: 'theme5', label: 'Theme 5', cssValue: 'theme5' },
+  { key: 'theme6', label: 'Theme 6', cssValue: 'theme6' },
+  { key: 'theme7', label: 'Theme 7', cssValue: 'theme7' },
+  { key: 'theme8', label: 'Theme 8', cssValue: 'theme8' },
   { key: 'font', label: 'Font Color', cssValue: 'base' },
-  { key: 'fontBrand1', label: 'Font Brand 1', cssValue: 'brand1' },
-  { key: 'fontBrand2', label: 'Font Brand 2', cssValue: 'brand2' },
-  { key: 'fontAccent', label: 'Font Accent', cssValue: 'fontAccent' },
-  { key: 'fontHighlight', label: 'Font Highlight', cssValue: 'fontHighlight' },
-  { key: 'accent', label: 'Accent', cssValue: 'accent' },
-  { key: 'highlight', label: 'Highlight', cssValue: 'highlight' },
+  { key: 'fontAccent', label: 'Font Accent', cssValue: 'accent' },
   { key: 'black', label: 'Black', cssValue: 'black' },
   { key: 'white', label: 'White', cssValue: 'white' },
 ] as const
@@ -71,8 +67,8 @@ const TEXT_COLOR_ICON = (
   >
     <defs>
       <linearGradient id="textColorIcon" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stopColor="var(--color-1, #6b081d)" />
-        <stop offset="100%" stopColor="var(--color-2, #f15b4e)" />
+        <stop offset="0%" stopColor="var(--color-theme1, #5E6E83)" />
+        <stop offset="100%" stopColor="var(--color-theme2, #5E6E83)" />
       </linearGradient>
     </defs>
     <text

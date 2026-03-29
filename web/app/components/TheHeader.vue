@@ -3,7 +3,7 @@ import type { PagesResponse } from '~/types/page'
 import type { Media } from '~/types/media'
 import type { HeaderMenuAlignment, HeaderHeight, LogoSize } from '~/types/siteSettings'
 import MainMenuItem from '~/components/ui/MainMenuItem.vue'
-import { resolveColorToHex, isHexColor } from '~/utils/resolveColor'
+import { isHexColor } from '~/utils/resolveColor'
 import { slugify } from '~/utils/slugify'
 
 interface NavItem {
@@ -79,9 +79,8 @@ const showBorder = computed(() => {
 })
 
 const headerBackgroundColor = computed(() => {
-  const raw = siteSettings.value?.styling?.headerBackgroundColor
   const cmsColors = siteSettings.value?.themeColors as Record<string, string | undefined> | undefined
-  return resolveColorToHex(raw, cmsColors)
+  return cmsColors?.mainBg || '#ffffff'
 })
 
 // Height values in rem (numeric for calculations)
@@ -359,7 +358,7 @@ const hasToolbarItems = computed(() => toolbarItems.value.length > 0)
   bottom: -2px;
   width: 100%;
   height: 2px;
-  background: linear-gradient(to right, var(--color-2), var(--color-1));
+  background: linear-gradient(to right, var(--color-theme2), var(--color-theme1));
   transform: scaleX(0);
   transition: transform 0.2s ease;
 }
@@ -371,7 +370,7 @@ const hasToolbarItems = computed(() => toolbarItems.value.length > 0)
 
 .header-toolbar-link:hover,
 .header-toolbar-link.router-link-active {
-  color: var(--color-font-highlight);
+  color: var(--color-font-accent);
 }
 
 /* Premium easing curves for smooth compacting */

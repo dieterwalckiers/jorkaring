@@ -136,16 +136,7 @@ export const SiteSettings: GlobalConfig = {
                     description: 'Width of the logo in the header. Height adjusts automatically to maintain aspect ratio.',
                   },
                 },
-                createColorField({
-                  name: 'headerBackgroundColor',
-                  label: 'Header Background Color',
-                  description: 'Background color for the header',
-                }),
-                createColorField({
-                  name: 'backgroundColor',
-                  label: 'Background Color',
-                  description: 'Background color for the website',
-                }),
+
                 {
                   name: 'googleFontBody',
                   type: 'text',
@@ -382,7 +373,7 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
         {
-          label: 'Theme Colors',
+          label: 'Colors',
           fields: [
             {
               name: 'themeColors',
@@ -393,127 +384,185 @@ export const SiteSettings: GlobalConfig = {
               },
               fields: [
                 // Hidden label fields — stored in DB, edited inline via the hex color picker
-                { name: 'color1Label', type: 'text', defaultValue: 'Color 1', admin: { hidden: true } },
-                { name: 'color2Label', type: 'text', defaultValue: 'Color 2', admin: { hidden: true } },
-                { name: 'color3Label', type: 'text', defaultValue: 'Color 3', admin: { hidden: true } },
-                { name: 'color4Label', type: 'text', defaultValue: 'Color 4', admin: { hidden: true } },
-                { name: 'color5Label', type: 'text', defaultValue: 'Color 5', admin: { hidden: true } },
-                { name: 'color6Label', type: 'text', defaultValue: 'Color 6', admin: { hidden: true } },
-                { name: 'fontLabel', type: 'text', defaultValue: 'Font Color', admin: { hidden: true } },
-                { name: 'fontBrand1Label', type: 'text', defaultValue: 'Font Brand 1', admin: { hidden: true } },
-                { name: 'fontBrand2Label', type: 'text', defaultValue: 'Font Brand 2', admin: { hidden: true } },
-                { name: 'fontAccentLabel', type: 'text', defaultValue: 'Font Accent', admin: { hidden: true } },
-                { name: 'fontHighlightLabel', type: 'text', defaultValue: 'Font Highlight', admin: { hidden: true } },
-                { name: 'accentLabel', type: 'text', defaultValue: 'Accent', admin: { hidden: true } },
-                { name: 'highlightLabel', type: 'text', defaultValue: 'Highlight', admin: { hidden: true } },
+                { name: 'theme1Label', type: 'text', defaultValue: 'Theme 1', admin: { hidden: true } },
+                { name: 'theme2Label', type: 'text', defaultValue: 'Theme 2', admin: { hidden: true } },
+                { name: 'theme3Label', type: 'text', defaultValue: 'Theme 3', admin: { hidden: true } },
+                { name: 'theme4Label', type: 'text', defaultValue: 'Theme 4', admin: { hidden: true } },
+                { name: 'theme5Label', type: 'text', defaultValue: 'Theme 5', admin: { hidden: true } },
+                { name: 'theme6Label', type: 'text', defaultValue: 'Theme 6', admin: { hidden: true } },
+                { name: 'theme7Label', type: 'text', defaultValue: 'Theme 7', admin: { hidden: true } },
+                { name: 'theme8Label', type: 'text', defaultValue: 'Theme 8', admin: { hidden: true } },
                 {
-                  type: 'row',
+                  type: 'collapsible',
+                  label: 'System',
+                  admin: {
+                    initCollapsed: false,
+                  },
                   fields: [
-                    createHexColorField({
-                      name: 'color1',
-                      label: 'Color 1',
-                      defaultValue: '#5E6E83',
-                      labelFieldName: 'color1Label',
-                    }),
-                    createHexColorField({
-                      name: 'color2',
-                      label: 'Color 2',
-                      defaultValue: '#5E6E83',
-                      labelFieldName: 'color2Label',
-                    }),
+                    {
+                      type: 'row',
+                      fields: [
+                        createHexColorField({
+                          name: 'mainBg',
+                          label: 'Main Background',
+                          defaultValue: '#ffffff',
+                        }),
+                        createHexColorField({
+                          name: 'font',
+                          label: 'Font Color',
+                          defaultValue: '#373031',
+                        }),
+                      ],
+                    },
+                    {
+                      type: 'row',
+                      fields: [
+                        createHexColorField({
+                          name: 'fontAccent',
+                          label: 'Font Accent',
+                          defaultValue: '#8B5A4A',
+                        }),
+                        createHexColorField({
+                          name: 'headings',
+                          label: 'Headings',
+                          defaultValue: '#5E6E83',
+                        }),
+                      ],
+                    },
+                    {
+                      type: 'row',
+                      fields: [
+                        createHexColorField({
+                          name: 'buttonFont',
+                          label: 'Button Font',
+                          defaultValue: '#373031',
+                        }),
+                        createHexColorField({
+                          name: 'buttonBg',
+                          label: 'Button Background',
+                          defaultValue: 'transparent',
+                        }),
+                      ],
+                    },
+                    {
+                      type: 'row',
+                      fields: [
+                        createHexColorField({
+                          name: 'buttonFontHover',
+                          label: 'Button Font Hover',
+                          defaultValue: '#ffffff',
+                        }),
+                        createHexColorField({
+                          name: 'buttonBgHover',
+                          label: 'Button Background Hover',
+                          defaultValue: '#EA8928',
+                        }),
+                      ],
+                    },
+                    {
+                      type: 'row',
+                      fields: [
+                        createHexColorField({
+                          name: 'tableBorders',
+                          label: 'Table Borders',
+                          defaultValue: '#EA8928',
+                        }),
+                      ],
+                    },
+                    {
+                      type: 'row',
+                      fields: [
+                        createHexColorField({
+                          name: 'stickyMessageTxt',
+                          label: 'Sticky Message Text',
+                          defaultValue: '#B6C9BB',
+                        }),
+                        createHexColorField({
+                          name: 'stickyMessageBg',
+                          label: 'Sticky Message Background',
+                          defaultValue: '#5E6E83',
+                        }),
+                      ],
+                    },
                   ],
                 },
                 {
-                  type: 'row',
+                  type: 'collapsible',
+                  label: 'Theme',
+                  admin: {
+                    initCollapsed: false,
+                  },
                   fields: [
-                    createHexColorField({
-                      name: 'color3',
-                      label: 'Color 3',
-                      defaultValue: '#B6C9BB',
-                      labelFieldName: 'color3Label',
-                    }),
-                    createHexColorField({
-                      name: 'color4',
-                      label: 'Color 4',
-                      defaultValue: '#BFEDC1',
-                      labelFieldName: 'color4Label',
-                    }),
+                    {
+                      type: 'row',
+                      fields: [
+                        createHexColorField({
+                          name: 'theme1',
+                          label: 'Theme 1',
+                          defaultValue: '#5E6E83',
+                          labelFieldName: 'theme1Label',
+                        }),
+                        createHexColorField({
+                          name: 'theme2',
+                          label: 'Theme 2',
+                          defaultValue: '#5E6E83',
+                          labelFieldName: 'theme2Label',
+                        }),
+                      ],
+                    },
+                    {
+                      type: 'row',
+                      fields: [
+                        createHexColorField({
+                          name: 'theme3',
+                          label: 'Theme 3',
+                          defaultValue: '#B6C9BB',
+                          labelFieldName: 'theme3Label',
+                        }),
+                        createHexColorField({
+                          name: 'theme4',
+                          label: 'Theme 4',
+                          defaultValue: '#BFEDC1',
+                          labelFieldName: 'theme4Label',
+                        }),
+                      ],
+                    },
+                    {
+                      type: 'row',
+                      fields: [
+                        createHexColorField({
+                          name: 'theme5',
+                          label: 'Theme 5',
+                          defaultValue: '#EA8928',
+                          labelFieldName: 'theme5Label',
+                        }),
+                        createHexColorField({
+                          name: 'theme6',
+                          label: 'Theme 6',
+                          defaultValue: '#656565',
+                          labelFieldName: 'theme6Label',
+                        }),
+                      ],
+                    },
+                    {
+                      type: 'row',
+                      fields: [
+                        createHexColorField({
+                          name: 'theme7',
+                          label: 'Theme 7',
+                          defaultValue: '#2C3E50',
+                          labelFieldName: 'theme7Label',
+                        }),
+                        createHexColorField({
+                          name: 'theme8',
+                          label: 'Theme 8',
+                          defaultValue: '#E74C3C',
+                          labelFieldName: 'theme8Label',
+                        }),
+                      ],
+                    },
                   ],
                 },
-                {
-                  type: 'row',
-                  fields: [
-                    createHexColorField({
-                      name: 'color5',
-                      label: 'Color 5',
-                      defaultValue: '#EA8928',
-                      labelFieldName: 'color5Label',
-                    }),
-                    createHexColorField({
-                      name: 'color6',
-                      label: 'Color 6',
-                      defaultValue: '#656565',
-                      labelFieldName: 'color6Label',
-                    }),
-                  ],
-                },
-                {
-                  type: 'row',
-                  fields: [
-                    createHexColorField({
-                      name: 'font',
-                      label: 'Font Color',
-                      defaultValue: '#373031',
-                      labelFieldName: 'fontLabel',
-                    }),
-                    createHexColorField({
-                      name: 'fontBrand1',
-                      label: 'Font Brand 1',
-                      defaultValue: '#6b081d',
-                      labelFieldName: 'fontBrand1Label',
-                    }),
-                  ],
-                },
-                {
-                  type: 'row',
-                  fields: [
-                    createHexColorField({
-                      name: 'fontBrand2',
-                      label: 'Font Brand 2',
-                      defaultValue: '#f15b4e',
-                      labelFieldName: 'fontBrand2Label',
-                    }),
-                    createHexColorField({
-                      name: 'fontAccent',
-                      label: 'Font Accent',
-                      defaultValue: '#8B5A4A',
-                      labelFieldName: 'fontAccentLabel',
-                    }),
-                  ],
-                },
-                {
-                  type: 'row',
-                  fields: [
-                    createHexColorField({
-                      name: 'fontHighlight',
-                      label: 'Font Highlight',
-                      defaultValue: '#f15b4e',
-                      labelFieldName: 'fontHighlightLabel',
-                    }),
-                    createHexColorField({
-                      name: 'accent',
-                      label: 'Accent',
-                      defaultValue: '#8B5A4A',
-                      labelFieldName: 'accentLabel',
-                    }),
-                  ],
-                },
-                createHexColorField({
-                  name: 'highlight',
-                  label: 'Highlight',
-                  defaultValue: '#f15b4e',
-                  labelFieldName: 'highlightLabel',
-                }),
               ],
             },
           ],

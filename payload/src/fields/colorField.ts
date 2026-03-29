@@ -19,7 +19,7 @@ export interface ColorFieldOptions {
  * Creates a color picker field with theme color presets and custom hex option.
  *
  * The field stores either:
- * - A theme color key (e.g., 'color1')
+ * - A theme color key (e.g., 'theme1')
  * - A custom hex value (e.g., '#ff0000')
  * - 'transparent'
  *

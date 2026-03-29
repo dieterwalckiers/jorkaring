@@ -2,14 +2,11 @@
 
 /* Define brand colors to match frontend */
 :root {
-  --color-1: #5E6E83;
-  --color-2: #5E6E83;
+  --color-theme1: #5E6E83;
+  --color-theme2: #5E6E83;
   --color-font: #373031;
-  --color-font-brand1: #6b081d;
-  --color-font-brand2: #f15b4e;
-  --color-accent: #8B5A4A;
-  --color-highlight: #f15b4e;
-  --color-headings: var(--color-2);
+  --color-font-accent: #8B5A4A;
+  --color-headings: #5E6E83;
 }
 
 /* ===========================================
@@ -255,36 +252,44 @@
 .LexicalEditorTheme__text [style*="--gradient-text"],
 [data-lexical-editor="true"] [style*="--text-color: gradient"],
 [data-lexical-editor="true"] [style*="--gradient-text"] {
-  background: linear-gradient(to right, var(--color-2), var(--color-1));
+  background: linear-gradient(to right, var(--color-theme2), var(--color-theme1));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Color 1–6 */
-.LexicalEditorTheme__text [style*="--text-color: color1"],
-[data-lexical-editor="true"] [style*="--text-color: color1"] {
-  color: var(--color-1) !important;
+/* Theme 1–8 */
+.LexicalEditorTheme__text [style*="--text-color: theme1"],
+[data-lexical-editor="true"] [style*="--text-color: theme1"] {
+  color: var(--color-theme1) !important;
 }
-.LexicalEditorTheme__text [style*="--text-color: color2"],
-[data-lexical-editor="true"] [style*="--text-color: color2"] {
-  color: var(--color-2) !important;
+.LexicalEditorTheme__text [style*="--text-color: theme2"],
+[data-lexical-editor="true"] [style*="--text-color: theme2"] {
+  color: var(--color-theme2) !important;
 }
-.LexicalEditorTheme__text [style*="--text-color: color3"],
-[data-lexical-editor="true"] [style*="--text-color: color3"] {
-  color: var(--color-3) !important;
+.LexicalEditorTheme__text [style*="--text-color: theme3"],
+[data-lexical-editor="true"] [style*="--text-color: theme3"] {
+  color: var(--color-theme3) !important;
 }
-.LexicalEditorTheme__text [style*="--text-color: color4"],
-[data-lexical-editor="true"] [style*="--text-color: color4"] {
-  color: var(--color-4) !important;
+.LexicalEditorTheme__text [style*="--text-color: theme4"],
+[data-lexical-editor="true"] [style*="--text-color: theme4"] {
+  color: var(--color-theme4) !important;
 }
-.LexicalEditorTheme__text [style*="--text-color: color5"],
-[data-lexical-editor="true"] [style*="--text-color: color5"] {
-  color: var(--color-5) !important;
+.LexicalEditorTheme__text [style*="--text-color: theme5"],
+[data-lexical-editor="true"] [style*="--text-color: theme5"] {
+  color: var(--color-theme5) !important;
 }
-.LexicalEditorTheme__text [style*="--text-color: color6"],
-[data-lexical-editor="true"] [style*="--text-color: color6"] {
-  color: var(--color-6) !important;
+.LexicalEditorTheme__text [style*="--text-color: theme6"],
+[data-lexical-editor="true"] [style*="--text-color: theme6"] {
+  color: var(--color-theme6) !important;
+}
+.LexicalEditorTheme__text [style*="--text-color: theme7"],
+[data-lexical-editor="true"] [style*="--text-color: theme7"] {
+  color: var(--color-theme7) !important;
+}
+.LexicalEditorTheme__text [style*="--text-color: theme8"],
+[data-lexical-editor="true"] [style*="--text-color: theme8"] {
+  color: var(--color-theme8) !important;
 }
 
 /* Font Color (base) */
@@ -293,40 +298,10 @@
   color: var(--color-font) !important;
 }
 
-/* Font Brand 1 */
-.LexicalEditorTheme__text [style*="--text-color: brand1"],
-[data-lexical-editor="true"] [style*="--text-color: brand1"] {
-  color: var(--color-font-brand1) !important;
-}
-
-/* Font Brand 2 */
-.LexicalEditorTheme__text [style*="--text-color: brand2"],
-[data-lexical-editor="true"] [style*="--text-color: brand2"] {
-  color: var(--color-font-brand2) !important;
-}
-
-/* Font Accent */
-.LexicalEditorTheme__text [style*="--text-color: fontAccent"],
-[data-lexical-editor="true"] [style*="--text-color: fontAccent"] {
-  color: var(--color-font-accent) !important;
-}
-
-/* Font Highlight */
-.LexicalEditorTheme__text [style*="--text-color: fontHighlight"],
-[data-lexical-editor="true"] [style*="--text-color: fontHighlight"] {
-  color: var(--color-font-highlight) !important;
-}
-
 /* Accent */
 .LexicalEditorTheme__text [style*="--text-color: accent"],
 [data-lexical-editor="true"] [style*="--text-color: accent"] {
-  color: var(--color-accent) !important;
-}
-
-/* Highlight */
-.LexicalEditorTheme__text [style*="--text-color: highlight"],
-[data-lexical-editor="true"] [style*="--text-color: highlight"] {
-  color: var(--color-highlight) !important;
+  color: var(--color-font-accent) !important;
 }
 
 /* Black */

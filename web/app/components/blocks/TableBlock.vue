@@ -180,7 +180,7 @@ const columnCount = computed(() => {
 }
 
 .button-cell:hover {
-  background-color: var(--color-5);
+  background-color: var(--color-button-bg-hover);
 }
 
 .chevron {
@@ -201,6 +201,6 @@ const columnCount = computed(() => {
 }
 
 .mobile-button-cell:hover {
-  background-color: var(--color-5);
+  background-color: var(--color-button-bg-hover);
 }
 </style>

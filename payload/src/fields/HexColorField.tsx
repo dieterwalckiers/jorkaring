@@ -19,7 +19,7 @@ export const HexColorField: React.FC<HexColorFieldProps> = ({ field, path, label
   const { value, setValue } = useField<string>({ path })
   const [localHex, setLocalHex] = useState(value || '#000000')
 
-  // Derive the sibling label field path (e.g. 'themeColors.color1' → 'themeColors.color1Label')
+  // Derive the sibling label field path (e.g. 'themeColors.theme1' → 'themeColors.theme1Label')
   const labelPath = labelFieldName && path
     ? path.replace(/[^.]+$/, labelFieldName)
     : undefined
@@ -103,19 +103,6 @@ export const HexColorField: React.FC<HexColorFieldProps> = ({ field, path, label
             fontSize: '14px',
             fontFamily: 'monospace',
           }}
-        />
-
-        {/* Preview swatch */}
-        <div
-          style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '4px',
-            border: '1px solid #ccc',
-            background: value || '#000000',
-            flexShrink: 0,
-          }}
-          title={`Preview: ${value}`}
         />
 
         {/* Inline label/name input */}

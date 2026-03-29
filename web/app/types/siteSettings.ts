@@ -12,8 +12,6 @@ export interface SiteStyling {
   headerHeight?: HeaderHeight
   headerBorder?: boolean
   logoSize?: LogoSize
-  headerBackgroundColor?: string
-  backgroundColor?: string
   googleFontBody?: string
   googleFontH1?: string
   googleFontHeadings?: string
@@ -54,19 +52,27 @@ export interface SplashPage {
 }
 
 export interface SiteThemeColors {
-  color1?: string
-  color2?: string
-  color3?: string
-  color4?: string
-  color5?: string
-  color6?: string
+  // System
+  mainBg?: string
   font?: string
-  fontBrand1?: string
-  fontBrand2?: string
   fontAccent?: string
-  fontHighlight?: string
-  accent?: string
-  highlight?: string
+  headings?: string
+  buttonFont?: string
+  buttonBg?: string
+  buttonFontHover?: string
+  buttonBgHover?: string
+  tableBorders?: string
+  stickyMessageTxt?: string
+  stickyMessageBg?: string
+  // Theme
+  theme1?: string
+  theme2?: string
+  theme3?: string
+  theme4?: string
+  theme5?: string
+  theme6?: string
+  theme7?: string
+  theme8?: string
 }
 
 export interface SiteSettings {

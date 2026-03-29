@@ -186,7 +186,7 @@ async function submitForm() {
 <style scoped>
 .newsletter-input {
   padding: 0.625rem 1.5rem;
-  border: 2px solid var(--color-5);
+  border: 2px solid var(--color-theme5);
   border-radius: 9999px;
   font-size: 1rem;
   color: var(--color-font);

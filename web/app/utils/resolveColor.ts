@@ -9,25 +9,27 @@ interface ThemeColorDef {
 
 const THEME_COLORS: Record<string, ThemeColorDef> = {
   transparent: { cssVar: 'transparent', hex: 'transparent' },
-  color1: { cssVar: 'var(--color-1)', hex: '#5E6E83' },
-  color2: { cssVar: 'var(--color-2)', hex: '#5E6E83' },
-  color3: { cssVar: 'var(--color-3)', hex: '#B6C9BB' },
-  color4: { cssVar: 'var(--color-4)', hex: '#BFEDC1' },
-  color5: { cssVar: 'var(--color-5)', hex: '#EA8928' },
-  color6: { cssVar: 'var(--color-6)', hex: '#656565' },
+  theme1: { cssVar: 'var(--color-theme1)', hex: '#5E6E83' },
+  theme2: { cssVar: 'var(--color-theme2)', hex: '#5E6E83' },
+  theme3: { cssVar: 'var(--color-theme3)', hex: '#B6C9BB' },
+  theme4: { cssVar: 'var(--color-theme4)', hex: '#BFEDC1' },
+  theme5: { cssVar: 'var(--color-theme5)', hex: '#EA8928' },
+  theme6: { cssVar: 'var(--color-theme6)', hex: '#656565' },
+  theme7: { cssVar: 'var(--color-theme7)', hex: '#2C3E50' },
+  theme8: { cssVar: 'var(--color-theme8)', hex: '#E74C3C' },
 }
 
 /**
  * Resolve a color value from Payload to a CSS value.
  *
  * Handles:
- * - Theme color keys (e.g., 'color1') → CSS variable
+ * - Theme color keys (e.g., 'theme1') → CSS variable
  * - Custom hex values (e.g., '#ff0000') → passed through
  * - 'transparent' → 'transparent'
  * - undefined/null/empty → 'transparent'
  *
  * @example
- * resolveColor('color1') // 'var(--color-1)'
+ * resolveColor('theme1') // 'var(--color-theme1)'
  * resolveColor('#ff0000')            // '#ff0000'
  * resolveColor('transparent')        // 'transparent'
  * resolveColor(undefined)            // 'transparent'
@@ -51,8 +53,8 @@ export function resolveColor(value: string | undefined | null): string {
  * instead of hardcoded fallbacks.
  *
  * @example
- * resolveColorToHex('color1') // '#5E6E83' (hardcoded fallback)
- * resolveColorToHex('color1', { color1: '#FF0000' }) // '#FF0000'
+ * resolveColorToHex('theme1') // '#5E6E83' (hardcoded fallback)
+ * resolveColorToHex('theme1', { theme1: '#FF0000' }) // '#FF0000'
  * resolveColorToHex('#ff0000')            // '#ff0000'
  * resolveColorToHex('transparent')        // 'transparent'
  */

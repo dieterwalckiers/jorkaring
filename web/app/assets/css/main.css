@@ -6,28 +6,27 @@
   --radius-button: .7rem;
 
   /* Theme colors (CMS-editable) */
-  --color-1: #5E6E83;
-  --color-2: #5E6E83;
-  --color-3: #B6C9BB;
-  --color-4: #BFEDC1;
-  --color-5: #EA8928;
-  --color-6: #656565;
+  --color-theme1: #5E6E83;
+  --color-theme2: #5E6E83;
+  --color-theme3: #B6C9BB;
+  --color-theme4: #BFEDC1;
+  --color-theme5: #EA8928;
+  --color-theme6: #656565;
+  --color-theme7: #2C3E50;
+  --color-theme8: #E74C3C;
 
-  /* Typography */
+  /* System colors (CMS-editable) */
+  --color-main-bg: #ffffff;
   --color-font: #373031;
-  --color-font-brand1: #6b081d;
-  --color-font-brand2: #f15b4e;
   --color-font-accent: #8B5A4A;
-  --color-font-highlight: #f15b4e;
-
-  /* Accent */
-  --color-accent: #8B5A4A;
-
-  /* Highlight */
-  --color-highlight: #f15b4e;
-
-  /* Header */
-  --color-header-border: var(--color-5);
+  --color-headings: #5E6E83;
+  --color-button-font: #373031;
+  --color-button-bg: transparent;
+  --color-button-font-hover: #ffffff;
+  --color-button-bg-hover: #EA8928;
+  --color-table-borders: #EA8928;
+  --color-sticky-message-txt: #B6C9BB;
+  --color-sticky-message-bg: #5E6E83;
 
   --color-warning-50: #fffbeb;
   --color-warning-100: #fef3c7;
@@ -70,15 +69,6 @@ html.dark {
 /* Make Nuxt UI components transparent so body background shows through */
 :root {
   --ui-bg: transparent;
-
-  --color-button-font: var(--color-2);
-  --color-button-bg: transparent;
-  --color-button-bg-hover: var(--color-5);
-  --color-table-borders: var(--color-5);
-  --color-headings: var(--color-2);
-
-  --color-sticky-message-txt: var(--color-3);
-  --color-sticky-message-bg: var(--color-2);
 }
 
 /* Mobile menu slideover - slightly transparent background */
@@ -98,6 +88,7 @@ html.dark {
 /* Global base font size for all body text (15px * 1.2 = 18px) */
 body {
   font-size: 18px;
+  background-color: var(--color-main-bg);
 }
 
 /* Text color classes for rich text content */
@@ -105,30 +96,27 @@ body {
 
 .text-color-gradient,
 .text-color-gradient * {
-  background: linear-gradient(to right, var(--color-2), var(--color-1));
+  background: linear-gradient(to right, var(--color-theme2), var(--color-theme1));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Color 1–6 */
-.text-color-1, .text-color-1 * { color: var(--color-1); }
-.text-color-2, .text-color-2 * { color: var(--color-2); }
-.text-color-3, .text-color-3 * { color: var(--color-3); }
-.text-color-4, .text-color-4 * { color: var(--color-4); }
-.text-color-5, .text-color-5 * { color: var(--color-5); }
-.text-color-6, .text-color-6 * { color: var(--color-6); }
+/* Theme 1–8 */
+.text-color-theme1, .text-color-theme1 * { color: var(--color-theme1); }
+.text-color-theme2, .text-color-theme2 * { color: var(--color-theme2); }
+.text-color-theme3, .text-color-theme3 * { color: var(--color-theme3); }
+.text-color-theme4, .text-color-theme4 * { color: var(--color-theme4); }
+.text-color-theme5, .text-color-theme5 * { color: var(--color-theme5); }
+.text-color-theme6, .text-color-theme6 * { color: var(--color-theme6); }
+.text-color-theme7, .text-color-theme7 * { color: var(--color-theme7); }
+.text-color-theme8, .text-color-theme8 * { color: var(--color-theme8); }
 
 /* Font colors */
 .text-color-base, .text-color-base * { color: var(--color-font); }
-.text-color-brand1, .text-color-brand1 * { color: var(--color-font-brand1); }
-.text-color-brand2, .text-color-brand2 * { color: var(--color-font-brand2); }
-.text-color-font-accent, .text-color-font-accent * { color: var(--color-font-accent); }
-.text-color-font-highlight, .text-color-font-highlight * { color: var(--color-font-highlight); }
 
-/* Accent & Highlight */
-.text-color-accent, .text-color-accent * { color: var(--color-accent); }
-.text-color-highlight, .text-color-highlight * { color: var(--color-highlight); }
+/* Accent */
+.text-color-accent, .text-color-accent * { color: var(--color-font-accent); }
 
 /* Black & White */
 .text-color-black, .text-color-black * { color: #000000; }
@@ -136,7 +124,7 @@ body {
 
 /* Legacy support: keep old class for backwards compatibility */
 .gradient-text {
-  background: linear-gradient(to right, var(--color-2), var(--color-1));
+  background: linear-gradient(to right, var(--color-theme2), var(--color-theme1));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -195,9 +183,9 @@ input[type="checkbox"]:checked {
   min-width: 1.75rem;
   height: 1.75rem;
   padding: 0 0.25rem;
-  border: 2px solid var(--color-2);
+  border: 2px solid var(--color-font);
   border-radius: 0.375rem;
-  color: var(--color-2);
+  color: var(--color-font);
   font-weight: 600;
   font-size: 0.875rem;
   line-height: 1;
@@ -223,5 +211,5 @@ input[type="checkbox"]:checked {
 
 .btn-outline-inline:hover {
   background-color: var(--color-button-bg-hover);
-  color: white;
+  color: var(--color-button-font-hover);
 }

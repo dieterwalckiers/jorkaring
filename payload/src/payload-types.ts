@@ -1146,14 +1146,6 @@ export interface SiteSetting {
      */
     logoSize?: ('small' | 'medium' | 'large' | 'xl') | null;
     /**
-     * Background color for the header
-     */
-    headerBackgroundColor?: string | null;
-    /**
-     * Background color for the website
-     */
-    backgroundColor?: string | null;
-    /**
      * Google Font for body text (e.g., "Roboto", "Open Sans"). Leave empty for system default.
      */
     googleFontBody?: string | null;
@@ -1708,71 +1700,90 @@ export interface SiteSetting {
    * Customize your brand colors. These override the default theme colors across the entire site. Use the "Name" fields to give each color a meaningful label (e.g. "Brand Red").
    */
   themeColors?: {
-    color1Label?: string | null;
-    color2Label?: string | null;
-    color3Label?: string | null;
-    color4Label?: string | null;
-    color5Label?: string | null;
-    color6Label?: string | null;
-    fontLabel?: string | null;
-    fontBrand1Label?: string | null;
-    fontBrand2Label?: string | null;
-    fontAccentLabel?: string | null;
-    fontHighlightLabel?: string | null;
-    accentLabel?: string | null;
-    highlightLabel?: string | null;
+    theme1Label?: string | null;
+    theme2Label?: string | null;
+    theme3Label?: string | null;
+    theme4Label?: string | null;
+    theme5Label?: string | null;
+    theme6Label?: string | null;
+    theme7Label?: string | null;
+    theme8Label?: string | null;
     /**
-     * Default: #5E6E83
+     * Default: #ffffff
      */
-    color1?: string | null;
-    /**
-     * Default: #5E6E83
-     */
-    color2?: string | null;
-    /**
-     * Default: #B6C9BB
-     */
-    color3?: string | null;
-    /**
-     * Default: #BFEDC1
-     */
-    color4?: string | null;
-    /**
-     * Default: #EA8928
-     */
-    color5?: string | null;
-    /**
-     * Default: #656565
-     */
-    color6?: string | null;
+    mainBg?: string | null;
     /**
      * Default: #373031
      */
     font?: string | null;
     /**
-     * Default: #6b081d
-     */
-    fontBrand1?: string | null;
-    /**
-     * Default: #f15b4e
-     */
-    fontBrand2?: string | null;
-    /**
      * Default: #8B5A4A
      */
     fontAccent?: string | null;
     /**
-     * Default: #f15b4e
+     * Default: #5E6E83
      */
-    fontHighlight?: string | null;
+    headings?: string | null;
     /**
-     * Default: #8B5A4A
+     * Default: #373031
      */
-    accent?: string | null;
+    buttonFont?: string | null;
     /**
-     * Default: #f15b4e
+     * Default: transparent
      */
-    highlight?: string | null;
+    buttonBg?: string | null;
+    /**
+     * Default: #ffffff
+     */
+    buttonFontHover?: string | null;
+    /**
+     * Default: #EA8928
+     */
+    buttonBgHover?: string | null;
+    /**
+     * Default: #EA8928
+     */
+    tableBorders?: string | null;
+    /**
+     * Default: #B6C9BB
+     */
+    stickyMessageTxt?: string | null;
+    /**
+     * Default: #5E6E83
+     */
+    stickyMessageBg?: string | null;
+    /**
+     * Default: #5E6E83
+     */
+    theme1?: string | null;
+    /**
+     * Default: #5E6E83
+     */
+    theme2?: string | null;
+    /**
+     * Default: #B6C9BB
+     */
+    theme3?: string | null;
+    /**
+     * Default: #BFEDC1
+     */
+    theme4?: string | null;
+    /**
+     * Default: #EA8928
+     */
+    theme5?: string | null;
+    /**
+     * Default: #656565
+     */
+    theme6?: string | null;
+    /**
+     * Default: #2C3E50
+     */
+    theme7?: string | null;
+    /**
+     * Default: #E74C3C
+     */
+    theme8?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1793,8 +1804,6 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         headerHeight?: T;
         headerBorder?: T;
         logoSize?: T;
-        headerBackgroundColor?: T;
-        backgroundColor?: T;
         googleFontBody?: T;
         googleFontH1?: T;
         googleFontHeadings?: T;
@@ -2025,32 +2034,33 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   themeColors?:
     | T
     | {
-        color1Label?: T;
-        color2Label?: T;
-        color3Label?: T;
-        color4Label?: T;
-        color5Label?: T;
-        color6Label?: T;
-        fontLabel?: T;
-        fontBrand1Label?: T;
-        fontBrand2Label?: T;
-        fontAccentLabel?: T;
-        fontHighlightLabel?: T;
-        accentLabel?: T;
-        highlightLabel?: T;
-        color1?: T;
-        color2?: T;
-        color3?: T;
-        color4?: T;
-        color5?: T;
-        color6?: T;
+        theme1Label?: T;
+        theme2Label?: T;
+        theme3Label?: T;
+        theme4Label?: T;
+        theme5Label?: T;
+        theme6Label?: T;
+        theme7Label?: T;
+        theme8Label?: T;
+        mainBg?: T;
         font?: T;
-        fontBrand1?: T;
-        fontBrand2?: T;
         fontAccent?: T;
-        fontHighlight?: T;
-        accent?: T;
-        highlight?: T;
+        headings?: T;
+        buttonFont?: T;
+        buttonBg?: T;
+        buttonFontHover?: T;
+        buttonBgHover?: T;
+        tableBorders?: T;
+        stickyMessageTxt?: T;
+        stickyMessageBg?: T;
+        theme1?: T;
+        theme2?: T;
+        theme3?: T;
+        theme4?: T;
+        theme5?: T;
+        theme6?: T;
+        theme7?: T;
+        theme8?: T;
       };
   updatedAt?: T;
   createdAt?: T;
