@@ -90,7 +90,9 @@ export default defineNuxtConfig({
     payloadApiUrl: process.env.PAYLOAD_API_URL || 'http://localhost:3202/api',
     public: {
       // Client-side (must be browser-accessible)
-      payloadApiUrl: process.env.NUXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3202/api'
+      payloadApiUrl: process.env.NUXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3202/api',
+      // Payload server URL for live preview (postMessage communication)
+      payloadServerUrl: process.env.NUXT_PUBLIC_PAYLOAD_SERVER_URL || 'http://localhost:3202',
     }
   },
 

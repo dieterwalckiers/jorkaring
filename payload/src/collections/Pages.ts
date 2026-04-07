@@ -11,10 +11,16 @@ export const Pages: CollectionConfig = {
   access: {
     read: () => true,
   },
+  versions: {
+    drafts: true,
+  },
   hooks: {
     afterChange: [
-      async ({ collection }) => {
-        await triggerDeploy(collection.slug)
+      async ({ collection, doc }) => {
+        // Only trigger deploy when content is published, not on draft saves
+        if (doc._status === 'published') {
+          await triggerDeploy(collection.slug)
+        }
       },
     ],
     afterDelete: [

@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@nuxt/ui": "^4",
+    "@payloadcms/live-preview-vue": "^3.80.0",
     "@vimeo/player": "^2.30.2",
     "nuxt": "^4.2.2",
     "vue": "^3.5.0",

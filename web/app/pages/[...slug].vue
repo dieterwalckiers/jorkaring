@@ -30,7 +30,11 @@ const { data: response, error } = await useAsyncData(
   }
 )
 
-const page = computed<Page | null>(() => response.value?.docs?.[0] || null)
+const initialPage = computed<Page | null>(() => response.value?.docs?.[0] || null)
+
+// Live preview: when rendered inside Payload admin iframe, data updates in real time
+const { data: liveData } = usePayloadLivePreview<Page>(initialPage.value || {} as Page)
+const page = computed<Page | null>(() => liveData.value?.id ? liveData.value : initialPage.value)
 
 const { setCurrentPage } = useCurrentPage()
 watch(page, (p) => setCurrentPage(p), { immediate: true })

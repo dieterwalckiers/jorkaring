@@ -30,6 +30,8 @@ services:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://payload:payload@postgres:5432/payload
       - PAYLOAD_SECRET=development-secret-key-change-in-production
+      - PAYLOAD_PUBLIC_SERVER_URL=http://localhost:3202
+      - PREVIEW_URL=http://localhost:3201
     depends_on:
       - postgres
     networks:
@@ -48,6 +50,7 @@ services:
     environment:
       - PAYLOAD_API_URL=http://payload:3000/api
       - NUXT_PUBLIC_PAYLOAD_API_URL=http://localhost:3202/api
+      - NUXT_PUBLIC_PAYLOAD_SERVER_URL=http://localhost:3202
     depends_on:
       - payload
     networks:

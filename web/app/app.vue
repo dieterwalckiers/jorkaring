@@ -1,10 +1,18 @@
 <script setup lang="ts">
 import type { Media } from '~/types/media'
-import type { ContainerWidth, SiteThemeColors } from '~/types/siteSettings'
+import type { ContainerWidth, SiteSettings, SiteThemeColors } from '~/types/siteSettings'
 
-const { data: siteSettings } = useSiteSettings()
+const { data: initialSettings } = useSiteSettings()
 const payloadBaseUrl = usePayloadBaseUrl()
 const route = useRoute()
+
+// Live preview for site settings: updates in real time when editing in Payload admin
+const { data: liveSettings } = usePayloadLivePreview<SiteSettings>(
+  initialSettings.value || {} as SiteSettings,
+)
+const siteSettings = computed(() =>
+  liveSettings.value?.id ? liveSettings.value : initialSettings.value,
+)
 
 const splashActive = computed(() =>
   route.path === '/'

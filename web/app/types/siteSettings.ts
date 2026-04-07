@@ -47,6 +47,7 @@ export interface SiteCookieConsent {
 
 export interface SplashPage {
   enabled?: boolean
+  backgroundImage?: Media | string
   centered?: boolean
   content?: ContentBlock[]
 }

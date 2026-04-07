@@ -21,10 +21,16 @@ export const SiteSettings: GlobalConfig = {
   access: {
     read: () => true,
   },
+  versions: {
+    drafts: true,
+  },
   hooks: {
     afterChange: [
-      async ({ global }) => {
-        await triggerDeploy(global.slug)
+      async ({ global, doc }) => {
+        // Only trigger deploy when content is published, not on draft saves
+        if (doc._status === 'published') {
+          await triggerDeploy(global.slug)
+        }
       },
     ],
   },
@@ -347,6 +353,15 @@ export const SiteSettings: GlobalConfig = {
                   defaultValue: false,
                   admin: {
                     description: 'When enabled, visitors will see the splash page instead of the normal home page',
+                  },
+                },
+                {
+                  name: 'backgroundImage',
+                  type: 'upload',
+                  relationTo: 'media',
+                  admin: {
+                    description: 'Full-screen background image for the splash page. Use a high-resolution image for best results.',
+                    condition: (data) => data?.splashPage?.enabled,
                   },
                 },
                 {

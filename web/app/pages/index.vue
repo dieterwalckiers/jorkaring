@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { Page, PagesResponse } from '~/types/page'
+import type { Media } from '~/types/media'
 
 const apiUrl = usePayloadApiUrl()
+const payloadBaseUrl = usePayloadBaseUrl()
 const { data: siteSettings } = useSiteSettings()
 
 const splashBlocks = computed(() =>
@@ -9,6 +11,15 @@ const splashBlocks = computed(() =>
 )
 
 const showSplash = computed(() => splashBlocks.value.length > 0)
+
+const splashBgStyle = computed(() => {
+  const bg = siteSettings.value?.splashPage?.backgroundImage
+  if (!bg || typeof bg === 'string') return undefined
+  const url = (bg as Media).url
+  if (!url) return undefined
+  const fullUrl = url.startsWith('http') ? url : `${payloadBaseUrl}${url}`
+  return { backgroundImage: `url(${fullUrl})` }
+})
 
 // Use native fetch to avoid $fetch caching issues during SSG
 const { data: response } = await useAsyncData(
@@ -23,7 +34,11 @@ const { data: response } = await useAsyncData(
   }
 )
 
-const page = computed<Page | null>(() => response.value?.docs?.[0] || null)
+const initialPage = computed<Page | null>(() => response.value?.docs?.[0] || null)
+
+// Live preview: when rendered inside Payload admin iframe, data updates in real time
+const { data: liveData } = usePayloadLivePreview<Page>(initialPage.value || {} as Page)
+const page = computed<Page | null>(() => liveData.value?.id ? liveData.value : initialPage.value)
 
 const { setCurrentPage } = useCurrentPage()
 watch(page, (p) => setCurrentPage(p), { immediate: true })
@@ -43,7 +58,7 @@ useSeoMeta({
 
 <template>
   <!-- Splash page: full viewport, no container -->
-  <div v-if="showSplash" class="h-dvh w-dvw" :class="siteSettings?.splashPage?.centered ? 'flex items-center justify-center' : ''">
+  <div v-if="showSplash" class="h-dvh w-dvw bg-cover bg-center bg-no-repeat" :class="siteSettings?.splashPage?.centered ? 'flex items-center justify-center' : ''" :style="splashBgStyle">
     <BlocksBlockRenderer :blocks="splashBlocks" />
   </div>
 

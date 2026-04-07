@@ -26,6 +26,27 @@ export default buildConfig({
     components: {
       providers: ['@/components/ThemeColorProvider#ThemeColorProvider'],
     },
+    livePreview: {
+      url: ({ data, collectionConfig, globalConfig }) => {
+        const previewUrl = process.env.PREVIEW_URL || 'http://localhost:3201'
+        if (collectionConfig?.slug === 'pages') {
+          const slug = (data as Record<string, unknown>)?.slug
+          return slug === 'home' ? previewUrl : `${previewUrl}/${slug}`
+        }
+        // For site-settings, preview the home page
+        if (globalConfig?.slug === 'site-settings') {
+          return previewUrl
+        }
+        return previewUrl
+      },
+      collections: ['pages'],
+      globals: ['site-settings'],
+      breakpoints: [
+        { label: 'Mobile', width: 375, height: 667 },
+        { label: 'Tablet', width: 768, height: 1024 },
+        { label: 'Desktop', width: 1440, height: 900 },
+      ],
+    },
   },
   collections: [Pages, Media, Users],
   globals: [SiteSettings],
@@ -151,6 +172,7 @@ export default buildConfig({
     'http://localhost:3201',
     'http://localhost:3202',
     process.env.FRONTEND_URL || '',
+    process.env.PREVIEW_URL || '',
   ].filter(Boolean),
   upload: {
     limits: {
