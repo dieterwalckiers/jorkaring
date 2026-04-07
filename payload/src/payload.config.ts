@@ -42,9 +42,9 @@ export default buildConfig({
       collections: ['pages'],
       globals: ['site-settings'],
       breakpoints: [
-        { label: 'Mobile', width: 375, height: 667 },
-        { label: 'Tablet', width: 768, height: 1024 },
-        { label: 'Desktop', width: 1440, height: 900 },
+        { name: 'mobile', label: 'Mobile', width: 375, height: 667 },
+        { name: 'tablet', label: 'Tablet', width: 768, height: 1024 },
+        { name: 'desktop', label: 'Desktop', width: 1440, height: 900 },
       ],
     },
   },
