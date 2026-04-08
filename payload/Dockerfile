@@ -50,5 +50,5 @@ ENV HOSTNAME="0.0.0.0"
 EXPOSE 3000
 
 # Run migrations then start the app on Railway's PORT
-# Use npm for runtime since node_modules is pre-installed and npm is always available
-CMD ["sh", "-c", "npm run migrate && npm run start -- -p ${PORT:-3000}"]
+# Note: 'next start' instead of 'npm run start' to avoid running migrate twice
+CMD ["sh", "-c", "npm run migrate && npx next start -p ${PORT:-3000}"]
