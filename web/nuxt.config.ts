@@ -86,13 +86,18 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    // Server-side only (can use Docker internal hostname)
-    payloadApiUrl: process.env.PAYLOAD_API_URL || 'http://localhost:3202/api',
+    // Server-side only — override at runtime with NUXT_PAYLOAD_API_URL
+    payloadApiUrl: 'http://localhost:3202/api',
     public: {
-      // Client-side (must be browser-accessible)
-      payloadApiUrl: process.env.NUXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3202/api',
-      // Payload server URL for live preview (postMessage communication)
-      payloadServerUrl: process.env.NUXT_PUBLIC_PAYLOAD_SERVER_URL || 'http://localhost:3202',
+      // Client-side — override at runtime with NUXT_PUBLIC_PAYLOAD_API_URL
+      payloadApiUrl: 'http://localhost:3202/api',
+      // Payload server URL for live preview — override with NUXT_PUBLIC_PAYLOAD_SERVER_URL
+      payloadServerUrl: 'http://localhost:3202',
+      // When true, API calls include draft=true — override with NUXT_PUBLIC_PREVIEW_MODE
+      previewMode: false,
+      // When true, media URLs are served from the same origin as the static site
+      // (files are bundled into public/api/media/file/). Override with NUXT_PUBLIC_STATIC_MEDIA.
+      staticMedia: false,
     }
   },
 

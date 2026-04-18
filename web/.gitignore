@@ -4,5 +4,8 @@ node_modules/
 .env
 *.log
 
+# Media files downloaded from Payload at build time
+public/api/
+
 *storybook.log
 storybook-static

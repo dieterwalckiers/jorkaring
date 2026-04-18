@@ -7,11 +7,24 @@ export function usePayloadApiUrl() {
   return import.meta.server ? config.payloadApiUrl : config.public.payloadApiUrl
 }
 
-// Returns the public payload base URL (for media URLs that need to work in the browser)
+// Returns true when running as the preview SSR server (shows draft content)
+export function useIsPreviewMode() {
+  const config = useRuntimeConfig()
+  // Nuxt runtime env override delivers strings, build-time value is boolean
+  return config.public.previewMode === true || config.public.previewMode === 'true'
+}
+
+// Returns draft query param when in preview mode, for spreading into query objects
+export function useDraftQuery(): Record<string, string> {
+  return useIsPreviewMode() ? { draft: 'true' } : {}
+}
+
+// Returns the public payload base URL (for media URLs that need to work in the browser).
+// When staticMedia is enabled, returns '' so relative media URLs (e.g. /api/media/file/foo.avif)
+// pass through unchanged and are served from the same origin as the static site.
 export function usePayloadBaseUrl() {
   const config = useRuntimeConfig()
-  // Always use public URL since media URLs are used in <img> tags rendered in the browser
-  // Remove '/api' suffix to get base URL
+  if (config.public.staticMedia === true || config.public.staticMedia === 'true') return ''
   return config.public.payloadApiUrl.replace(/\/api$/, '')
 }
 
@@ -30,8 +43,9 @@ export function useMediaUrl(url: string | undefined | null): string | undefined 
 
 export function usePages() {
   const apiUrl = usePayloadApiUrl()
+  const draftQuery = useDraftQuery()
   const result = useFetch<PagesResponse>(`${apiUrl}/pages`, {
-    query: { limit: 100 },
+    query: { limit: 100, ...draftQuery },
     key: 'pages',
     timeout: 10000,
     retry: 1,
@@ -45,11 +59,13 @@ export function usePages() {
 
 export function useMenuPages() {
   const apiUrl = usePayloadApiUrl()
+  const draftQuery = useDraftQuery()
   const result = useFetch<PagesResponse>(`${apiUrl}/pages`, {
     query: {
       'where[showInMenu][equals]': 'true',
       sort: 'menuOrder',
-      limit: 100
+      limit: 100,
+      ...draftQuery,
     },
     key: 'menuPages',
     timeout: 10000,
@@ -64,6 +80,7 @@ export function useMenuPages() {
 
 export function usePage(slug: MaybeRefOrGetter<string>) {
   const apiUrl = usePayloadApiUrl()
+  const draftQuery = useDraftQuery()
   const slugValue = toValue(slug)
 
   const result = useFetch<PagesResponse>(`${apiUrl}/pages`, {
@@ -73,7 +90,8 @@ export function usePage(slug: MaybeRefOrGetter<string>) {
           equals: slugValue
         }
       },
-      limit: 1
+      limit: 1,
+      ...draftQuery,
     },
     key: `page-${slugValue}`,
     timeout: 10000,
@@ -88,10 +106,12 @@ export function usePage(slug: MaybeRefOrGetter<string>) {
 
 export function useSiteSettings() {
   const apiUrl = usePayloadApiUrl()
+  const draftQuery = useDraftQuery()
 
   const result = useFetch<SiteSettings>(`${apiUrl}/globals/site-settings`, {
     query: {
       depth: 2, // Include media relations and nested block media
+      ...draftQuery,
     },
     key: 'siteSettings',
     dedupe: 'defer',

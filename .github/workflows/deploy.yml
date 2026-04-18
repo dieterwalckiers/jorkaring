@@ -70,12 +70,21 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuxt-
 
+      - name: Download media from Payload
+        working-directory: web
+        env:
+          PAYLOAD_API_URL: ${{ secrets.PAYLOAD_API_URL }}
+        run: pnpm run download-media
+
       - name: Generate static site
         working-directory: web
         env:
           # Both needed: PAYLOAD_API_URL for server-side rendering, NUXT_PUBLIC_PAYLOAD_API_URL for client
           PAYLOAD_API_URL: ${{ secrets.PAYLOAD_API_URL }}
           NUXT_PUBLIC_PAYLOAD_API_URL: ${{ secrets.PAYLOAD_API_URL }}
+          # Media files are bundled into the static site at public/api/media/file/,
+          # so media URLs should be same-origin (no Railway domain prefix)
+          NUXT_PUBLIC_STATIC_MEDIA: 'true'
           NODE_OPTIONS: '--max-old-space-size=8192'
         run: pnpm run generate
 

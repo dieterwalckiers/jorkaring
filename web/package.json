@@ -8,6 +8,7 @@
     "dev:nuxt": "nuxt dev",
     "dev:storybook": "storybook dev -p 6006",
     "generate": "nuxt generate",
+    "download-media": "node scripts/download-media.mjs",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "storybook": "storybook dev -p 6006 --no-open",
