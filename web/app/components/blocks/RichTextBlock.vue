@@ -53,7 +53,7 @@ const containerClasses = computed(() => {
 <template>
   <div v-if="block.renderFloating" class="relative pointer-events-none">
     <div
-      class="prose prose-lg max-w-none floating-content"
+      class="prose prose-lg max-w-none mx-auto floating-content"
       :class="[widthClass, marginClass, ...containerClasses]"
       :style="{ ...floatingStyle, ...containerStyle }"
     >
@@ -62,7 +62,7 @@ const containerClasses = computed(() => {
   </div>
   <div
     v-else
-    class="prose prose-lg max-w-none"
+    class="prose prose-lg max-w-none mx-auto"
     :class="[widthClass, marginClass, ...containerClasses]"
     :style="containerStyle"
   >
