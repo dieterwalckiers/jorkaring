@@ -1,3 +1,14 @@
+/* ===========================================
+   LIVE PREVIEW - Fit desktop preview in panel
+   =========================================== */
+
+/* Contain the preview iframe within the panel when a breakpoint is wider
+   than the available space. overflow:auto adds scrollbars as fallback. */
+.live-preview-window__main {
+  overflow: auto !important;
+  max-width: 100% !important;
+}
+
 /* Custom admin styles - WYSIWYG preview matching frontend */
 
 /* Define brand colors to match frontend */
