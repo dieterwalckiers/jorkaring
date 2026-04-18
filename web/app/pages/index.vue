@@ -4,6 +4,7 @@ import type { Media } from '~/types/media'
 
 const apiUrl = usePayloadApiUrl()
 const payloadBaseUrl = usePayloadBaseUrl()
+const isPreview = useIsPreviewMode()
 const { data: siteSettings } = useSiteSettings()
 
 const splashBlocks = computed(() =>
@@ -29,6 +30,7 @@ const { data: response } = await useAsyncData(
     url.searchParams.set('where[slug][equals]', 'home')
     url.searchParams.set('limit', '1')
     url.searchParams.set('depth', '2')
+    if (isPreview) url.searchParams.set('draft', 'true')
     const res = await fetch(url.toString())
     return res.json() as Promise<PagesResponse>
   }

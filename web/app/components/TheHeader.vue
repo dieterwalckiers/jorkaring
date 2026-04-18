@@ -22,12 +22,14 @@ const route = useRoute()
 const { currentPage } = useCurrentPage()
 const apiUrl = usePayloadApiUrl()
 const payloadBaseUrl = usePayloadBaseUrl()
+const draftQuery = useDraftQuery()
 
 const { data: response } = await useFetch<PagesResponse>(`${apiUrl}/pages`, {
   query: {
     'where[showInMenu][equals]': 'true',
     sort: 'menuOrder',
-    limit: 100
+    limit: 100,
+    ...draftQuery,
   },
   key: 'menuPages',
   dedupe: 'defer',
@@ -39,7 +41,8 @@ const { data: toolbarResponse } = await useFetch<PagesResponse>(`${apiUrl}/pages
   query: {
     'where[showInToolbar][equals]': 'true',
     sort: 'toolbarOrder',
-    limit: 100
+    limit: 100,
+    ...draftQuery,
   },
   key: 'toolbarPages',
   dedupe: 'defer',

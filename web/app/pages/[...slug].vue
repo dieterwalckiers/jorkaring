@@ -3,6 +3,7 @@ import type { Page, PagesResponse } from '~/types/page'
 
 const route = useRoute()
 const apiUrl = usePayloadApiUrl()
+const isPreview = useIsPreviewMode()
 const { data: siteSettings } = useSiteSettings()
 
 // Get slug from route params - handle array (catch-all) or string
@@ -25,6 +26,7 @@ const { data: response, error } = await useAsyncData(
     url.searchParams.set('where[slug][equals]', slug)
     url.searchParams.set('limit', '1')
     url.searchParams.set('depth', '2')
+    if (isPreview) url.searchParams.set('draft', 'true')
     const res = await fetch(url.toString())
     return res.json() as Promise<PagesResponse>
   }
