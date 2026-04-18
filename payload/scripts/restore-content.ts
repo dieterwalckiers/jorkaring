@@ -256,11 +256,18 @@ async function restoreContent(): Promise<void> {
     const pages = JSON.parse(pagesContent) as PageDoc[]
     let restoredCount = 0
 
-    // Pass 1: Create pages without menuFilter
+    // Pass 1: Create pages without menuFilter. We always create as draft
+    // first to skip required-field validation, then publish in pass 3 if the
+    // source doc was published.
+    const publishedOldIds = new Set<number>()
     for (const page of pages) {
       const oldId = page.id
       // Remove fields that Payload manages
       const { id, createdAt, updatedAt, menuFilter, ...pageData } = page
+
+      if (page._status === 'published') {
+        publishedOldIds.add(oldId)
+      }
 
       // Track pages that have menuFilter for second pass
       if (Array.isArray(menuFilter) && menuFilter.length > 0) {
@@ -312,6 +319,27 @@ async function restoreContent(): Promise<void> {
       }
       console.log(`   ✓ ${pagesWithMenuFilter.length} menuFilter relationships restored`)
     }
+
+    // Pass 3: Publish pages that were published in the source
+    if (publishedOldIds.size > 0) {
+      console.log('\n📢 Publishing pages...')
+      let publishedCount = 0
+      for (const oldId of publishedOldIds) {
+        const newId = pageIdMap.get(oldId)
+        if (!newId) continue
+        try {
+          await payload.update({
+            collection: 'pages',
+            id: newId,
+            data: { _status: 'published' } as Record<string, unknown>,
+          })
+          publishedCount++
+        } catch (error) {
+          console.warn(`   ⚠ Failed to publish page id=${newId}:`, (error as Error).message)
+        }
+      }
+      console.log(`   ✓ ${publishedCount}/${publishedOldIds.size} pages published`)
+    }
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
       console.log('   ⚠ No pages.json found (skipping)')
@@ -326,20 +354,22 @@ async function restoreContent(): Promise<void> {
     const settingsContent = await fs.readFile(path.join(backupDir, 'site-settings.json'), 'utf-8')
     const settings = JSON.parse(settingsContent) as SiteSettingsDoc
 
-    // Remove fields that Payload manages
-    const { id, createdAt, updatedAt, globalType, ...settingsData } = settings
+    // Remove fields that Payload manages. We also drop _status: the source
+    // may have been a draft, but globals are singletons and dev environments
+    // want the latest values visible in the non-preview frontend.
+    const { id, createdAt, updatedAt, globalType, _status, ...settingsData } = settings
 
-    // Remap media IDs
-    if (settingsData.logo && typeof settingsData.logo === 'number') {
-      settingsData.logo = mediaIdMap.get(settingsData.logo) ?? null
-    }
-    if (settingsData.favicon && typeof settingsData.favicon === 'number') {
-      settingsData.favicon = mediaIdMap.get(settingsData.favicon) ?? null
-    }
+    // Deep-remap all media references (logo, favicon, splashPage.backgroundImage,
+    // rich text embeds, etc.)
+    const remappedSettings = remapMediaIds(
+      [settingsData as unknown],
+      mediaIdMap,
+    )[0] as Record<string, unknown>
 
     await payload.updateGlobal({
       slug: 'site-settings',
-      data: settingsData as Record<string, unknown>,
+      data: { ...remappedSettings, _status: 'published' },
+      draft: false,
     })
     console.log('   ✓ Site settings restored')
   } catch (error) {
@@ -358,12 +388,14 @@ function remapMediaIds(content: unknown[], mediaIdMap: Map<number, number>): unk
   return JSON.parse(
     JSON.stringify(content),
     (key, value) => {
-      // Remap media relationship IDs
+      // Remap media relationship IDs. If the referenced media was not
+      // restored (file missing in backup), null the reference so we don't
+      // violate foreign keys against stale production IDs.
       if (
         (key === 'image' || key === 'backgroundImage' || key === 'logo' || key === 'favicon') &&
         typeof value === 'number'
       ) {
-        return mediaIdMap.get(value) ?? value
+        return mediaIdMap.get(value) ?? null
       }
       // Handle media references in rich text
       if (key === 'relationTo' && value === 'media') {

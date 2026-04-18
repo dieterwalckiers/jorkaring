@@ -41,11 +41,14 @@ async function exportContent(): Promise<void> {
   const results: ExportResult[] = []
 
   // Export Pages
+  // draft: true returns the latest version of each doc (draft or published),
+  // so in-progress edits aren't silently dropped.
   console.log('📄 Exporting pages...')
   const pages = await payload.find({
     collection: 'pages',
     limit: 0, // No limit - get all
     depth: 0, // Don't expand relationships - we'll handle them during restore
+    draft: true,
   })
   await fs.writeFile(
     path.join(backupDir, 'pages.json'),
@@ -88,6 +91,7 @@ async function exportContent(): Promise<void> {
   const siteSettings = await payload.findGlobal({
     slug: 'site-settings',
     depth: 0,
+    draft: true,
   })
   await fs.writeFile(
     path.join(backupDir, 'site-settings.json'),
