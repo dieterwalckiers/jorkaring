@@ -79,8 +79,10 @@ jobs:
       - name: Generate static site
         working-directory: web
         env:
-          # Both needed: PAYLOAD_API_URL for server-side rendering, NUXT_PUBLIC_PAYLOAD_API_URL for client
-          PAYLOAD_API_URL: ${{ secrets.PAYLOAD_API_URL }}
+          # Nuxt runtimeConfig convention: server key `payloadApiUrl` is
+          # overridden by NUXT_PAYLOAD_API_URL, public key by NUXT_PUBLIC_PAYLOAD_API_URL.
+          # Without the NUXT_ prefix, SSG fetches fall back to localhost:3202 and fail.
+          NUXT_PAYLOAD_API_URL: ${{ secrets.PAYLOAD_API_URL }}
           NUXT_PUBLIC_PAYLOAD_API_URL: ${{ secrets.PAYLOAD_API_URL }}
           # Media files are bundled into the static site at public/api/media/file/,
           # so media URLs should be same-origin (no Railway domain prefix)
