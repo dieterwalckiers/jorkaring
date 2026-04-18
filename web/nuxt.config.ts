@@ -50,7 +50,9 @@ export default defineNuxtConfig({
         return
       }
 
-      const apiUrl = process.env.PAYLOAD_API_URL || 'http://localhost:3202/api'
+      // NUXT_PAYLOAD_API_URL is the runtimeConfig-compatible name (set in deploy.yml);
+      // PAYLOAD_API_URL is the local-dev name used in docker-compose.yml.
+      const apiUrl = process.env.NUXT_PAYLOAD_API_URL || process.env.PAYLOAD_API_URL || 'http://localhost:3202/api'
 
       try {
         const response = await fetch(`${apiUrl}/pages?limit=500`)
