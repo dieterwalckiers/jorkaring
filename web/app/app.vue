@@ -10,9 +10,11 @@ const route = useRoute()
 const { data: liveSettings } = usePayloadLivePreview<SiteSettings>(
   initialSettings.value || {} as SiteSettings,
 )
-const siteSettings = computed(() =>
-  liveSettings.value?.id ? liveSettings.value : initialSettings.value,
-)
+const siteSettings = computed(() => {
+  const live = liveSettings.value
+  const init = initialSettings.value
+  return live?.id && init?.id && live.id === init.id ? live : init
+})
 
 const splashActive = computed(() =>
   route.path === '/'

@@ -40,7 +40,11 @@ const initialPage = computed<Page | null>(() => response.value?.docs?.[0] || nul
 
 // Live preview: when rendered inside Payload admin iframe, data updates in real time
 const { data: liveData } = usePayloadLivePreview<Page>(initialPage.value || {} as Page)
-const page = computed<Page | null>(() => liveData.value?.id ? liveData.value : initialPage.value)
+const page = computed<Page | null>(() => {
+  const live = liveData.value
+  const init = initialPage.value
+  return live?.id && init?.id && live.id === init.id ? live : init
+})
 
 const { setCurrentPage } = useCurrentPage()
 watch(page, (p) => setCurrentPage(p), { immediate: true })

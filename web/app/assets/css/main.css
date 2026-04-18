@@ -56,7 +56,7 @@
 /* Force light mode - override dark mode even if system prefers dark */
 html.dark {
   color-scheme: light !important;
-  --ui-text: var(--ui-color-neutral-900) !important;
+  --ui-text: var(--color-font) !important;
   --ui-text-muted: var(--ui-color-neutral-500) !important;
   --ui-text-dimmed: var(--ui-color-neutral-400) !important;
   --ui-bg: transparent !important;
@@ -66,9 +66,11 @@ html.dark {
   --ui-border-muted: var(--ui-color-neutral-200) !important;
 }
 
-/* Make Nuxt UI components transparent so body background shows through */
+/* Make Nuxt UI components transparent so body background shows through,
+   and make the default text color follow the CMS "Font Color" setting */
 :root {
   --ui-bg: transparent;
+  --ui-text: var(--color-font);
 }
 
 /* Mobile menu slideover - slightly transparent background */
@@ -89,6 +91,7 @@ html.dark {
 body {
   font-size: 18px;
   background-color: var(--color-main-bg);
+  color: var(--color-font);
 }
 
 /* Text color classes for rich text content */
