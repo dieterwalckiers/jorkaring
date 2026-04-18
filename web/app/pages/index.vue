@@ -3,7 +3,6 @@ import type { Page, PagesResponse } from '~/types/page'
 import type { Media } from '~/types/media'
 
 const apiUrl = usePayloadApiUrl()
-const payloadBaseUrl = usePayloadBaseUrl()
 const isPreview = useIsPreviewMode()
 const { data: siteSettings } = useSiteSettings()
 
@@ -13,13 +12,10 @@ const splashBlocks = computed(() =>
 
 const showSplash = computed(() => splashBlocks.value.length > 0)
 
-const splashBgStyle = computed(() => {
+const splashBackground = computed<Media | null>(() => {
   const bg = siteSettings.value?.splashPage?.backgroundImage
-  if (!bg || typeof bg === 'string') return undefined
-  const url = (bg as Media).url
-  if (!url) return undefined
-  const fullUrl = url.startsWith('http') ? url : `${payloadBaseUrl}${url}`
-  return { backgroundImage: `url(${fullUrl})` }
+  if (!bg || typeof bg === 'string') return null
+  return bg as Media
 })
 
 // Use native fetch to avoid $fetch caching issues during SSG
@@ -64,8 +60,22 @@ useSeoMeta({
 
 <template>
   <!-- Splash page: full viewport, no container -->
-  <div v-if="showSplash" class="h-dvh w-dvw bg-cover bg-center bg-no-repeat" :class="siteSettings?.splashPage?.centered ? 'flex items-center justify-center' : ''" :style="splashBgStyle">
-    <BlocksBlockRenderer :blocks="splashBlocks" />
+  <div v-if="showSplash" class="relative h-dvh w-dvw overflow-hidden">
+    <ProgressiveImage
+      v-if="splashBackground"
+      :media="splashBackground"
+      cover
+      priority
+      sizes="100vw"
+      alt=""
+      class="z-0"
+    />
+    <div
+      class="relative z-10 h-full w-full"
+      :class="siteSettings?.splashPage?.centered ? 'flex items-center justify-center' : ''"
+    >
+      <BlocksBlockRenderer :blocks="splashBlocks" />
+    </div>
   </div>
 
   <!-- Normal home page -->

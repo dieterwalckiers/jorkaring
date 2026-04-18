@@ -7,8 +7,8 @@ const props = defineProps<{
   startNumberedListAtZero?: boolean
 }>()
 
-// Get the base URL for media - needs to be called at setup time
-const payloadBaseUrl = usePayloadBaseUrl()
+// Resolver for media URLs - needs to be called at setup time
+const resolveMediaUrl = useMediaUrlResolver()
 
 // Get the app base URL for internal links (e.g., /newwebsite2026/)
 const appConfig = useRuntimeConfig()
@@ -42,9 +42,7 @@ function escapeHtml(text: string): string {
 }
 
 function getMediaUrl(url: string | undefined | null): string | undefined {
-  if (!url) return undefined
-  if (url.startsWith('http://') || url.startsWith('https://')) return url
-  return `${payloadBaseUrl}${url}`
+  return resolveMediaUrl(url)
 }
 
 // Lexical format bitmask values
@@ -308,7 +306,7 @@ function renderNode(node: LexicalNode): string {
       const sizesAttr = sizesMap[size] ?? '600px'
 
       // Build srcset from Payload's pre-generated sizes
-      const srcset = buildSrcset(mediaValue, payloadBaseUrl)
+      const srcset = buildSrcset(mediaValue, resolveMediaUrl)
 
       // Alignment uses a flex wrapper for reliable positioning
       const alignmentStyles: Record<string, string> = {

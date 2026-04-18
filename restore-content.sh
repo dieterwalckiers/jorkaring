@@ -15,6 +15,12 @@ BACKUP_NAME=""
 PRODUCTION=false
 FORCE=""
 
+# Railway service that hosts the Payload app (holds DATABASE_PUBLIC_URL,
+# GITHUB_TOKEN/REPO, and is the SSH target for media uploads). Override via
+# the RAILWAY_SERVICE env var if your service is named differently or if
+# `railway link` happens to point at the Postgres service instead.
+RAILWAY_SERVICE="${RAILWAY_SERVICE:-jorkaring}"
+
 # Parse arguments
 for arg in "$@"; do
   case $arg in
@@ -90,7 +96,7 @@ if [ "$PRODUCTION" = true ]; then
   else
     echo ""
     echo "Fetching database credentials from Railway..."
-    PROD_DB_URL=$(railway variables --json | grep -o '"DATABASE_PUBLIC_URL": "[^"]*"' | cut -d'"' -f4)
+    PROD_DB_URL=$(railway variables --service "$RAILWAY_SERVICE" --json | grep -o '"DATABASE_PUBLIC_URL": "[^"]*"' | cut -d'"' -f4)
   fi
 
   if [ -z "$PROD_DB_URL" ]; then
@@ -111,19 +117,17 @@ if [ "$PRODUCTION" = true ]; then
   echo "Restoring to production database..."
   echo ""
 
-  # Run restore WITHOUT GitHub credentials to prevent hooks from firing
-  # We'll trigger a single deploy manually after restore completes
-  DATABASE_URL="$PROD_DB_URL" pnpm --dir payload restore:content "$BACKUP_NAME" $FORCE
+  # Run restore inside the payload container so file operations on
+  # payload/public/uploads (which Docker created with root ownership) don't
+  # fail with EACCES. GitHub credentials are NOT passed so hooks don't fire
+  # per-item; we trigger a single deploy manually after restore completes.
+  docker compose exec -T -e DATABASE_URL="$PROD_DB_URL" payload pnpm restore:content "$BACKUP_NAME" $FORCE
   RESTORE_EXIT=$?
 
   # If restore succeeded, upload media files and trigger deploy
   if [ $RESTORE_EXIT -eq 0 ]; then
     echo ""
     echo "📤 Uploading media files to Railway..."
-
-    # Get the Railway service name from the linked project
-    RAILWAY_SERVICE=$(railway status --json 2>/dev/null | grep -o '"name": "[^"]*"' | head -1 | cut -d'"' -f4)
-    RAILWAY_SERVICE=${RAILWAY_SERVICE:-payload}
 
     # Upload files from local payload/public/uploads/ (where Payload created them)
     if [ -d "payload/public/uploads" ]; then
@@ -142,12 +146,13 @@ if [ "$PRODUCTION" = true ]; then
 
       if [[ "$UPLOAD_URL" == http* ]]; then
         echo "   Downloading to Railway..."
-        railway ssh --service "$RAILWAY_SERVICE" "curl -sL '$UPLOAD_URL' -o /tmp/uploads.tar.gz && tar -xzf /tmp/uploads.tar.gz -C /app/public/ && rm /tmp/uploads.tar.gz && echo 'Extracted'"
+        # Railway's Payload image has wget but not curl.
+        railway ssh --service "$RAILWAY_SERVICE" "wget -q '$UPLOAD_URL' -O /tmp/uploads.tar.gz && tar -xzf /tmp/uploads.tar.gz -C /app/public/ && rm /tmp/uploads.tar.gz && echo 'Extracted'"
       else
         echo "   ⚠ Upload failed: $UPLOAD_URL"
         echo "   Manual upload required. Tarball saved at: $UPLOADS_TAR"
         echo "   Upload to any file host and run on Railway:"
-        echo "   railway ssh --service \"$RAILWAY_SERVICE\" \"curl -sL '<URL>' -o /tmp/uploads.tar.gz && tar -xzf /tmp/uploads.tar.gz -C /app/public/ && rm /tmp/uploads.tar.gz\""
+        echo "   railway ssh --service \"$RAILWAY_SERVICE\" \"wget -q '<URL>' -O /tmp/uploads.tar.gz && tar -xzf /tmp/uploads.tar.gz -C /app/public/ && rm /tmp/uploads.tar.gz\""
         exit 1
       fi
 
@@ -160,8 +165,8 @@ if [ "$PRODUCTION" = true ]; then
     echo ""
     echo "🚀 Triggering deploy..."
 
-    GITHUB_TOKEN=$(railway variables --json | grep -o '"GITHUB_TOKEN": "[^"]*"' | cut -d'"' -f4)
-    GITHUB_REPO=$(railway variables --json | grep -o '"GITHUB_REPO": "[^"]*"' | cut -d'"' -f4)
+    GITHUB_TOKEN=$(railway variables --service "$RAILWAY_SERVICE" --json | grep -o '"GITHUB_TOKEN": "[^"]*"' | cut -d'"' -f4)
+    GITHUB_REPO=$(railway variables --service "$RAILWAY_SERVICE" --json | grep -o '"GITHUB_REPO": "[^"]*"' | cut -d'"' -f4)
 
     if [ -n "$GITHUB_TOKEN" ] && [ -n "$GITHUB_REPO" ]; then
       curl -s -X POST \

@@ -5,6 +5,11 @@
 BACKUP_NAME=""
 PRODUCTION=false
 
+# Railway service that hosts the Payload app (where DATABASE_PUBLIC_URL is
+# set). Override via the RAILWAY_SERVICE env var if your service is named
+# differently or if `railway link` happens to point at the Postgres service.
+RAILWAY_SERVICE="${RAILWAY_SERVICE:-jorkaring}"
+
 # Parse arguments
 for arg in "$@"; do
   case $arg in
@@ -24,7 +29,7 @@ BACKUP_NAME="${BACKUP_NAME:-backup-$(date +%Y%m%d-%H%M%S)}"
 
 if [ "$PRODUCTION" = true ]; then
   # Fetch production DATABASE_PUBLIC_URL from Railway
-  PROD_DB_URL=$(railway variables --json 2>/dev/null | grep -o '"DATABASE_PUBLIC_URL": "[^"]*"' | cut -d'"' -f4)
+  PROD_DB_URL=$(railway variables --service "$RAILWAY_SERVICE" --json 2>/dev/null | grep -o '"DATABASE_PUBLIC_URL": "[^"]*"' | cut -d'"' -f4)
 
   if [ -z "$PROD_DB_URL" ]; then
     echo "❌ Could not retrieve production DATABASE_PUBLIC_URL from Railway"

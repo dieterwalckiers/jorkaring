@@ -19,26 +19,45 @@ export function useDraftQuery(): Record<string, string> {
   return useIsPreviewMode() ? { draft: 'true' } : {}
 }
 
+function useStaticMedia(): boolean {
+  const config = useRuntimeConfig()
+  return config.public.staticMedia === true || config.public.staticMedia === 'true'
+}
+
+function usePayloadOrigin(): string {
+  const config = useRuntimeConfig()
+  return config.public.payloadApiUrl.replace(/\/api$/, '')
+}
+
 // Returns the public payload base URL (for media URLs that need to work in the browser).
 // When staticMedia is enabled, returns '' so relative media URLs (e.g. /api/media/file/foo.avif)
 // pass through unchanged and are served from the same origin as the static site.
 export function usePayloadBaseUrl() {
-  const config = useRuntimeConfig()
-  if (config.public.staticMedia === true || config.public.staticMedia === 'true') return ''
-  return config.public.payloadApiUrl.replace(/\/api$/, '')
+  return useStaticMedia() ? '' : usePayloadOrigin()
 }
 
-// Convert a relative media URL to an absolute URL
-// WARNING: This composable must be called at the top level of script setup,
-// not inside computed() or other callbacks. If you need to use it in a computed,
-// call usePayloadBaseUrl() at setup time and construct the URL manually.
+// Returns a resolver that normalizes a media URL into the form to embed in the rendered HTML.
+// In staticMedia mode, absolute URLs pointing at the Payload origin are rewritten to same-origin
+// relative paths — otherwise the static build still triggers cross-origin Railway fetches per request.
+// The returned function is pure and safe to call inside computed/watch.
+export function useMediaUrlResolver(): (url: string | undefined | null) => string | undefined {
+  const isStatic = useStaticMedia()
+  const origin = usePayloadOrigin()
+  return (url) => {
+    if (!url) return undefined
+    if (isStatic) {
+      return url.startsWith(origin) ? url.slice(origin.length) : url
+    }
+    if (url.startsWith('http://') || url.startsWith('https://')) return url
+    return `${origin}${url}`
+  }
+}
+
+// Convert a media URL into its browser-facing form.
+// WARNING: must be called at the top level of script setup, not inside computed() or other callbacks.
+// For reactive use, call useMediaUrlResolver() at setup time and invoke the returned function.
 export function useMediaUrl(url: string | undefined | null): string | undefined {
-  if (!url) return undefined
-  // If already absolute, return as-is
-  if (url.startsWith('http://') || url.startsWith('https://')) return url
-  // Prepend payload base URL
-  const baseUrl = usePayloadBaseUrl()
-  return `${baseUrl}${url}`
+  return useMediaUrlResolver()(url)
 }
 
 export function usePages() {

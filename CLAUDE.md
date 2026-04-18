@@ -93,7 +93,16 @@ See `.env.example`. Key variables:
 
 - **CMS**: Railway (see `payload/railway.toml`)
 - **Frontend**: Static site deployed via FTP through GitHub Actions (`.github/workflows/deploy.yml`)
-- **Content backup**: `./export-content.sh` / `./restore-content.sh` (supports `--production` flag via Railway CLI)
+- **Content backup**: `./export-content.sh` / `./restore-content.sh` (supports `--production` flag via Railway CLI). Both scripts target the `jorkaring` Railway service by default; override with `RAILWAY_SERVICE=<name>` if renamed. Production restores run inside the payload container.
+
+## Knowledge base
+
+Longer-form operational notes (gotchas, troubleshooting, undocumented infra behavior) live in `docs/knowledge-base/`. Check there before debugging anything production-adjacent. Current entries:
+
+- `restore-production-data.md` — pulling production content down into local
+- `restore-local-data-to-production.md` — pushing local content up to production
+
+When you learn something non-obvious about the stack (especially anything that took more than a few minutes to figure out), add or update a doc in that directory rather than only leaving it in a commit message.
 
 ## Conventions
 

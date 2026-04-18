@@ -19,13 +19,7 @@ const props = withDefaults(
   }
 )
 
-const baseUrl = usePayloadBaseUrl()
-
-const getAbsoluteUrl = (url: string | undefined): string | undefined => {
-  if (!url) return undefined
-  if (url.startsWith('http://') || url.startsWith('https://')) return url
-  return `${baseUrl}${url}`
-}
+const getAbsoluteUrl = useMediaUrlResolver()
 
 // Get thumbnail URL for placeholder
 const placeholderUrl = computed(() => {

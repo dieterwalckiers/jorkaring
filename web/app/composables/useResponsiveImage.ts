@@ -31,13 +31,7 @@ export function useResponsiveImage(
 ): ResponsiveImageData | null {
   if (!media || typeof media === 'string') return null
 
-  const baseUrl = usePayloadBaseUrl()
-
-  const getAbsoluteUrl = (url: string | undefined): string | undefined => {
-    if (!url) return undefined
-    if (url.startsWith('http://') || url.startsWith('https://')) return url
-    return `${baseUrl}${url}`
-  }
+  const getAbsoluteUrl = useMediaUrlResolver()
 
   // Build srcset from available sizes
   const srcsetParts: string[] = []
@@ -79,14 +73,11 @@ export function useResponsiveImage(
 /**
  * Build srcset string for use in HTML string contexts (like RichTextRenderer).
  * Returns just the srcset value, not a full object.
+ *
+ * Pass a resolver from `useMediaUrlResolver()` (constructed at setup time) so this can be called
+ * inside non-composable contexts.
  */
-export function buildSrcset(media: Media, baseUrl: string): string {
-  const getAbsoluteUrl = (url: string | undefined): string | undefined => {
-    if (!url) return undefined
-    if (url.startsWith('http://') || url.startsWith('https://')) return url
-    return `${baseUrl}${url}`
-  }
-
+export function buildSrcset(media: Media, getAbsoluteUrl: (url: string | undefined | null) => string | undefined): string {
   const srcsetParts: string[] = []
 
   const sizeNames: SizeName[] = ['thumbnail', 'small', 'medium', 'large']

@@ -1,12 +1,12 @@
 # Restoring production data to local
 
-How to pull the current production content (pages, media metadata, site settings) from Railway into your local Docker stack.
+How to pull the current production content (pages, media metadata, site settings) from Railway into your local Docker stack. For the reverse (local → prod), see [restore-local-data-to-production.md](./restore-local-data-to-production.md).
 
 ## Prerequisites
 
 - Local stack running: `docker compose up`
 - Railway CLI installed and logged in: `railway login`
-- Project linked: `railway link` (the project is `jorkaring`; any service in it is fine for step 1)
+- Project linked: `railway link` (the project is `jorkaring`; any service in it is fine — the scripts pass `--service jorkaring` explicitly when reading Railway variables)
 
 ## Happy path
 
@@ -15,13 +15,12 @@ There are two scripts:
 - `./export-content.sh <name> --production` — dumps the production DB into `payload/backups/<name>/`
 - `./restore-content.sh <name>` — restores that backup into the local DB
 
-The export script reads `DATABASE_PUBLIC_URL` off whichever Railway service is currently linked. That variable lives on the `jorkaring` (payload) service, so link there:
-
 ```bash
-railway service jorkaring   # pick the payload service interactively
 ./export-content.sh prod-$(date +%Y%m%d-%H%M%S) --production
 ./restore-content.sh prod-YYYYMMDD-HHMMSS --force
 ```
+
+If your service is named something other than `jorkaring`, export `RAILWAY_SERVICE=<name>` before running.
 
 The restore script:
 1. Runs pending migrations against the local DB
@@ -29,7 +28,7 @@ The restore script:
 3. Copies `backups/<name>/uploads/` into `payload/public/uploads/`
 4. Recreates media, pages (as drafts), page-to-page `menuFilter` relations, and site settings, remapping media IDs to the new auto-increment IDs
 
-Pages come back as **drafts**. If you want them to match production (where they are published), run:
+Pages come back **with their source status** — the script creates each page as a draft first (to bypass required-field validation), then republishes the ones whose source doc was published. If something went wrong and they all stayed as drafts, you can force-publish:
 
 ```bash
 docker compose exec postgres psql -U payload -d payload \
@@ -42,10 +41,11 @@ Verify the frontend at `http://localhost:3201/` and the admin at `http://localho
 
 ### `Could not retrieve production DATABASE_PUBLIC_URL from Railway`
 
-`export-content.sh` shells out to `railway variables --json` and greps for `DATABASE_PUBLIC_URL`. That variable only exists on the payload service (`jorkaring`), not on `Postgres`. Either:
+`export-content.sh` runs `railway variables --service "$RAILWAY_SERVICE" --json` (default `RAILWAY_SERVICE=jorkaring`) and greps for `DATABASE_PUBLIC_URL`. If it comes back empty:
 
-- Re-link: `railway service jorkaring`, then re-run, or
-- Build the URL manually from the Postgres service's `RAILWAY_TCP_PROXY_DOMAIN`, `RAILWAY_TCP_PROXY_PORT`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` and pass it directly:
+- Confirm the variable exists: `railway variables --service jorkaring --json | grep DATABASE_PUBLIC_URL`. It should — setting it requires enabling public networking on the Postgres service and copying the URL onto the `jorkaring` service.
+- If the service is named something else in your project, override: `RAILWAY_SERVICE=<name> ./export-content.sh … --production`.
+- As a last resort, build the URL manually from the Postgres service's `RAILWAY_TCP_PROXY_DOMAIN`, `RAILWAY_TCP_PROXY_PORT`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` and pass it directly:
 
   ```bash
   docker compose exec -T \
