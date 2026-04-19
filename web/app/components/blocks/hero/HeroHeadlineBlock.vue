@@ -12,7 +12,7 @@ defineProps<{
   <h1
     class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight"
     :class="[
-      hasBackground ? 'text-white' : '',
+      hasBackground ? 'text-white!' : '',
       alignment === 'left' ? 'text-left' : alignment === 'right' ? 'text-right' : 'text-center',
     ]"
   >
