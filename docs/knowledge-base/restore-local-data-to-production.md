@@ -52,12 +52,14 @@ Two scripts, run from the repo root:
 
 The tarball is uploaded via `litterbox.catbox.moe` — a public paste/file service, 1h expiry, no authentication. Anyone who guesses the URL during that window can download it. If your media is sensitive, replace that step with a private transfer (e.g., your own object store, or pipe directly via `railway ssh` with stdin — in our testing that hung, so validate first).
 
-### Production `/app/public/uploads` is ephemeral
+### Production `/app/public/uploads` is persisted on a Railway volume
 
-Railway's payload service has **no persistent volume mounted at `/app/public/uploads`** (you can see the volume is on the Postgres service only). Every redeploy of the payload service starts with an empty uploads dir. Implications:
-- The production DB often references media files that no longer exist on that disk
-- The static site build downloads media via `pnpm run download-media` at build time — if a deploy runs while the disk is empty and before the media-sync step, images will be missing
-- The local→prod restore above deliberately re-uploads the full media set to cover this
+As of 2026-04-20 the `jorkaring` service has a Railway volume (`jorkaring-volume`, 5 GB) mounted at `/app/public/uploads`. Redeploys no longer wipe media, so the media re-upload step in `restore-content.sh … --production` is belt-and-suspenders rather than strictly required.
+
+Caveats still worth knowing:
+- The static site build downloads media via `pnpm run download-media` at build time. If Payload can't serve a file (missing on disk, or 500 for other reasons), that file is silently skipped and won't appear on the static site — so it's still possible for the DB to reference files not on the volume.
+- The Dockerfile dropped `USER nextjs` so the container can write to the root-owned volume mount. If you reintroduce a non-root user, add a chown step at startup or the healthcheck will fail.
+- Detaching the volume (or creating a new one) reverts to ephemeral storage.
 
 ### Safety backup's media dir reflects local, not prod
 
