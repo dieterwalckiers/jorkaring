@@ -8,7 +8,7 @@ Jorkaring is a CMS-driven website with two independent apps:
 - **`payload/`** — Payload CMS 3.0 backend (Next.js 15, React 19, PostgreSQL 16)
 - **`web/`** — Nuxt 4 frontend (Vue 3.5, Tailwind CSS 4, Nuxt UI 4) built as a static site (SSG)
 
-Content flows: Editors manage pages in Payload admin → content changes trigger GitHub Actions via webhook (`triggerDeploy.ts` hook) → Nuxt generates static HTML from the Payload API → deployed via FTP.
+Content flows: Editors manage pages in Payload admin → content changes trigger GitHub Actions via webhook (`triggerDeploy.ts` hook) → Nuxt generates static HTML from the Payload API → deployed to GitHub Pages.
 
 ## Development Commands
 
@@ -92,7 +92,7 @@ See `.env.example`. Key variables:
 ## Deployment
 
 - **CMS**: Railway (see `payload/railway.toml`)
-- **Frontend**: Static site deployed via FTP through GitHub Actions (`.github/workflows/deploy.yml`)
+- **Frontend**: Static site built by GitHub Actions and deployed to GitHub Pages (`.github/workflows/deploy.yml`)
 - **Content backup**: `./export-content.sh` / `./restore-content.sh` (supports `--production` flag via Railway CLI). Both scripts target the `jorkaring` Railway service by default; override with `RAILWAY_SERVICE=<name>` if renamed. Production restores run inside the payload container.
 
 ## Knowledge base

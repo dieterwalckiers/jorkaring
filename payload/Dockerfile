@@ -38,10 +38,9 @@ COPY --from=builder /app/src ./src
 COPY --from=builder /app/tsconfig.json ./tsconfig.json
 COPY --from=builder /app/next.config.mjs ./next.config.mjs
 
-# Create uploads directory
-RUN mkdir -p ./public/uploads && chown -R nextjs:nodejs ./public
-
-USER nextjs
+# Create uploads directory. Container runs as root so a Railway-mounted
+# volume at /app/public/uploads (root-owned by default) is writable.
+RUN mkdir -p ./public/uploads
 
 # Railway sets PORT dynamically - use shell form to expand variable
 ENV PORT=3000
