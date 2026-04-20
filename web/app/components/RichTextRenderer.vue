@@ -177,7 +177,7 @@ function renderNode(node: LexicalNode): string {
       const level = node.tag?.replace('h', '') || '2'
       const align = getTextAlign(node.format)
       const sizeClass = getHeadingSize(level)
-      return `<h${level} class="${sizeClass} font-bold mb-4${align}">${childrenHtml}</h${level}>`
+      return `<h${level} class="editorial-heading editorial-heading--h${level} ${sizeClass} font-bold${align}">${childrenHtml}</h${level}>`
     }
 
     case 'list': {
@@ -379,13 +379,16 @@ function getTextAlign(format: number | string | undefined): string {
 }
 
 function getHeadingSize(level: string): string {
+  // Scale is driven by the .editorial-heading--hN CSS rules (fluid clamp).
+  // This hook is retained as a fallback for anything that renders outside
+  // our scoped prose context and still expects a Tailwind size class.
   switch (level) {
-    case '1': return 'text-4xl'
-    case '2': return 'text-3xl'
-    case '3': return 'text-2xl'
-    case '4': return 'text-xl'
-    case '5': return 'text-lg'
-    case '6': return 'text-base'
+    case '1': return 'text-5xl md:text-6xl'
+    case '2': return 'text-4xl md:text-5xl'
+    case '3': return 'text-2xl md:text-3xl'
+    case '4': return 'text-xl md:text-2xl'
+    case '5': return 'text-lg md:text-xl'
+    case '6': return 'text-base md:text-lg'
     default: return 'text-2xl'
   }
 }

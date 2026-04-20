@@ -18,20 +18,24 @@ const currentTestimonial = computed(() => {
   return testimonials.value[currentIndex.value]
 })
 
+// Strip wrapping straight or curly quotes — we render our own typographic
+// opening glyph and the repetition reads as a mistake when both are present.
+const cleanedQuote = computed(() => {
+  const raw = currentTestimonial.value?.quote ?? ''
+  return raw.replace(/^[\s"“”«»„]+/, '').replace(/[\s"“”«»„]+$/, '')
+})
+
 async function navigate(direction: 'up' | 'down') {
   if (isTransitioning.value || totalTestimonials.value <= 1) return
 
   isTransitioning.value = true
 
-  // Lock current height
   if (innerContent.value) {
     wrapperHeight.value = `${innerContent.value.offsetHeight}px`
   }
 
-  // Wait for fade out
-  await new Promise(resolve => setTimeout(resolve, 150))
+  await new Promise(resolve => setTimeout(resolve, 180))
 
-  // Change testimonial
   if (direction === 'up') {
     currentIndex.value = currentIndex.value === 0
       ? totalTestimonials.value - 1
@@ -42,29 +46,34 @@ async function navigate(direction: 'up' | 'down') {
       : currentIndex.value + 1
   }
 
-  // Wait for DOM to update
   await nextTick()
 
-  // Animate to new height
   if (innerContent.value) {
     wrapperHeight.value = `${innerContent.value.offsetHeight}px`
   }
 
-  // Wait for fade in + height transition
-  await new Promise(resolve => setTimeout(resolve, 300))
+  await new Promise(resolve => setTimeout(resolve, 320))
 
-  // Reset to auto
   wrapperHeight.value = undefined
   isTransitioning.value = false
+}
+
+function goTo(idx: number) {
+  if (isTransitioning.value || idx === currentIndex.value) return
+  navigate(idx > currentIndex.value ? 'down' : 'up')
 }
 </script>
 
 <template>
-  <section class="testimonials-block bg-color-5 py-6 md:py-10 px-4 md:px-16 rounded-3xl">
-    <div class="max-w-4xl mx-auto flex items-center gap-4 md:gap-8">
-      <!-- Testimonial content with height animation -->
+  <section class="testimonials-block" aria-label="Testimonials">
+    <div class="testimonial-rail">
+      <!-- Oversized opening quotation mark, rendered purely decoratively.
+           It's absolute-positioned so the quote text reads from the editorial
+           baseline without being pushed around by the glyph. -->
+      <span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>
+
       <div
-        class="flex-1 min-w-0 overflow-hidden transition-[height] duration-300 ease-in-out"
+        class="testimonial-content-wrap"
         :style="wrapperHeight ? { height: wrapperHeight } : undefined"
       >
         <div ref="innerContent">
@@ -73,62 +82,65 @@ async function navigate(direction: 'up' | 'down') {
             class="testimonial-content"
             :class="{ 'is-transitioning': isTransitioning }"
           >
-            <blockquote class="text-font-brand1 text-lg md:text-xl leading-relaxed mb-4 md:mb-6">
-              "{{ currentTestimonial.quote }}"
+            <blockquote class="testimonial-quote">
+              {{ cleanedQuote }}
             </blockquote>
-            <p class="text-font-brand1 text-sm md:text-base">
-              {{ currentTestimonial.name }}
-            </p>
+            <figcaption class="testimonial-attribution">
+              <span class="testimonial-rule" aria-hidden="true" />
+              <cite class="testimonial-name">{{ currentTestimonial.name }}</cite>
+            </figcaption>
           </div>
-          <div v-else class="text-font-brand1">
+          <div v-else class="testimonial-empty">
             No testimonials available.
           </div>
         </div>
       </div>
 
-      <!-- Navigation buttons -->
       <div
         v-if="totalTestimonials > 1"
-        class="flex flex-col gap-2 shrink-0"
+        class="testimonial-controls"
       >
         <button
           type="button"
-          class="nav-button w-8 h-8 md:w-10 md:h-10 rounded-lg border border-font-brand1 flex items-center justify-center cursor-pointer"
+          class="nav-button"
           aria-label="Previous testimonial"
           @click="navigate('up')"
         >
-          <svg
-            class="w-4 h-4 md:w-5 md:h-5 text-font-brand1"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 15l7-7 7 7"
-            />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 18l-6-6 6-6" />
           </svg>
         </button>
+
+        <ol class="testimonial-dots" aria-hidden="true">
+          <li
+            v-for="(t, i) in testimonials"
+            :key="t.id ?? i"
+            class="testimonial-dot"
+            :class="{ 'is-active': i === currentIndex }"
+          >
+            <button
+              type="button"
+              class="testimonial-dot-button"
+              :aria-label="`Go to testimonial ${i + 1}`"
+              @click="goTo(i)"
+            />
+          </li>
+        </ol>
+
+        <span class="testimonial-counter" aria-live="polite">
+          <span class="testimonial-counter-current">{{ String(currentIndex + 1).padStart(2, '0') }}</span>
+          <span class="testimonial-counter-sep">/</span>
+          <span class="testimonial-counter-total">{{ String(totalTestimonials).padStart(2, '0') }}</span>
+        </span>
+
         <button
           type="button"
-          class="nav-button w-8 h-8 md:w-10 md:h-10 rounded-lg border border-font-brand1 flex items-center justify-center cursor-pointer"
+          class="nav-button"
           aria-label="Next testimonial"
           @click="navigate('down')"
         >
-          <svg
-            class="w-4 h-4 md:w-5 md:h-5 text-font-brand1"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 9l-7 7-7-7"
-            />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 6l6 6-6 6" />
           </svg>
         </button>
       </div>
@@ -137,23 +149,190 @@ async function navigate(direction: 'up' | 'down') {
 </template>
 
 <style scoped>
+.testimonials-block {
+  position: relative;
+  padding-block: clamp(3rem, 7vw, 6rem);
+  padding-inline: clamp(1rem, 4vw, 3rem);
+}
+
+.testimonial-rail {
+  max-width: 64rem;
+  margin-inline: auto;
+  position: relative;
+  padding-inline-start: clamp(0rem, 6vw, 5rem);
+}
+
+/* The decorative glyph. Uses the current heading font so it inherits the
+   brand display treatment, scaled way past any other heading. Tuned so the
+   hook of the quotemark sits just above and to the left of the quote text. */
+.testimonial-quote-mark {
+  position: absolute;
+  top: clamp(-1rem, -1vw, -0.5rem);
+  left: clamp(-0.25rem, 2vw, 1.5rem);
+  font-size: clamp(8rem, 18vw, 16rem);
+  line-height: 0.75;
+  color: var(--color-headings);
+  opacity: 0.28;
+  font-weight: 400;
+  user-select: none;
+  pointer-events: none;
+  font-feature-settings: "ss01";
+  z-index: 0;
+}
+
+.testimonial-content-wrap {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  transition: height 320ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
 .testimonial-content {
-  transition: opacity 150ms ease-in-out;
+  transition: opacity 180ms cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 .testimonial-content.is-transitioning {
   opacity: 0;
 }
 
+.testimonial-quote {
+  color: var(--color-font);
+  font-size: clamp(1.375rem, 1.5vw + 1rem, 2.25rem);
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  font-weight: 400;
+  text-wrap: balance;
+  font-style: italic;
+  margin-block-end: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.testimonial-quote::before { content: "\201C"; margin-inline-end: 0.05em; }
+.testimonial-quote::after { content: "\201D"; margin-inline-start: 0.05em; }
+
+.testimonial-attribution {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  color: var(--color-font);
+  opacity: 0.82;
+}
+
+.testimonial-rule {
+  display: inline-block;
+  width: clamp(2rem, 4vw, 3rem);
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.testimonial-name {
+  font-style: normal;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.testimonial-empty {
+  color: var(--color-font);
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.testimonial-controls {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  margin-block-start: clamp(2rem, 4vw, 3rem);
+  color: var(--color-font);
+}
+
 .nav-button {
-  transition: transform 150ms ease-in-out;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 180ms cubic-bezier(0.33, 1, 0.68, 1),
+              transform 240ms cubic-bezier(0.33, 1, 0.68, 1),
+              background-color 180ms;
+}
+
+.nav-button svg {
+  width: 0.95rem;
+  height: 0.95rem;
 }
 
 .nav-button:hover {
-  transform: scale(1.08);
+  opacity: 1;
+  transform: scale(1.05);
 }
 
 .nav-button:active {
-  transform: scale(0.95);
+  transform: scale(0.96);
+}
+
+.testimonial-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.testimonial-dot {
+  display: flex;
+}
+
+.testimonial-dot-button {
+  width: 0.375rem;
+  height: 0.375rem;
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0.35;
+  cursor: pointer;
+  transition: opacity 180ms, width 220ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.testimonial-dot.is-active .testimonial-dot-button {
+  opacity: 1;
+  width: 1.25rem;
+}
+
+.testimonial-dot-button:hover {
+  opacity: 0.75;
+}
+
+.testimonial-counter {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  font-variant-numeric: tabular-nums;
+  margin-inline-start: auto;
+}
+
+.testimonial-counter-sep {
+  margin-inline: 0.35em;
+  opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-content-wrap,
+  .testimonial-content,
+  .nav-button,
+  .testimonial-dot-button {
+    transition: none;
+  }
 }
 </style>

@@ -139,6 +139,51 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
 }
 
+/* Editorial heading scale: fluid clamp + tight tracking so serif/display
+   headings carry real weight in body content. Wins out over Tailwind size
+   classes via descendant specificity on .prose (and is equally specific to
+   the `text-*` utility inline class on the heading itself). */
+.prose .editorial-heading,
+.editorial-heading {
+  letter-spacing: -0.015em;
+  line-height: 1.04;
+  text-wrap: balance;
+  margin-block-end: clamp(0.9rem, 1.5vw, 1.5rem);
+}
+
+.prose .editorial-heading--h1 {
+  font-size: clamp(2.5rem, 5.5vw + 0.5rem, 5.25rem);
+  letter-spacing: -0.022em;
+  line-height: 0.98;
+  margin-block: clamp(1.75rem, 3vw, 2.75rem) clamp(1.25rem, 2vw, 2rem);
+}
+
+.prose .editorial-heading--h2 {
+  font-size: clamp(2rem, 4vw + 0.25rem, 3.75rem);
+  letter-spacing: -0.018em;
+  line-height: 1;
+  margin-block: clamp(2rem, 3.25vw, 3.25rem) clamp(1rem, 1.75vw, 1.75rem);
+}
+
+.prose .editorial-heading--h3 {
+  font-size: clamp(1.5rem, 2vw + 0.75rem, 2.25rem);
+  letter-spacing: -0.012em;
+  line-height: 1.08;
+  margin-block: clamp(1.5rem, 2.5vw, 2.25rem) clamp(0.6rem, 1vw, 1rem);
+}
+
+.prose .editorial-heading--h4 {
+  font-size: clamp(1.15rem, 1vw + 0.85rem, 1.5rem);
+  line-height: 1.2;
+  margin-block: clamp(1.15rem, 2vw, 1.75rem) 0.5rem;
+}
+
+/* First heading inside a prose container shouldn't push a huge top margin
+   — the block-wrap already provides section breath above it. */
+.prose > .editorial-heading:first-child {
+  margin-block-start: 0;
+}
+
 /* Custom checkbox - ensure consistent sizing for all states */
 input[type="checkbox"] {
   appearance: none;

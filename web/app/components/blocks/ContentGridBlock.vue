@@ -10,9 +10,18 @@ const numberOfColumns = computed(() => props.block.numberOfColumns ?? '3')
 const horizontalAlignment = computed(() => props.block.horizontalAlignment ?? 'left')
 const verticalAlignment = computed(() => props.block.verticalAlignment ?? 'center')
 
+// Editorial numbering reads best when cells are left-aligned prose columns
+// (a real magazine spread), and looks fussy on centered or right-aligned
+// decorative grids. Auto-enable only for left-aligned 2–4 column layouts.
+const showEditorialNumbers = computed(() => {
+  if (horizontalAlignment.value !== 'left') return false
+  const cols = numberOfColumns.value
+  if (cols === '5') return false
+  return cells.value.length >= 2
+})
+
 const gridClass = computed(() => {
   const cols = numberOfColumns.value
-  // On mobile: 1 column, on medium screens: 2 columns (max), on large screens: configured columns
   const colsMap: Record<string, string> = {
     '2': 'grid-cols-1 md:grid-cols-2',
     '3': 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
@@ -42,25 +51,87 @@ const verticalAlignmentClass = computed(() => {
 </script>
 
 <template>
-  <section class="content-grid-block">
+  <section class="content-grid-block" :class="{ 'has-editorial-numbers': showEditorialNumbers }">
     <div
-      class="grid gap-4 md:gap-6"
+      class="content-grid"
       :class="[gridClass, verticalAlignmentClass]"
     >
       <div
-        v-for="cell in cells"
+        v-for="(cell, i) in cells"
         :key="cell.id"
         class="content-grid-cell"
         :class="horizontalAlignmentClass"
       >
-        <RichTextRenderer :content="cell.content" />
+        <span
+          v-if="showEditorialNumbers"
+          class="content-grid-number"
+          aria-hidden="true"
+        >
+          {{ String(i + 1).padStart(2, '0') }}
+        </span>
+        <div class="content-grid-body">
+          <RichTextRenderer :content="cell.content" />
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <style scoped>
+.content-grid-block {
+  padding-block: clamp(0.5rem, 1.5vw, 1.5rem);
+}
+
+.content-grid {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3.5rem) clamp(2rem, 3.5vw, 3.5rem);
+}
+
 .content-grid-cell {
   min-width: 0; /* Prevent grid blowout from long content */
+  position: relative;
+}
+
+/* Editorial numbered columns: a small display number and a hairline rule
+   at the top of each cell read like a magazine spread index. Only the
+   visual wrapper — the content itself is still whatever the editor put in. */
+.has-editorial-numbers .content-grid-cell {
+  padding-block-start: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+.has-editorial-numbers .content-grid-cell::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.28;
+}
+
+.content-grid-number {
+  display: block;
+  color: var(--color-headings);
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.9;
+  margin-block-end: clamp(0.9rem, 1.5vw, 1.35rem);
+}
+
+/* Within a numbered cell, trim the default section-heading top margin so
+   the heading sits directly under the column number without extra breath. */
+.has-editorial-numbers .content-grid-body :deep(.editorial-heading:first-child) {
+  margin-block-start: 0;
+}
+
+.has-editorial-numbers .content-grid-body :deep(h1),
+.has-editorial-numbers .content-grid-body :deep(h2),
+.has-editorial-numbers .content-grid-body :deep(h3),
+.has-editorial-numbers .content-grid-body :deep(h4) {
+  margin-block-start: 0;
 }
 </style>
