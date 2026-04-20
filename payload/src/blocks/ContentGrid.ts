@@ -75,5 +75,15 @@ export const ContentGrid: Block = {
         },
       ],
     },
+    {
+      name: 'editorialNumbers',
+      type: 'checkbox',
+      label: 'Editorial column numbers',
+      defaultValue: false,
+      admin: {
+        description:
+          'Show a small 01/02/… index and hairline rule above each cell — reads like a magazine spread. Best on 2–4 column left-aligned grids.',
+      },
+    },
   ],
 }

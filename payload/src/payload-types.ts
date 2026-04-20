@@ -214,6 +214,10 @@ export interface Page {
              * Vertical alignment of cells
              */
             verticalAlignment?: ('top' | 'center' | 'bottom') | null;
+            /**
+             * Show a small 01/02/… index and hairline rule above each cell — reads like a magazine spread. Best on 2–4 column left-aligned grids.
+             */
+            editorialNumbers?: boolean | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'contentGrid';
@@ -378,6 +382,10 @@ export interface Page {
               };
               [k: string]: unknown;
             };
+            /**
+             * Body is regular prose. Hero is for panel/overlay taglines where the first paragraph should read as a display lede. Long-form applies magazine-style reading measure and a drop cap on the first paragraph.
+             */
+            variant?: ('body' | 'hero' | 'longForm') | null;
             width?: ('1/4' | '1/3' | 'half' | '2/3' | '3/4' | 'full') | null;
             /**
              * When enabled, the block will be rendered with absolute positioning inside a relative wrapper.
@@ -806,6 +814,7 @@ export interface PagesSelect<T extends boolean = true> {
               numberOfColumns?: T;
               horizontalAlignment?: T;
               verticalAlignment?: T;
+              editorialNumbers?: T;
               id?: T;
               blockName?: T;
             };
@@ -895,6 +904,7 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               content?: T;
+              variant?: T;
               width?: T;
               renderFloating?: T;
               floatingOffset?: T;
@@ -1313,6 +1323,10 @@ export interface SiteSetting {
                * Vertical alignment of cells
                */
               verticalAlignment?: ('top' | 'center' | 'bottom') | null;
+              /**
+               * Show a small 01/02/… index and hairline rule above each cell — reads like a magazine spread. Best on 2–4 column left-aligned grids.
+               */
+              editorialNumbers?: boolean | null;
               id?: string | null;
               blockName?: string | null;
               blockType: 'contentGrid';
@@ -1466,6 +1480,10 @@ export interface SiteSetting {
                 };
                 [k: string]: unknown;
               };
+              /**
+               * Body is regular prose. Hero is for panel/overlay taglines where the first paragraph should read as a display lede. Long-form applies magazine-style reading measure and a drop cap on the first paragraph.
+               */
+              variant?: ('body' | 'hero' | 'longForm') | null;
               width?: ('1/4' | '1/3' | 'half' | '2/3' | '3/4' | 'full') | null;
               /**
                * When enabled, the block will be rendered with absolute positioning inside a relative wrapper.
@@ -1875,6 +1893,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
                     numberOfColumns?: T;
                     horizontalAlignment?: T;
                     verticalAlignment?: T;
+                    editorialNumbers?: T;
                     id?: T;
                     blockName?: T;
                   };
@@ -1953,6 +1972,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
                 | T
                 | {
                     content?: T;
+                    variant?: T;
                     width?: T;
                     renderFloating?: T;
                     floatingOffset?: T;

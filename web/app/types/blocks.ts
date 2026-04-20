@@ -19,6 +19,7 @@ export interface ContentGridBlock {
   numberOfColumns?: '2' | '3' | '4' | '5'
   horizontalAlignment?: 'left' | 'center' | 'right'
   verticalAlignment?: 'top' | 'center' | 'bottom'
+  editorialNumbers?: boolean
 }
 
 export interface HeroHeadlineBlock {
@@ -79,10 +80,13 @@ export type RichTextWidth = '1/4' | '1/3' | 'half' | '2/3' | '3/4' | 'full'
 
 export type RichTextMargin = 'none' | 'small' | 'medium' | 'large'
 
+export type RichTextVariant = 'body' | 'hero' | 'longForm'
+
 export interface RichTextBlock {
   id: string
   blockType: 'richText'
   content: unknown
+  variant?: RichTextVariant
   width?: RichTextWidth
   renderFloating?: boolean
   floatingOffset?: string

@@ -15,6 +15,21 @@ export const RichText: Block = {
       required: true,
     },
     {
+      name: 'variant',
+      type: 'select',
+      label: 'Style',
+      defaultValue: 'body',
+      options: [
+        { label: 'Body (default)', value: 'body' },
+        { label: 'Hero — first paragraph rendered as display tagline with hairline separator', value: 'hero' },
+        { label: 'Long-form — narrower reading measure with drop cap', value: 'longForm' },
+      ],
+      admin: {
+        description:
+          'Body is regular prose. Hero is for panel/overlay taglines where the first paragraph should read as a display lede. Long-form applies magazine-style reading measure and a drop cap on the first paragraph.',
+      },
+    },
+    {
       name: 'width',
       type: 'select',
       label: 'Width',

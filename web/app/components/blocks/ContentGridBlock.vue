@@ -9,16 +9,7 @@ const cells = computed(() => props.block.cells ?? [])
 const numberOfColumns = computed(() => props.block.numberOfColumns ?? '3')
 const horizontalAlignment = computed(() => props.block.horizontalAlignment ?? 'left')
 const verticalAlignment = computed(() => props.block.verticalAlignment ?? 'center')
-
-// Editorial numbering reads best when cells are left-aligned prose columns
-// (a real magazine spread), and looks fussy on centered or right-aligned
-// decorative grids. Auto-enable only for left-aligned 2–4 column layouts.
-const showEditorialNumbers = computed(() => {
-  if (horizontalAlignment.value !== 'left') return false
-  const cols = numberOfColumns.value
-  if (cols === '5') return false
-  return cells.value.length >= 2
-})
+const showEditorialNumbers = computed(() => props.block.editorialNumbers === true)
 
 const gridClass = computed(() => {
   const cols = numberOfColumns.value
