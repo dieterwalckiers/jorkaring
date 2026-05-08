@@ -29,6 +29,12 @@ defineProps<{
         :alignment="alignment"
         :has-background="hasBackground"
       />
+      <BlocksHeroRotatingHeadlineBlock
+        v-else-if="block.blockType === 'heroRotatingHeadline'"
+        :block="block"
+        :alignment="alignment"
+        :has-background="hasBackground"
+      />
       <BlocksHeroCtaBlock
         v-else-if="block.blockType === 'heroCta'"
         :block="block"

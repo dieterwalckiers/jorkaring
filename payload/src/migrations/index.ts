@@ -15,6 +15,9 @@ import * as migration_20260329_103234_rework_theme_colors from './20260329_10323
 import * as migration_20260407_222158 from './20260407_222158';
 import * as migration_20260420_114911 from './20260420_114911';
 import * as migration_20260503_093000_splash_page_overlay from './20260503_093000_splash_page_overlay';
+import * as migration_20260503_101343_add_rotating_headline_block from './20260503_101343_add_rotating_headline_block';
+import * as migration_20260507_190744_add_hero_rotating_headline_block from './20260507_190744_add_hero_rotating_headline_block';
+import * as migration_20260507_212426_add_hero_height_xxxl from './20260507_212426_add_hero_height_xxxl';
 
 export const migrations = [
   {
@@ -101,5 +104,20 @@ export const migrations = [
     up: migration_20260503_093000_splash_page_overlay.up,
     down: migration_20260503_093000_splash_page_overlay.down,
     name: '20260503_093000_splash_page_overlay',
+  },
+  {
+    up: migration_20260503_101343_add_rotating_headline_block.up,
+    down: migration_20260503_101343_add_rotating_headline_block.down,
+    name: '20260503_101343_add_rotating_headline_block',
+  },
+  {
+    up: migration_20260507_190744_add_hero_rotating_headline_block.up,
+    down: migration_20260507_190744_add_hero_rotating_headline_block.down,
+    name: '20260507_190744_add_hero_rotating_headline_block',
+  },
+  {
+    up: migration_20260507_212426_add_hero_height_xxxl.up,
+    down: migration_20260507_212426_add_hero_height_xxxl.down,
+    name: '20260507_212426_add_hero_height_xxxl'
   },
 ];

@@ -18,6 +18,7 @@ defineProps<{
         <BlocksLogoMarqueeBlock v-else-if="block.blockType === 'logoMarquee'" :block="block" />
         <BlocksNewsletterSignupBlock v-else-if="block.blockType === 'newsletterSignup'" :block="block" />
         <BlocksRichTextBlock v-else-if="block.blockType === 'richText'" :block="block" />
+        <BlocksRotatingHeadlineBlock v-else-if="block.blockType === 'rotatingHeadline'" :block="block" />
         <BlocksSpacerBlock v-else-if="block.blockType === 'spacer'" :block="block" />
         <BlocksSplitTextImage v-else-if="block.blockType === 'splitTextImage'" :block="block" />
         <BlocksTableBlock v-else-if="block.blockType === 'table'" :block="block" />

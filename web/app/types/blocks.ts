@@ -62,7 +62,21 @@ export interface HeroSpacerBlock {
   height: 'xs' | 'small' | 'medium' | 'large' | 'xl'
 }
 
-export type HeroContentBlock = HeroHeadlineBlock | HeroSubheadlineBlock | HeroRichTextBlock | HeroCtaBlock | HeroSpacerBlock
+export interface HeroRotatingHeadlineWord {
+  id?: string
+  word: string
+}
+
+export interface HeroRotatingHeadlineBlock {
+  id: string
+  blockType: 'heroRotatingHeadline'
+  prefix?: string
+  rotatingWords: HeroRotatingHeadlineWord[]
+  suffix?: string
+  intervalMs?: number
+}
+
+export type HeroContentBlock = HeroHeadlineBlock | HeroSubheadlineBlock | HeroRichTextBlock | HeroCtaBlock | HeroRotatingHeadlineBlock | HeroSpacerBlock
 
 export interface HeroBlock {
   id: string
@@ -72,7 +86,7 @@ export interface HeroBlock {
   overlay?: 'none' | 'darken' | 'lighten'
   overlayStrength?: number
   alignment?: 'left' | 'center' | 'right'
-  height?: 'small' | 'medium' | 'large' | 'xl' | 'xxl'
+  height?: 'small' | 'medium' | 'large' | 'xl' | 'xxl' | 'xxxl'
   content?: HeroContentBlock[]
 }
 
@@ -93,6 +107,21 @@ export interface RichTextBlock {
   margin?: RichTextMargin
   backgroundColor?: string
   roundedCorners?: boolean
+}
+
+export interface RotatingHeadlineWord {
+  id?: string
+  word: string
+}
+
+export interface RotatingHeadlineBlock {
+  id: string
+  blockType: 'rotatingHeadline'
+  prefix?: string
+  rotatingWords: RotatingHeadlineWord[]
+  suffix?: string
+  alignment?: 'left' | 'center' | 'right'
+  intervalMs?: number
 }
 
 export interface SplitTextImageButton {
@@ -209,4 +238,4 @@ export interface NewsletterSignupBlock {
 }
 
 // Union type for all block types - add more as they are created
-export type ContentBlock = CalendlyEmbedBlock | ContactFormBlock | ContentGridBlock | HeroBlock | InPageMenuTitleBlock | LogoMarqueeBlock | NewsletterSignupBlock | RichTextBlock | SpacerBlock | SplitTextImageBlock | TableBlock | TestimonialsBlock | VideoBlock
+export type ContentBlock = CalendlyEmbedBlock | ContactFormBlock | ContentGridBlock | HeroBlock | InPageMenuTitleBlock | LogoMarqueeBlock | NewsletterSignupBlock | RichTextBlock | RotatingHeadlineBlock | SpacerBlock | SplitTextImageBlock | TableBlock | TestimonialsBlock | VideoBlock

@@ -8,6 +8,7 @@ export { InPageMenuTitle } from './InPageMenuTitle'
 export { LogoMarquee } from './LogoMarquee'
 export { NewsletterSignup } from './NewsletterSignup'
 export { RichText } from './RichText'
+export { RotatingHeadline } from './RotatingHeadline'
 export { Spacer } from './Spacer'
 export { SplitTextImage } from './SplitTextImage'
 export { Table } from './Table'
@@ -23,6 +24,7 @@ import { InPageMenuTitle } from './InPageMenuTitle'
 import { LogoMarquee } from './LogoMarquee'
 import { NewsletterSignup } from './NewsletterSignup'
 import { RichText } from './RichText'
+import { RotatingHeadline } from './RotatingHeadline'
 import { Spacer } from './Spacer'
 import { SplitTextImage } from './SplitTextImage'
 import { Table } from './Table'
@@ -38,6 +40,7 @@ const allBlocks: Block[] = [
   LogoMarquee,
   NewsletterSignup,
   RichText,
+  RotatingHeadline,
   Spacer,
   SplitTextImage,
   Table,

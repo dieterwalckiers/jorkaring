@@ -1,5 +1,5 @@
 import type { Block } from 'payload'
-import { HeroHeadline, HeroSubheadline, HeroRichText, HeroCta, HeroSpacer } from './hero'
+import { HeroHeadline, HeroSubheadline, HeroRichText, HeroCta, HeroRotatingHeadline, HeroSpacer } from './hero'
 
 export const Hero: Block = {
   slug: 'hero',
@@ -79,6 +79,7 @@ export const Hero: Block = {
         { label: 'Large', value: 'large' },
         { label: 'XL', value: 'xl' },
         { label: 'XXL', value: 'xxl' },
+        { label: 'XXXL', value: 'xxxl' },
       ],
       admin: {
         description: 'Height of the hero section',
@@ -87,7 +88,7 @@ export const Hero: Block = {
     {
       name: 'content',
       type: 'blocks',
-      blocks: [HeroHeadline, HeroSubheadline, HeroRichText, HeroCta, HeroSpacer],
+      blocks: [HeroHeadline, HeroSubheadline, HeroRichText, HeroRotatingHeadline, HeroCta, HeroSpacer],
       admin: {
         description: 'Add and arrange content within the hero',
       },

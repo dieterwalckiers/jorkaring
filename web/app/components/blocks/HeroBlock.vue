@@ -15,7 +15,9 @@ const heightClass = computed(() => {
     case 'xl':
       return 'min-h-80 md:min-h-[30rem]'
     case 'xxl':
-      return 'min-h-[80vh] md:min-h-screen'
+      return 'min-h-[25rem] md:min-h-[38rem]'
+    case 'xxxl':
+      return 'min-h-[31rem] md:min-h-[48rem]'
     default:
       return 'min-h-56 md:min-h-80'
   }
@@ -40,7 +42,7 @@ const overlayStyle = computed(() => {
 
 <template>
   <!-- Full-width hero that breaks out of container constraints -->
-  <div class="hero-full-bleed relative overflow-hidden" :class="heightClass">
+  <div data-hero class="hero-full-bleed relative overflow-hidden" :class="heightClass">
     <ProgressiveImage
       v-if="backgroundImage"
       :media="backgroundImage"
@@ -60,14 +62,14 @@ const overlayStyle = computed(() => {
       class="relative z-10 h-full flex items-center"
       :class="heightClass"
     >
-      <div class="container mx-auto px-4 py-8 w-full">
+      <UContainer class="py-8 w-full">
         <BlocksHeroBlockRenderer
           v-if="block.content?.length"
           :blocks="block.content"
           :alignment="block.alignment"
           :has-background="hasBackground"
         />
-      </div>
+      </UContainer>
     </div>
   </div>
 </template>

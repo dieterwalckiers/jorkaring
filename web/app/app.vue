@@ -70,6 +70,15 @@ const fontStyles = computed(() => {
     styles.push(`h2, h3, h4, h5, h6 { font-family: '${googleFontBody.value}', sans-serif; }`)
   }
 
+  // Expose heading fonts as CSS variables so non-heading components can reference
+  // them without coupling to h1-h6 rules.
+  const headingsFont = googleFontHeadings.value || googleFontBody.value
+  const h1Font = googleFontH1.value || googleFontBody.value
+  const rootVars: string[] = []
+  if (headingsFont) rootVars.push(`  --font-headings: '${headingsFont}', sans-serif;`)
+  if (h1Font) rootVars.push(`  --font-h1: '${h1Font}', sans-serif;`)
+  if (rootVars.length) styles.push(`:root {\n${rootVars.join('\n')}\n}`)
+
   return styles.join('\n')
 })
 
