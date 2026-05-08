@@ -383,13 +383,13 @@ function getHeadingSize(level: string): string {
   // This hook is retained as a fallback for anything that renders outside
   // our scoped prose context and still expects a Tailwind size class.
   switch (level) {
-    case '1': return 'text-5xl md:text-6xl'
-    case '2': return 'text-4xl md:text-5xl'
-    case '3': return 'text-2xl md:text-3xl'
-    case '4': return 'text-xl md:text-2xl'
-    case '5': return 'text-lg md:text-xl'
-    case '6': return 'text-base md:text-lg'
-    default: return 'text-2xl'
+    case '1': return 'text-3xl md:text-4xl lg:text-5xl'
+    case '2': return 'text-2xl md:text-3xl lg:text-4xl'
+    case '3': return 'text-xl md:text-2xl'
+    case '4': return 'text-lg md:text-xl'
+    case '5': return 'text-base md:text-lg'
+    case '6': return 'text-base'
+    default: return 'text-xl'
   }
 }
 

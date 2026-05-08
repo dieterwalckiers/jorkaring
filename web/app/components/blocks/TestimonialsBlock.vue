@@ -167,9 +167,9 @@ function goTo(idx: number) {
    hook of the quotemark sits just above and to the left of the quote text. */
 .testimonial-quote-mark {
   position: absolute;
-  top: clamp(-1rem, -1vw, -0.5rem);
+  top: clamp(-0.75rem, -0.5vw, -0.25rem);
   left: clamp(-0.25rem, 2vw, 1.5rem);
-  font-size: clamp(8rem, 18vw, 16rem);
+  font-size: clamp(5rem, 9vw, 9rem);
   line-height: 0.75;
   color: var(--color-headings);
   opacity: 0.28;
@@ -197,8 +197,8 @@ function goTo(idx: number) {
 
 .testimonial-quote {
   color: var(--color-font);
-  font-size: clamp(1.375rem, 1.5vw + 1rem, 2.25rem);
-  line-height: 1.25;
+  font-size: clamp(1.125rem, 0.65vw + 0.875rem, 1.625rem);
+  line-height: 1.45;
   letter-spacing: -0.005em;
   font-weight: 400;
   text-wrap: balance;

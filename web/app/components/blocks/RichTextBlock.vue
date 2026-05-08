@@ -6,12 +6,15 @@ const props = defineProps<{
   block: RichTextBlockType
 }>()
 
+// Mobile-first: fractional widths only apply from md upward. On phones
+// the content always spans full width — narrow viewports can't afford
+// to give 33–75% of horizontal space back to side margins.
 const widthClasses: Record<RichTextWidth, string> = {
-  '1/4': 'w-1/4',
-  '1/3': 'w-1/3',
-  'half': 'w-1/2',
-  '2/3': 'w-2/3',
-  '3/4': 'w-3/4',
+  '1/4': 'w-full md:w-1/4',
+  '1/3': 'w-full md:w-1/3',
+  'half': 'w-full md:w-1/2',
+  '2/3': 'w-full md:w-2/3',
+  '3/4': 'w-full md:w-3/4',
   'full': 'w-full',
 }
 
@@ -93,8 +96,8 @@ const containerClasses = computed(() => {
    lede; subsequent paragraphs keep body size so hierarchy is obvious.
    A short hairline under the lede echoes the content-grid spread device. */
 .variant-hero :deep(p:first-of-type) {
-  font-size: clamp(1.5rem, 1.5vw + 1rem, 2.5rem);
-  line-height: 1.18;
+  font-size: clamp(1.25rem, 1vw + 0.85rem, 1.75rem);
+  line-height: 1.25;
   letter-spacing: -0.01em;
   font-weight: 400;
   text-wrap: balance;
@@ -127,8 +130,8 @@ const containerClasses = computed(() => {
   float: left;
   font-family: inherit;
   font-weight: 700;
-  font-size: clamp(3.25rem, 5.5vw + 1rem, 5.5rem);
-  line-height: 0.82;
+  font-size: clamp(2.5rem, 3.5vw + 0.75rem, 4rem);
+  line-height: 0.85;
   padding-inline-end: 0.1em;
   padding-block-start: 0.08em;
   color: var(--color-headings);
