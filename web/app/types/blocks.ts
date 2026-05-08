@@ -10,6 +10,8 @@ export interface CalendlyEmbedBlock {
 export interface ContentGridCell {
   id?: string
   content: unknown // Rich text content (Lexical format)
+  collapsedByDefault?: boolean
+  collapsedLines?: '5' | '8' | '12' | '16' | '20'
 }
 
 export interface ContentGridBlock {
@@ -20,6 +22,10 @@ export interface ContentGridBlock {
   horizontalAlignment?: 'left' | 'center' | 'right'
   verticalAlignment?: 'top' | 'center' | 'bottom'
   editorialNumbers?: boolean
+  renderAsCards?: boolean
+  cardBackground?: 'lighten' | 'darken'
+  cardRoundedCorners?: boolean
+  equalRowHeights?: boolean
 }
 
 export interface HeroHeadlineBlock {

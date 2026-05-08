@@ -17,7 +17,12 @@ import * as migration_20260420_114911 from './20260420_114911';
 import * as migration_20260503_093000_splash_page_overlay from './20260503_093000_splash_page_overlay';
 import * as migration_20260503_101343_add_rotating_headline_block from './20260503_101343_add_rotating_headline_block';
 import * as migration_20260507_190744_add_hero_rotating_headline_block from './20260507_190744_add_hero_rotating_headline_block';
+import * as migration_20260507_193343_add_content_grid_cell_collapsed from './20260507_193343_add_content_grid_cell_collapsed';
+import * as migration_20260507_194852_add_content_grid_cell_collapsed_lines from './20260507_194852_add_content_grid_cell_collapsed_lines';
+import * as migration_20260507_195330_add_content_grid_collapsed_lines_12_16 from './20260507_195330_add_content_grid_collapsed_lines_12_16';
 import * as migration_20260507_212426_add_hero_height_xxxl from './20260507_212426_add_hero_height_xxxl';
+import * as migration_20260507_220000_add_content_grid_render_as_cards from './20260507_220000_add_content_grid_render_as_cards';
+import * as migration_20260508_140000_add_content_grid_equal_row_heights from './20260508_140000_add_content_grid_equal_row_heights';
 
 export const migrations = [
   {
@@ -116,8 +121,33 @@ export const migrations = [
     name: '20260507_190744_add_hero_rotating_headline_block',
   },
   {
+    up: migration_20260507_193343_add_content_grid_cell_collapsed.up,
+    down: migration_20260507_193343_add_content_grid_cell_collapsed.down,
+    name: '20260507_193343_add_content_grid_cell_collapsed',
+  },
+  {
+    up: migration_20260507_194852_add_content_grid_cell_collapsed_lines.up,
+    down: migration_20260507_194852_add_content_grid_cell_collapsed_lines.down,
+    name: '20260507_194852_add_content_grid_cell_collapsed_lines',
+  },
+  {
+    up: migration_20260507_195330_add_content_grid_collapsed_lines_12_16.up,
+    down: migration_20260507_195330_add_content_grid_collapsed_lines_12_16.down,
+    name: '20260507_195330_add_content_grid_collapsed_lines_12_16',
+  },
+  {
     up: migration_20260507_212426_add_hero_height_xxxl.up,
     down: migration_20260507_212426_add_hero_height_xxxl.down,
     name: '20260507_212426_add_hero_height_xxxl'
+  },
+  {
+    up: migration_20260507_220000_add_content_grid_render_as_cards.up,
+    down: migration_20260507_220000_add_content_grid_render_as_cards.down,
+    name: '20260507_220000_add_content_grid_render_as_cards',
+  },
+  {
+    up: migration_20260508_140000_add_content_grid_equal_row_heights.up,
+    down: migration_20260508_140000_add_content_grid_equal_row_heights.down,
+    name: '20260508_140000_add_content_grid_equal_row_heights',
   },
 ];
