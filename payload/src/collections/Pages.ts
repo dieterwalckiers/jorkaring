@@ -6,7 +6,7 @@ export const Pages: CollectionConfig = {
   slug: 'pages',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'showInMenu', 'menuOrder', 'updatedAt'],
+    defaultColumns: ['title', 'slug', 'showInMenu', 'menuOrder', 'updatedAt'],
   },
   access: {
     read: () => true,
