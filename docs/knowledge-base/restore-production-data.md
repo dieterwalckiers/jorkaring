@@ -22,6 +22,11 @@ There are two scripts:
 
 If your service is named something other than `jorkaring`, export `RAILWAY_SERVICE=<name>` before running.
 
+The export script (with `--production`):
+1. Pulls `DATABASE_PUBLIC_URL` and `PAYLOAD_PUBLIC_SERVER_URL` from the `jorkaring` Railway service and passes both into the payload container — the latter is required so generated media URLs target production rather than `localhost`
+2. Dumps pages, media metadata, and site settings from the production DB into `backups/<name>/`
+3. Copies the local container's `payload/public/uploads/` into `backups/<name>/uploads/`, then walks every media doc (and each size variant) and downloads any file missing from the backup via its public `url`. The result is a self-contained backup with full media
+
 The restore script:
 1. Runs pending migrations against the local DB
 2. Deletes existing pages, media, and site settings
@@ -53,16 +58,15 @@ Verify the frontend at `http://localhost:3201/` and the admin at `http://localho
     payload pnpm export:content prod-$(date +%Y%m%d-%H%M%S)
   ```
 
-### `⚠ Skipping "<filename>": file not found in backup`
+### `⚠ Skipping "<filename>": file not found in backup` (during restore)
 
-The export script copies `payload/public/uploads/` from **the local payload container**, not from Railway. Production's `/app/public/uploads` is on Railway's ephemeral disk and gets wiped on every redeploy (see commit `819ca07`), so the files genuinely don't exist in production either — the static site build downloads them from whatever is still cached or reachable at build time.
+`export-content.sh --production` is supposed to make this unreachable for prod-sourced backups: after copying local uploads, it iterates every media doc and `fetch()`es any missing file from its public URL into the backup dir. If a restore still warns about missing files, the export step almost certainly logged a corresponding `⚠ Failed to fetch …` or `⚠ Error fetching …` line — re-read that output. Common causes:
 
-Consequences locally:
-- Only media whose files happen to live in your local `payload/public/uploads/` will restore fully
-- Media records whose files are missing get skipped and their IDs are absent from the in-memory `mediaIdMap`
-- Any page/site-setting field referencing those IDs gets remapped to `null` by `restore-content.ts` so foreign keys don't blow up
+- **Production volume actually missing the file** (HTTP 404 from `https://jorkaring-production.up.railway.app/api/media/file/<filename>`). The DB row is real but the file isn't on disk — typically a previously-broken upload, or a file that pre-dates the Railway volume mount and was lost at the redeploy that introduced it. Fix it on production (re-upload via the admin) and re-export, or accept the broken reference locally.
+- **`PAYLOAD_PUBLIC_SERVER_URL` not set on the `jorkaring` Railway service** (or returned empty by `railway variables`). Without it the export-script env var falls back to localhost, generated media URLs point at the local container, and `fetch()` returns 404. Verify with `railway variables --service jorkaring --json | grep PAYLOAD_PUBLIC_SERVER_URL` — should be `https://jorkaring-production.up.railway.app` (or the current public domain).
+- **Container can't reach the public domain** (network policy, DNS). Sanity-check with `docker compose exec payload wget -q --spider https://jorkaring-production.up.railway.app/api/media/file/<filename>; echo $?` (0 = ok).
 
-This is the current production reality, not a bug in the restore. If you need a full media set locally, you have to obtain the files out-of-band (e.g., from a collaborator's machine, a prior backup, or the deployed static site under `web/.output/public/api/media/file/`).
+If you genuinely want to restore with the missing files left as `null` references, the existing fallback still applies: `restore-content.ts` skips media with no file on disk, and `remapMediaIds` rewrites any dangling references to `null` so foreign keys don't blow up.
 
 ### `Failed query: insert into "pages_blocks_hero" ... background_image_id = <N>`
 

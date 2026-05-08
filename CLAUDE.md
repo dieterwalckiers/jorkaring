@@ -60,6 +60,8 @@ When adding a new block: define it in `payload/src/blocks/`, register it in `pay
 
 Block visibility in the admin UI is controlled by the `hiddenBlockSlugs` array in `payload/src/blocks/index.ts`. Add a block's slug there to hide it from the editor. `Pages.ts` imports the filtered `pageBlocks` list, so no other file needs to change.
 
+**IMPORTANT — schema changes need migrations.** Postgres enforces enums and column types at the DB level. Adding a `select` option, renaming a field, changing a default, adding a new field, or adding/removing a block all require a migration in `payload/src/migrations/` — editing the block definition alone will cause runtime save errors like `invalid input value for enum ...`. Each block's enums typically exist **four times** (once each for `pages_blocks_*`, `site_settings_blocks_*`, `_pages_v_blocks_*`, `_site_settings_v_blocks_*`) — update all of them. Generate via `docker compose exec payload npm run migrate:create <name>`, or hand-write following the pattern in `20260503_120000_add_block_spacing.ts`. Then add the import + entry to `payload/src/migrations/index.ts` and run `docker compose exec payload npm run migrate`. Also regenerate types with `npm run generate:types` so `payload-types.ts` matches.
+
 ### API Communication (`web/app/composables/usePayload.ts`)
 
 - **Server-side** rendering uses `config.payloadApiUrl` (Docker internal URL: `http://payload:3000/api`)

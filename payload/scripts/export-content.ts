@@ -24,6 +24,17 @@ interface ExportResult {
   count: number
 }
 
+interface MediaSize {
+  filename?: string | null
+  url?: string | null
+}
+
+interface MediaDoc {
+  filename?: string | null
+  url?: string | null
+  sizes?: Record<string, MediaSize | null> | null
+}
+
 async function exportContent(): Promise<void> {
   const backupName = process.argv[2] || `backup-${new Date().toISOString().replace(/[:.]/g, '-')}`
   const backupDir = path.resolve(__dirname, '..', 'backups', backupName)
@@ -86,6 +97,22 @@ async function exportContent(): Promise<void> {
     }
   }
 
+  // For files that don't exist on the local container's disk (typical when
+  // exporting against a remote DATABASE_URL like production), fetch them from
+  // the public media URLs returned by the API. This makes `--production`
+  // exports actually self-contained.
+  console.log('🌐 Fetching missing files from media URLs...')
+  const fetchResult = await fetchMissingMediaFiles(
+    media.docs as MediaDoc[],
+    uploadsBackupDir,
+  )
+  if (fetchResult.fetched > 0 || fetchResult.failed > 0) {
+    const failedNote = fetchResult.failed > 0 ? `, ${fetchResult.failed} failed` : ''
+    console.log(`   ✓ ${fetchResult.fetched} files fetched${failedNote}`)
+  } else {
+    console.log('   ✓ All media files already present locally')
+  }
+
   // Export Site Settings
   console.log('⚙️  Exporting site settings...')
   const siteSettings = await payload.findGlobal({
@@ -117,6 +144,55 @@ async function exportContent(): Promise<void> {
   console.log(`   pnpm restore:content ${backupName}\n`)
 
   process.exit(0)
+}
+
+async function fetchMissingMediaFiles(
+  docs: MediaDoc[],
+  uploadsBackupDir: string,
+): Promise<{ fetched: number; failed: number }> {
+  let fetched = 0
+  let failed = 0
+
+  for (const doc of docs) {
+    const variants: Array<{ filename: string; url: string }> = []
+    if (doc.filename && doc.url) {
+      variants.push({ filename: doc.filename, url: doc.url })
+    }
+    if (doc.sizes) {
+      for (const size of Object.values(doc.sizes)) {
+        if (size?.filename && size.url) {
+          variants.push({ filename: size.filename, url: size.url })
+        }
+      }
+    }
+
+    for (const { filename, url } of variants) {
+      const dest = path.join(uploadsBackupDir, filename)
+      try {
+        await fs.access(dest)
+        continue
+      } catch {
+        // missing — fall through to fetch
+      }
+
+      try {
+        const res = await fetch(url)
+        if (!res.ok) {
+          console.warn(`   ⚠ Failed to fetch "${filename}" (HTTP ${res.status})`)
+          failed++
+          continue
+        }
+        const buf = Buffer.from(await res.arrayBuffer())
+        await fs.writeFile(dest, buf)
+        fetched++
+      } catch (error) {
+        console.warn(`   ⚠ Error fetching "${filename}":`, (error as Error).message)
+        failed++
+      }
+    }
+  }
+
+  return { fetched, failed }
 }
 
 async function copyDirectory(src: string, dest: string): Promise<void> {

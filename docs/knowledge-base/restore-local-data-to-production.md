@@ -7,7 +7,7 @@ How to push your local Payload content (pages, media, site settings) up to the p
 Typical cases:
 - You've authored a batch of new pages locally and want them live
 - You're recovering production from a known-good local snapshot
-- You're seeding a freshly-redeployed production (whose `/app/public/uploads` is ephemeral and gets wiped on every Railway deploy)
+- You're seeding a fresh production deploy or recovering from a wiped/recreated upload volume
 
 ## Prerequisites
 
@@ -61,9 +61,11 @@ Caveats still worth knowing:
 - The Dockerfile dropped `USER nextjs` so the container can write to the root-owned volume mount. If you reintroduce a non-root user, add a chown step at startup or the healthcheck will fail.
 - Detaching the volume (or creating a new one) reverts to ephemeral storage.
 
-### Safety backup's media dir reflects local, not prod
+### Safety backup's media dir
 
-`export-content.sh … --production` dumps the production **DB** but copies `payload/public/uploads/` from the **local payload container**. So a "prod safety backup" taken moments before a local→prod restore actually has *local* media alongside *prod* DB rows. Good enough for DB rollback, not for true media rollback. If you need both, grab the media separately (e.g., `railway ssh --service jorkaring "tar -czf - -C /app/public uploads" > prod-uploads.tar.gz` before you start).
+`export-content.sh … --production` first copies `payload/public/uploads/` from the local container into the backup, then walks every media doc and HTTP-fetches any file missing from the backup via its public `url`. So the safety backup is self-contained for everything the production DB references — *as long as production's volume actually serves those files*. If a media row points at a file the volume no longer has (HTTP 404 during fetch), the export logs a `⚠ Failed to fetch` line and continues; that file won't be in the safety backup either.
+
+For belt-and-suspenders, `railway ssh --service jorkaring "tar -czf - -C /app/public uploads" > prod-uploads.tar.gz` still gives you a raw volume snapshot independent of DB consistency.
 
 ### Railway CLI linked to the wrong service
 
