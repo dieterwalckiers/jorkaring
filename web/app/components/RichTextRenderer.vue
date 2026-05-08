@@ -25,10 +25,10 @@ function prefixInternalUrl(url: string): string {
   return url
 }
 
-// Check if a URL is external (should open in new tab)
+// Only true cross-origin URLs (http(s):// or protocol-relative //) open in a new tab.
+// Anchors (#…), relative paths, mailto:, tel:, etc. stay in the same tab.
 function isExternalUrl(url: string): boolean {
-  // Internal links start with / (but not // which is protocol-relative)
-  return !url.startsWith('/') || url.startsWith('//')
+  return /^(https?:)?\/\//i.test(url)
 }
 
 // Escape HTML entities to prevent XSS

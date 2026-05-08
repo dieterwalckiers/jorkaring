@@ -3,7 +3,7 @@
 
 @theme {
   /* Component styling */
-  --radius-button: .7rem;
+  --radius-button: 0;
 
   /* Theme colors (CMS-editable) */
   --color-theme1: #5E6E83;
@@ -254,12 +254,14 @@ input[type="checkbox"]:checked {
 /* Button inline style for rich text editor buttons */
 .btn-outline-inline {
   display: inline-block;
+  min-width: 180px;
+  text-align: center;
   border: 2px solid var(--color-button-font);
   color: var(--color-button-font);
   background-color: var(--color-button-bg);
   font-weight: 600;
   padding: 0.625rem 1.5rem;
-  border-radius: 9999px;
+  border-radius: 0;
   transition: background-color 150ms, color 150ms;
   text-decoration: none;
 }

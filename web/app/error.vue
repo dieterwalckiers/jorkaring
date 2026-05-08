@@ -12,7 +12,7 @@ const props = defineProps<{
       <p class="text-sm font-medium text-gray-500">{{ error.statusCode }}</p>
       <h1 class="mt-2 text-4xl font-bold text-gray-700">Page Not Found</h1>
       <p class="mt-4 text-gray-500">The page "{{ error.data?.path }}" could not be found.</p>
-      <NuxtLink to="/" class="mt-8 px-6 py-3 bg-gray-700 text-white rounded-full hover:bg-gray-800 transition-colors">
+      <NuxtLink to="/" class="mt-8 inline-flex min-w-[180px] justify-center px-6 py-3 bg-gray-700 text-white hover:bg-gray-800 transition-colors">
         Back to Homepage
       </NuxtLink>
     </div>
