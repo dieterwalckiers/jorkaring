@@ -17,8 +17,6 @@ const cmsFooterLinks = computed(() => {
 </script>
 
 <template>
-  <USeparator class="footer-separator" />
-
   <UFooter class="footer-brand-text">
     <template #left>
       <p class="text-sm">
@@ -36,13 +34,11 @@ const cmsFooterLinks = computed(() => {
       />
     </template>
   </UFooter>
+
+  <div data-checkered-bar aria-hidden="true" />
 </template>
 
 <style scoped>
-.footer-separator {
-  --ui-border: var(--color-theme5);
-}
-
 .footer-brand-text {
   color: var(--color-font-accent);
 }

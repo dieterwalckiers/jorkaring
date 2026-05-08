@@ -1,0 +1,84 @@
+/* Client-specific overrides for jorkaring.
+   Anything in this file is bespoke decoration that doesn't belong in the
+   generic CMS-driven core. Targeted via stable hooks (data-attributes /
+   classes) added to host components — no other markup change required. */
+
+/* Two-blue checkered ribbon. Used as a grounding element at the bottom of
+   the splash hero, the bottom of regular hero blocks, and as the final
+   element below the site footer. Same pattern — height/scale differ per
+   host so the ribbon stays proportionate to its surroundings. */
+[data-splash]::after,
+[data-hero]::after,
+[data-checkered-bar] {
+  --checker-light: #8FAABA;
+  --checker-dark: #5D83A2;
+  --checker-size: 70px;
+  height: var(--checker-size);
+  background-color: var(--checker-dark);
+  background-image:
+    conic-gradient(
+      var(--checker-light) 0 25%,
+      var(--checker-dark)  0 50%,
+      var(--checker-light) 0 75%,
+      var(--checker-dark)  0 100%
+    );
+  background-size: var(--checker-size) var(--checker-size);
+  background-repeat: repeat;
+  background-position: 0 0;
+  pointer-events: none;
+}
+
+/* Splash + hero placement: pinned to the bottom edge of the host, above
+   the background image but below content. */
+[data-splash]::after,
+[data-hero]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 5;
+}
+
+/* Hero variant: smaller tile so the squares are half-scale and the strip
+   ends up much thinner — a quiet trim, not a second hero element. Height
+   tracks --checker-size so we always render exactly one full row of the
+   2×2 micro-checker (any less collapses to stripes). */
+[data-hero]::after {
+  --checker-size: 28px;
+}
+
+/* Below-footer placement: takes its own block in normal flow, full width. */
+[data-checkered-bar] {
+  display: block;
+  width: 100%;
+}
+
+/* Mobile: scale the bar down so squares stay readable and the ribbon
+   doesn't eat too much of an already-cramped viewport. */
+@media (max-width: 767px) {
+  [data-splash]::after,
+  [data-checkered-bar] {
+    --checker-size: 36px;
+  }
+
+  /* Hero variant on mobile: shrink further so the trim stays quiet next
+     to a tighter viewport. */
+  [data-hero]::after {
+    --checker-size: 18px;
+  }
+
+  /* Phones often can't fit the full splash hero in 100dvh. Let the wrapper
+     grow with its content and scroll if it does, instead of cropping under
+     `overflow-hidden`. The inner wrapper keeps `min-height: 100dvh` so the
+     flex centering still works when the content does fit. */
+  [data-splash] {
+    height: auto;
+    min-height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  [data-splash] > div:has(> .blocks-container) {
+    min-height: 100dvh;
+    /* Reserve room for the checkered bar at the bottom (bar height + breath). */
+    padding-bottom: calc(36px + 1rem);
+  }
+}
