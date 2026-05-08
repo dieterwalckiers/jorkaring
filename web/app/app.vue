@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Media } from '~/types/media'
-import type { ContainerWidth, SiteSettings, SiteThemeColors } from '~/types/siteSettings'
+import type { BlockSpacing, ContainerWidth, SiteSettings, SiteThemeColors } from '~/types/siteSettings'
 
 const { data: initialSettings } = useSiteSettings()
 const payloadBaseUrl = usePayloadBaseUrl()
@@ -93,6 +93,19 @@ const containerWidth = computed(() => {
   return containerWidthMap[width]
 })
 
+const blockSpacingScaleMap: Record<BlockSpacing, string> = {
+  tight: '0.5',
+  narrower: '0.75',
+  default: '1',
+  wider: '1.35',
+  spacious: '1.75',
+}
+
+const blockSpacingScale = computed(() => {
+  const spacing = siteSettings.value?.styling?.blockSpacing ?? 'default'
+  return blockSpacingScaleMap[spacing]
+})
+
 /** Map from SiteThemeColors keys to CSS variable names */
 const themeColorCssVarMap: Record<keyof SiteThemeColors, string> = {
   // System
@@ -140,7 +153,7 @@ useHead(() => ({
     ...googleFontUrls.value.map(href => ({ rel: 'stylesheet', href })),
   ],
   style: [
-    { innerHTML: `:root { --ui-container: ${containerWidth.value}; }` },
+    { innerHTML: `:root { --ui-container: ${containerWidth.value}; --block-spacing-scale: ${blockSpacingScale.value}; }` },
     ...(fontStyles.value
       ? [{ innerHTML: fontStyles.value }]
       : []),

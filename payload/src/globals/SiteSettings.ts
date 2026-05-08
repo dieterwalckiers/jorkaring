@@ -143,6 +143,23 @@ export const SiteSettings: GlobalConfig = {
                   },
                 },
                 {
+                  name: 'blockSpacing',
+                  type: 'select',
+                  label: 'Block Spacing',
+                  defaultValue: 'default',
+                  options: [
+                    { label: 'Tight', value: 'tight' },
+                    { label: 'Narrower', value: 'narrower' },
+                    { label: 'Default', value: 'default' },
+                    { label: 'Wider', value: 'wider' },
+                    { label: 'Spacious', value: 'spacious' },
+                  ],
+                  admin: {
+                    description: 'Vertical spacing between content blocks on a page',
+                  },
+                },
+
+                {
                   name: 'googleFontBody',
                   type: 'text',
                   label: 'Body Text Font',

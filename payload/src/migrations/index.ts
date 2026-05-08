@@ -16,6 +16,7 @@ import * as migration_20260407_222158 from './20260407_222158';
 import * as migration_20260420_114911 from './20260420_114911';
 import * as migration_20260503_093000_splash_page_overlay from './20260503_093000_splash_page_overlay';
 import * as migration_20260503_101343_add_rotating_headline_block from './20260503_101343_add_rotating_headline_block';
+import * as migration_20260503_120000_add_block_spacing from './20260503_120000_add_block_spacing';
 import * as migration_20260507_190744_add_hero_rotating_headline_block from './20260507_190744_add_hero_rotating_headline_block';
 import * as migration_20260507_193343_add_content_grid_cell_collapsed from './20260507_193343_add_content_grid_cell_collapsed';
 import * as migration_20260507_194852_add_content_grid_cell_collapsed_lines from './20260507_194852_add_content_grid_cell_collapsed_lines';
@@ -114,6 +115,11 @@ export const migrations = [
     up: migration_20260503_101343_add_rotating_headline_block.up,
     down: migration_20260503_101343_add_rotating_headline_block.down,
     name: '20260503_101343_add_rotating_headline_block',
+  },
+  {
+    up: migration_20260503_120000_add_block_spacing.up,
+    down: migration_20260503_120000_add_block_spacing.down,
+    name: '20260503_120000_add_block_spacing',
   },
   {
     up: migration_20260507_190744_add_hero_rotating_headline_block.up,

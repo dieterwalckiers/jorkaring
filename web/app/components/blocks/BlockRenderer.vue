@@ -32,9 +32,10 @@ defineProps<{
 <style scoped>
 /* Editorial rhythm: major blocks get a generous section break; inline and
    structural blocks fall back to smaller or zero spacing so the page reads
-   like a considered spread, not a stacked feed. */
+   like a considered spread, not a stacked feed. The --block-spacing-scale
+   multiplier is set from Site Settings → Styling → Block Spacing. */
 .block-wrap {
-  margin-block-start: clamp(3rem, 7vw, 6rem);
+  margin-block-start: calc(clamp(3rem, 7vw, 6rem) * var(--block-spacing-scale, 1));
 }
 
 .block-wrap:first-child {
@@ -45,12 +46,12 @@ defineProps<{
 .block-wrap[data-block-type="richText"],
 .block-wrap[data-block-type="table"],
 .block-wrap[data-block-type="newsletterSignup"] {
-  margin-block-start: clamp(2rem, 4vw, 3.5rem);
+  margin-block-start: calc(clamp(2rem, 4vw, 3.5rem) * var(--block-spacing-scale, 1));
 }
 
 /* Two rich-text blocks in a row are a single reading flow — stay tight */
 .block-wrap[data-block-type="richText"] + .block-wrap[data-block-type="richText"] {
-  margin-block-start: clamp(1rem, 2vw, 1.75rem);
+  margin-block-start: calc(clamp(1rem, 2vw, 1.75rem) * var(--block-spacing-scale, 1));
 }
 
 /* Anchors are zero-height; the spacer below them carries the breath */

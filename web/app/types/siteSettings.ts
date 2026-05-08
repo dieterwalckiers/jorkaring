@@ -5,6 +5,7 @@ export type ContainerWidth = 'narrower' | 'default' | 'wider'
 export type HeaderMenuAlignment = 'left' | 'center' | 'right'
 export type HeaderHeight = 'small' | 'medium' | 'large' | 'xl' | '2xl'
 export type LogoSize = 'small' | 'medium' | 'large' | 'xl'
+export type BlockSpacing = 'tight' | 'narrower' | 'default' | 'wider' | 'spacious'
 
 export interface SiteStyling {
   containerWidth?: ContainerWidth
@@ -12,6 +13,7 @@ export interface SiteStyling {
   headerHeight?: HeaderHeight
   headerBorder?: boolean
   logoSize?: LogoSize
+  blockSpacing?: BlockSpacing
   googleFontBody?: string
   googleFontH1?: string
   googleFontHeadings?: string
