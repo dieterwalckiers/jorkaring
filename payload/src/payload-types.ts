@@ -200,6 +200,14 @@ export interface Page {
                 };
                 [k: string]: unknown;
               };
+              /**
+               * Truncate this cell with a fade-out and a "Lees meer" button that expands the full content.
+               */
+              collapsedByDefault?: boolean | null;
+              /**
+               * How many lines to show before fading out.
+               */
+              collapsedLines?: ('5' | '8' | '12' | '16' | '20') | null;
               id?: string | null;
             }[];
             /**
@@ -218,6 +226,22 @@ export interface Page {
              * Show a small 01/02/… index and hairline rule above each cell — reads like a magazine spread. Best on 2–4 column left-aligned grids.
              */
             editorialNumbers?: boolean | null;
+            /**
+             * Wrap each cell in a translucent card with padding.
+             */
+            renderAsCards?: boolean | null;
+            /**
+             * Card background tone.
+             */
+            cardBackground?: ('lighten' | 'darken') | null;
+            /**
+             * Apply rounded corners to each card.
+             */
+            cardRoundedCorners?: boolean | null;
+            /**
+             * Stretch every cell in a row to match the tallest one. Most visible when cells render as cards.
+             */
+            equalRowHeights?: boolean | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'contentGrid';
@@ -246,7 +270,7 @@ export interface Page {
             /**
              * Height of the hero section
              */
-            height?: ('small' | 'medium' | 'large' | 'xl' | 'xxl') | null;
+            height?: ('small' | 'medium' | 'large' | 'xl' | 'xxl' | 'xxxl') | null;
             /**
              * Add and arrange content within the hero
              */
@@ -254,18 +278,46 @@ export interface Page {
               | (
                   | {
                       /**
-                       * The main headline text
+                       * The main headline text. Select text to color individual words or phrases.
                        */
-                      text: string;
+                      text: {
+                        root: {
+                          type: string;
+                          children: {
+                            type: any;
+                            version: number;
+                            [k: string]: unknown;
+                          }[];
+                          direction: ('ltr' | 'rtl') | null;
+                          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                          indent: number;
+                          version: number;
+                        };
+                        [k: string]: unknown;
+                      };
                       id?: string | null;
                       blockName?: string | null;
                       blockType: 'heroHeadline';
                     }
                   | {
                       /**
-                       * Supporting text below the headline
+                       * Supporting text below the headline. Select text to color individual words or phrases.
                        */
-                      text: string;
+                      text: {
+                        root: {
+                          type: string;
+                          children: {
+                            type: any;
+                            version: number;
+                            [k: string]: unknown;
+                          }[];
+                          direction: ('ltr' | 'rtl') | null;
+                          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                          indent: number;
+                          version: number;
+                        };
+                        [k: string]: unknown;
+                      };
                       id?: string | null;
                       blockName?: string | null;
                       blockType: 'heroSubheadline';
@@ -293,6 +345,30 @@ export interface Page {
                       id?: string | null;
                       blockName?: string | null;
                       blockType: 'heroRichText';
+                    }
+                  | {
+                      /**
+                       * Static text shown before the rotating words (e.g. "We help you")
+                       */
+                      prefix?: string | null;
+                      /**
+                       * Words that cycle one after the other (minimum 2)
+                       */
+                      rotatingWords: {
+                        word: string;
+                        id?: string | null;
+                      }[];
+                      /**
+                       * Optional static text shown after the rotating words
+                       */
+                      suffix?: string | null;
+                      /**
+                       * How long each word stays on screen, in milliseconds
+                       */
+                      intervalMs?: number | null;
+                      id?: string | null;
+                      blockName?: string | null;
+                      blockType: 'heroRotatingHeadline';
                     }
                   | {
                       /**
@@ -410,6 +486,34 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'richText';
+          }
+        | {
+            /**
+             * Static text shown before the rotating words (e.g. "We help you")
+             */
+            prefix?: string | null;
+            /**
+             * Words that cycle one after the other (minimum 2)
+             */
+            rotatingWords: {
+              word: string;
+              id?: string | null;
+            }[];
+            /**
+             * Optional static text shown after the rotating words
+             */
+            suffix?: string | null;
+            /**
+             * Text alignment
+             */
+            alignment?: ('left' | 'center' | 'right') | null;
+            /**
+             * How long each word stays on screen, in milliseconds
+             */
+            intervalMs?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'rotatingHeadline';
           }
         | {
             /**
@@ -809,12 +913,18 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     content?: T;
+                    collapsedByDefault?: T;
+                    collapsedLines?: T;
                     id?: T;
                   };
               numberOfColumns?: T;
               horizontalAlignment?: T;
               verticalAlignment?: T;
               editorialNumbers?: T;
+              renderAsCards?: T;
+              cardBackground?: T;
+              cardRoundedCorners?: T;
+              equalRowHeights?: T;
               id?: T;
               blockName?: T;
             };
@@ -849,6 +959,21 @@ export interface PagesSelect<T extends boolean = true> {
                       | {
                           content?: T;
                           layout?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    heroRotatingHeadline?:
+                      | T
+                      | {
+                          prefix?: T;
+                          rotatingWords?:
+                            | T
+                            | {
+                                word?: T;
+                                id?: T;
+                              };
+                          suffix?: T;
+                          intervalMs?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -911,6 +1036,22 @@ export interface PagesSelect<T extends boolean = true> {
               margin?: T;
               backgroundColor?: T;
               roundedCorners?: T;
+              id?: T;
+              blockName?: T;
+            };
+        rotatingHeadline?:
+          | T
+          | {
+              prefix?: T;
+              rotatingWords?:
+                | T
+                | {
+                    word?: T;
+                    id?: T;
+                  };
+              suffix?: T;
+              alignment?: T;
+              intervalMs?: T;
               id?: T;
               blockName?: T;
             };
@@ -1158,6 +1299,10 @@ export interface SiteSetting {
      */
     logoSize?: ('small' | 'medium' | 'large' | 'xl') | null;
     /**
+     * Vertical spacing between content blocks on a page
+     */
+    blockSpacing?: ('tight' | 'narrower' | 'default' | 'wider' | 'spacious') | null;
+    /**
      * Google Font for body text (e.g., "Roboto", "Open Sans"). Leave empty for system default.
      */
     googleFontBody?: string | null;
@@ -1269,6 +1414,14 @@ export interface SiteSetting {
      */
     backgroundImage?: (number | null) | Media;
     /**
+     * Apply a dark or light overlay on the background image to improve text readability
+     */
+    backgroundOverlay?: ('none' | 'darken' | 'lighten') | null;
+    /**
+     * Overlay strength in % (0 = transparent, 100 = fully opaque)
+     */
+    backgroundOverlayStrength?: number | null;
+    /**
      * Centers all content horizontally and vertically in a full-screen (100vw x 100vh) wrapper
      */
     centered?: boolean | null;
@@ -1309,6 +1462,14 @@ export interface SiteSetting {
                   };
                   [k: string]: unknown;
                 };
+                /**
+                 * Truncate this cell with a fade-out and a "Lees meer" button that expands the full content.
+                 */
+                collapsedByDefault?: boolean | null;
+                /**
+                 * How many lines to show before fading out.
+                 */
+                collapsedLines?: ('5' | '8' | '12' | '16' | '20') | null;
                 id?: string | null;
               }[];
               /**
@@ -1327,6 +1488,22 @@ export interface SiteSetting {
                * Show a small 01/02/… index and hairline rule above each cell — reads like a magazine spread. Best on 2–4 column left-aligned grids.
                */
               editorialNumbers?: boolean | null;
+              /**
+               * Wrap each cell in a translucent card with padding.
+               */
+              renderAsCards?: boolean | null;
+              /**
+               * Card background tone.
+               */
+              cardBackground?: ('lighten' | 'darken') | null;
+              /**
+               * Apply rounded corners to each card.
+               */
+              cardRoundedCorners?: boolean | null;
+              /**
+               * Stretch every cell in a row to match the tallest one. Most visible when cells render as cards.
+               */
+              equalRowHeights?: boolean | null;
               id?: string | null;
               blockName?: string | null;
               blockType: 'contentGrid';
@@ -1355,7 +1532,7 @@ export interface SiteSetting {
               /**
                * Height of the hero section
                */
-              height?: ('small' | 'medium' | 'large' | 'xl' | 'xxl') | null;
+              height?: ('small' | 'medium' | 'large' | 'xl' | 'xxl' | 'xxxl') | null;
               /**
                * Add and arrange content within the hero
                */
@@ -1363,18 +1540,46 @@ export interface SiteSetting {
                 | (
                     | {
                         /**
-                         * The main headline text
+                         * The main headline text. Select text to color individual words or phrases.
                          */
-                        text: string;
+                        text: {
+                          root: {
+                            type: string;
+                            children: {
+                              type: any;
+                              version: number;
+                              [k: string]: unknown;
+                            }[];
+                            direction: ('ltr' | 'rtl') | null;
+                            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                            indent: number;
+                            version: number;
+                          };
+                          [k: string]: unknown;
+                        };
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'heroHeadline';
                       }
                     | {
                         /**
-                         * Supporting text below the headline
+                         * Supporting text below the headline. Select text to color individual words or phrases.
                          */
-                        text: string;
+                        text: {
+                          root: {
+                            type: string;
+                            children: {
+                              type: any;
+                              version: number;
+                              [k: string]: unknown;
+                            }[];
+                            direction: ('ltr' | 'rtl') | null;
+                            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                            indent: number;
+                            version: number;
+                          };
+                          [k: string]: unknown;
+                        };
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'heroSubheadline';
@@ -1402,6 +1607,30 @@ export interface SiteSetting {
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'heroRichText';
+                      }
+                    | {
+                        /**
+                         * Static text shown before the rotating words (e.g. "We help you")
+                         */
+                        prefix?: string | null;
+                        /**
+                         * Words that cycle one after the other (minimum 2)
+                         */
+                        rotatingWords: {
+                          word: string;
+                          id?: string | null;
+                        }[];
+                        /**
+                         * Optional static text shown after the rotating words
+                         */
+                        suffix?: string | null;
+                        /**
+                         * How long each word stays on screen, in milliseconds
+                         */
+                        intervalMs?: number | null;
+                        id?: string | null;
+                        blockName?: string | null;
+                        blockType: 'heroRotatingHeadline';
                       }
                     | {
                         /**
@@ -1829,6 +2058,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         headerHeight?: T;
         headerBorder?: T;
         logoSize?: T;
+        blockSpacing?: T;
         googleFontBody?: T;
         googleFontH1?: T;
         googleFontHeadings?: T;
@@ -1870,6 +2100,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | {
         enabled?: T;
         backgroundImage?: T;
+        backgroundOverlay?: T;
+        backgroundOverlayStrength?: T;
         centered?: T;
         content?:
           | T
@@ -1888,12 +2120,18 @@ export interface SiteSettingsSelect<T extends boolean = true> {
                       | T
                       | {
                           content?: T;
+                          collapsedByDefault?: T;
+                          collapsedLines?: T;
                           id?: T;
                         };
                     numberOfColumns?: T;
                     horizontalAlignment?: T;
                     verticalAlignment?: T;
                     editorialNumbers?: T;
+                    renderAsCards?: T;
+                    cardBackground?: T;
+                    cardRoundedCorners?: T;
+                    equalRowHeights?: T;
                     id?: T;
                     blockName?: T;
                   };
@@ -1928,6 +2166,21 @@ export interface SiteSettingsSelect<T extends boolean = true> {
                             | {
                                 content?: T;
                                 layout?: T;
+                                id?: T;
+                                blockName?: T;
+                              };
+                          heroRotatingHeadline?:
+                            | T
+                            | {
+                                prefix?: T;
+                                rotatingWords?:
+                                  | T
+                                  | {
+                                      word?: T;
+                                      id?: T;
+                                    };
+                                suffix?: T;
+                                intervalMs?: T;
                                 id?: T;
                                 blockName?: T;
                               };
