@@ -23,6 +23,7 @@ import * as migration_20260507_194852_add_content_grid_cell_collapsed_lines from
 import * as migration_20260507_195330_add_content_grid_collapsed_lines_12_16 from './20260507_195330_add_content_grid_collapsed_lines_12_16';
 import * as migration_20260507_212426_add_hero_height_xxxl from './20260507_212426_add_hero_height_xxxl';
 import * as migration_20260507_220000_add_content_grid_render_as_cards from './20260507_220000_add_content_grid_render_as_cards';
+import * as migration_20260508_120000_hero_headlines_to_richtext from './20260508_120000_hero_headlines_to_richtext';
 import * as migration_20260508_140000_add_content_grid_equal_row_heights from './20260508_140000_add_content_grid_equal_row_heights';
 
 export const migrations = [
@@ -150,6 +151,11 @@ export const migrations = [
     up: migration_20260507_220000_add_content_grid_render_as_cards.up,
     down: migration_20260507_220000_add_content_grid_render_as_cards.down,
     name: '20260507_220000_add_content_grid_render_as_cards',
+  },
+  {
+    up: migration_20260508_120000_hero_headlines_to_richtext.up,
+    down: migration_20260508_120000_hero_headlines_to_richtext.down,
+    name: '20260508_120000_hero_headlines_to_richtext',
   },
   {
     up: migration_20260508_140000_add_content_grid_equal_row_heights.up,

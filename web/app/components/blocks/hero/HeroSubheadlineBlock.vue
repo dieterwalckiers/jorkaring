@@ -10,12 +10,9 @@ defineProps<{
 
 <template>
   <p
-    class="text-lg md:text-xl lg:text-2xl"
-    :class="[
-      hasBackground ? 'text-white/80' : 'text-gray-600 dark:text-gray-400',
-      alignment === 'left' ? 'text-left' : alignment === 'right' ? 'text-right' : 'text-center',
-    ]"
+    class="text-color-base text-lg md:text-xl lg:text-2xl"
+    :class="alignment === 'left' ? 'text-left' : alignment === 'right' ? 'text-right' : 'text-center'"
   >
-    {{ block.text }}
+    <RichTextInline :content="block.text" />
   </p>
 </template>

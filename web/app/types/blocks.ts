@@ -31,13 +31,13 @@ export interface ContentGridBlock {
 export interface HeroHeadlineBlock {
   id: string
   blockType: 'heroHeadline'
-  text: string
+  text: unknown // Rich text content (Lexical format) — color-only formatting
 }
 
 export interface HeroSubheadlineBlock {
   id: string
   blockType: 'heroSubheadline'
-  text: string
+  text: unknown // Rich text content (Lexical format) — color-only formatting
 }
 
 export type HeroRichTextLayout = 'full' | 'left' | 'right'

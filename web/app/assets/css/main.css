@@ -105,15 +105,12 @@ body {
   background-clip: text;
 }
 
-/* Theme 1–8 */
-.text-color-theme1, .text-color-theme1 * { color: var(--color-theme1); }
-.text-color-theme2, .text-color-theme2 * { color: var(--color-theme2); }
-.text-color-theme3, .text-color-theme3 * { color: var(--color-theme3); }
-.text-color-theme4, .text-color-theme4 * { color: var(--color-theme4); }
-.text-color-theme5, .text-color-theme5 * { color: var(--color-theme5); }
-.text-color-theme6, .text-color-theme6 * { color: var(--color-theme6); }
-.text-color-theme7, .text-color-theme7 * { color: var(--color-theme7); }
-.text-color-theme8, .text-color-theme8 * { color: var(--color-theme8); }
+/* Order matters: declare the "default-like" colors (base / accent / black /
+   white) FIRST so the theme colors below can win on source order when an
+   inline span re-colors a word inside an outer container that already has
+   one of these classes (e.g. <h1 class="text-color-base">…<span
+   class="text-color-theme1">…</span></h1>). All these rules share the same
+   specificity (0,1,0) on a nested span, so the one declared later wins. */
 
 /* Font colors */
 .text-color-base, .text-color-base * { color: var(--color-font); }
@@ -124,6 +121,16 @@ body {
 /* Black & White */
 .text-color-black, .text-color-black * { color: #000000; }
 .text-color-white, .text-color-white * { color: #ffffff; }
+
+/* Theme 1–8 */
+.text-color-theme1, .text-color-theme1 * { color: var(--color-theme1); }
+.text-color-theme2, .text-color-theme2 * { color: var(--color-theme2); }
+.text-color-theme3, .text-color-theme3 * { color: var(--color-theme3); }
+.text-color-theme4, .text-color-theme4 * { color: var(--color-theme4); }
+.text-color-theme5, .text-color-theme5 * { color: var(--color-theme5); }
+.text-color-theme6, .text-color-theme6 * { color: var(--color-theme6); }
+.text-color-theme7, .text-color-theme7 * { color: var(--color-theme7); }
+.text-color-theme8, .text-color-theme8 * { color: var(--color-theme8); }
 
 /* Legacy support: keep old class for backwards compatibility */
 .gradient-text {

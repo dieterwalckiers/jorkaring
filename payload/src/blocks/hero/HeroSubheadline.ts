@@ -1,4 +1,11 @@
 import type { Block } from 'payload'
+import {
+  lexicalEditor,
+  ParagraphFeature,
+  FixedToolbarFeature,
+  InlineToolbarFeature,
+} from '@payloadcms/richtext-lexical'
+import { TextColorFeature } from '../../features/text-color'
 
 export const HeroSubheadline: Block = {
   slug: 'heroSubheadline',
@@ -9,10 +16,18 @@ export const HeroSubheadline: Block = {
   fields: [
     {
       name: 'text',
-      type: 'textarea',
+      type: 'richText',
       required: true,
+      editor: lexicalEditor({
+        features: () => [
+          ParagraphFeature(),
+          TextColorFeature(),
+          FixedToolbarFeature(),
+          InlineToolbarFeature(),
+        ],
+      }),
       admin: {
-        description: 'Supporting text below the headline',
+        description: 'Supporting text below the headline. Select text to color individual words or phrases.',
       },
     },
   ],

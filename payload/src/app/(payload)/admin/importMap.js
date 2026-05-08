@@ -25,8 +25,8 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
-import { ColorField as ColorField_b8aac22e0c2ddb436ac976c4ee6e9c31 } from '../../../fields/ColorField'
 import { FixedToolbarFeatureClient as FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { ColorField as ColorField_b8aac22e0c2ddb436ac976c4ee6e9c31 } from '../../../fields/ColorField'
 import { HexColorField as HexColorField_69c7870344a325daf3bfa8790806bb3e } from '../../../fields/HexColorField'
 import { ThemeColorProvider as ThemeColorProvider_0dc51704687e55124abe2d121bf5f078 } from '@/components/ThemeColorProvider'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
@@ -59,8 +59,8 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  "/fields/ColorField#ColorField": ColorField_b8aac22e0c2ddb436ac976c4ee6e9c31,
   "@payloadcms/richtext-lexical/client#FixedToolbarFeatureClient": FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "/fields/ColorField#ColorField": ColorField_b8aac22e0c2ddb436ac976c4ee6e9c31,
   "/fields/HexColorField#HexColorField": HexColorField_69c7870344a325daf3bfa8790806bb3e,
   "@/components/ThemeColorProvider#ThemeColorProvider": ThemeColorProvider_0dc51704687e55124abe2d121bf5f078,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
