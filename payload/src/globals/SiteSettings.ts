@@ -142,7 +142,6 @@ export const SiteSettings: GlobalConfig = {
                     description: 'Width of the logo in the header. Height adjusts automatically to maintain aspect ratio.',
                   },
                 },
-
                 {
                   name: 'googleFontBody',
                   type: 'text',
@@ -362,6 +361,36 @@ export const SiteSettings: GlobalConfig = {
                   admin: {
                     description: 'Full-screen background image for the splash page. Use a high-resolution image for best results.',
                     condition: (data) => data?.splashPage?.enabled,
+                  },
+                },
+                {
+                  name: 'backgroundOverlay',
+                  type: 'select',
+                  defaultValue: 'none',
+                  options: [
+                    { label: 'None', value: 'none' },
+                    { label: 'Darken', value: 'darken' },
+                    { label: 'Lighten', value: 'lighten' },
+                  ],
+                  admin: {
+                    description: 'Apply a dark or light overlay on the background image to improve text readability',
+                    condition: (data) => data?.splashPage?.enabled && Boolean(data?.splashPage?.backgroundImage),
+                  },
+                },
+                {
+                  name: 'backgroundOverlayStrength',
+                  type: 'number',
+                  min: 0,
+                  max: 100,
+                  defaultValue: 40,
+                  admin: {
+                    description: 'Overlay strength in % (0 = transparent, 100 = fully opaque)',
+                    placeholder: '40',
+                    condition: (data) =>
+                      data?.splashPage?.enabled
+                      && Boolean(data?.splashPage?.backgroundImage)
+                      && data?.splashPage?.backgroundOverlay
+                      && data.splashPage.backgroundOverlay !== 'none',
                   },
                 },
                 {

@@ -45,9 +45,13 @@ export interface SiteCookieConsent {
   policyLinkText?: string
 }
 
+export type SplashOverlay = 'none' | 'darken' | 'lighten'
+
 export interface SplashPage {
   enabled?: boolean
   backgroundImage?: Media | string
+  backgroundOverlay?: SplashOverlay
+  backgroundOverlayStrength?: number
   centered?: boolean
   content?: ContentBlock[]
 }

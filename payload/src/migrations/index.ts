@@ -14,6 +14,7 @@ import * as migration_20260329_074840 from './20260329_074840';
 import * as migration_20260329_103234_rework_theme_colors from './20260329_103234_rework_theme_colors';
 import * as migration_20260407_222158 from './20260407_222158';
 import * as migration_20260420_114911 from './20260420_114911';
+import * as migration_20260503_093000_splash_page_overlay from './20260503_093000_splash_page_overlay';
 
 export const migrations = [
   {
@@ -94,6 +95,11 @@ export const migrations = [
   {
     up: migration_20260420_114911.up,
     down: migration_20260420_114911.down,
-    name: '20260420_114911'
+    name: '20260420_114911',
+  },
+  {
+    up: migration_20260503_093000_splash_page_overlay.up,
+    down: migration_20260503_093000_splash_page_overlay.down,
+    name: '20260503_093000_splash_page_overlay',
   },
 ];
