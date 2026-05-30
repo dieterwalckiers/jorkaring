@@ -140,6 +140,14 @@ export interface Page {
    */
   menuOrder?: number | null;
   /**
+   * Custom label for the main menu link (uses page title if blank)
+   */
+  menuLabel?: string | null;
+  /**
+   * Optional inline CSS rules applied to this menu item (e.g. "color: #fff; background-color: #ccc;"). Plain CSS declarations only — no selectors or classes.
+   */
+  menuItemStyle?: string | null;
+  /**
    * Show this page as a call-to-action in the header toolbar (above main menu)
    */
   showInToolbar?: boolean | null;
@@ -152,18 +160,43 @@ export interface Page {
    */
   toolbarOrder?: number | null;
   /**
-   * When enabled, only the pages selected below will appear in the main menu when viewing this page. If none are selected, no page menu items will be shown (in-page menu titles are always shown).
+   * Override the main menu for this page. When enabled, only the menu items configured below are shown (in this order), instead of the default menu. If none are added, no page menu items appear.
    */
-  filterMainMenu?: boolean | null;
+  overrideMainMenu?: boolean | null;
   /**
-   * Select which pages appear in the main menu when viewing this page. Leave empty to hide all page menu items.
+   * The main menu links shown on this page. Drag to reorder — items appear in this order. Each link can point to any page and use its own label.
    */
-  menuFilter?: (number | Page)[] | null;
+  menuItems?:
+    | {
+        /**
+         * The page this menu link points to.
+         */
+        page: number | Page;
+        /**
+         * Custom label for this link (uses the page's menu label or title if blank).
+         */
+        label?: string | null;
+        /**
+         * Optional anchor on the target page to jump to — the id of an Anchor block there (e.g. "about"). Leave blank to link to the top of the page.
+         */
+        anchor?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * Add and arrange content blocks for this page
    */
   content?:
     | (
+        | {
+            /**
+             * The id for this spot on the page. Link to it from elsewhere with #<id> — e.g. set "about" here, then link to "https://mysite.com/#about". Use lowercase letters, numbers and hyphens; no spaces.
+             */
+            anchorId: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'anchor';
+          }
         | {
             /**
              * Calendly URL (e.g. "https://calendly.com/<username>/<event>?hide_event_type_details=1&hide_gdpr_banner=1")
@@ -183,9 +216,13 @@ export interface Page {
              */
             cells: {
               /**
+               * What this cell holds. A stat counter shows a large number that counts up from zero when it scrolls into view.
+               */
+              elementType?: ('richText' | 'counter') | null;
+              /**
                * Cell content
                */
-              content: {
+              content?: {
                 root: {
                   type: string;
                   children: {
@@ -199,7 +236,7 @@ export interface Page {
                   version: number;
                 };
                 [k: string]: unknown;
-              };
+              } | null;
               /**
                * Truncate this cell with a fade-out and a "Lees meer" button that expands the full content.
                */
@@ -208,6 +245,26 @@ export interface Page {
                * How many lines to show before fading out.
                */
               collapsedLines?: ('5' | '8' | '12' | '16' | '20') | null;
+              /**
+               * The target number to count up to.
+               */
+              counterValue?: number | null;
+              /**
+               * Show the infinity symbol (∞) instead of a number. The counter still animates up, then cross-fades to ∞.
+               */
+              counterInfinite?: boolean | null;
+              /**
+               * Append a "+" after the number (e.g. "8+").
+               */
+              counterShowPlus?: boolean | null;
+              /**
+               * Caption shown beneath the number (e.g. "Jaren ervaring").
+               */
+              counterLabel?: string | null;
+              /**
+               * Color of the number (the label stays in the muted body color).
+               */
+              counterColor?: string | null;
               id?: string | null;
             }[];
             /**
@@ -242,6 +299,22 @@ export interface Page {
              * Stretch every cell in a row to match the tallest one. Most visible when cells render as cards.
              */
             equalRowHeights?: boolean | null;
+            /**
+             * Background color for the whole grid (adds padding around the cells).
+             */
+            backgroundColor?: string | null;
+            /**
+             * Background color stretches horizontally across the full page width (cells stay within the container).
+             */
+            fullBleed?: boolean | null;
+            /**
+             * Draw subtle hairline rules between cells, like the columns of a magazine spread.
+             */
+            cellDividers?: boolean | null;
+            /**
+             * Color of the dividing lines (rendered at low opacity).
+             */
+            cellDividerColor?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'contentGrid';
@@ -255,6 +328,14 @@ export interface Page {
              * Vertical focal point in % (0 = top, 50 = center, 100 = bottom)
              */
             focalPointY?: number | null;
+            /**
+             * Center the background image horizontally. Uncheck to set a custom horizontal focal point.
+             */
+            centered?: boolean | null;
+            /**
+             * Horizontal focal point in % (0 = left, 50 = center, 100 = right)
+             */
+            focalPointX?: number | null;
             /**
              * Apply a dark or light overlay on the background image to improve text readability
              */
@@ -295,6 +376,10 @@ export interface Page {
                         };
                         [k: string]: unknown;
                       };
+                      /**
+                       * Heading level — matches the WYSIWYG heading sizes.
+                       */
+                      fontSize: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
                       id?: string | null;
                       blockName?: string | null;
                       blockType: 'heroHeadline';
@@ -366,6 +451,10 @@ export interface Page {
                        * How long each word stays on screen, in milliseconds
                        */
                       intervalMs?: number | null;
+                      /**
+                       * Heading level — matches the WYSIWYG heading sizes.
+                       */
+                      fontSize: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
                       id?: string | null;
                       blockName?: string | null;
                       blockType: 'heroRotatingHeadline';
@@ -401,15 +490,6 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'hero';
-          }
-        | {
-            /**
-             * This title will appear as a menu item in the main navigation, scrolling to this position on click
-             */
-            title: string;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'inPageMenuTitle';
           }
         | {
             /**
@@ -479,6 +559,18 @@ export interface Page {
              * Background color for this block
              */
             backgroundColor?: string | null;
+            /**
+             * Color stretches horizontally across the full page width (content stays within container)
+             */
+            fullBleed?: boolean | null;
+            /**
+             * Lay a dark overlay over the background (like the hero) to lift text contrast — handy with the checkered pattern.
+             */
+            darken?: boolean | null;
+            /**
+             * Overlay strength in % (0 = transparent, 100 = fully opaque)
+             */
+            darkenStrength?: number | null;
             /**
              * Apply rounded corners to the block
              */
@@ -890,14 +982,30 @@ export interface PagesSelect<T extends boolean = true> {
   slug?: T;
   showInMenu?: T;
   menuOrder?: T;
+  menuLabel?: T;
+  menuItemStyle?: T;
   showInToolbar?: T;
   toolbarLabel?: T;
   toolbarOrder?: T;
-  filterMainMenu?: T;
-  menuFilter?: T;
+  overrideMainMenu?: T;
+  menuItems?:
+    | T
+    | {
+        page?: T;
+        label?: T;
+        anchor?: T;
+        id?: T;
+      };
   content?:
     | T
     | {
+        anchor?:
+          | T
+          | {
+              anchorId?: T;
+              id?: T;
+              blockName?: T;
+            };
         calendlyEmbed?:
           | T
           | {
@@ -912,9 +1020,15 @@ export interface PagesSelect<T extends boolean = true> {
               cells?:
                 | T
                 | {
+                    elementType?: T;
                     content?: T;
                     collapsedByDefault?: T;
                     collapsedLines?: T;
+                    counterValue?: T;
+                    counterInfinite?: T;
+                    counterShowPlus?: T;
+                    counterLabel?: T;
+                    counterColor?: T;
                     id?: T;
                   };
               numberOfColumns?: T;
@@ -925,6 +1039,10 @@ export interface PagesSelect<T extends boolean = true> {
               cardBackground?: T;
               cardRoundedCorners?: T;
               equalRowHeights?: T;
+              backgroundColor?: T;
+              fullBleed?: T;
+              cellDividers?: T;
+              cellDividerColor?: T;
               id?: T;
               blockName?: T;
             };
@@ -933,6 +1051,8 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               backgroundImage?: T;
               focalPointY?: T;
+              centered?: T;
+              focalPointX?: T;
               overlay?: T;
               overlayStrength?: T;
               alignment?: T;
@@ -944,6 +1064,7 @@ export interface PagesSelect<T extends boolean = true> {
                       | T
                       | {
                           text?: T;
+                          fontSize?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -974,6 +1095,7 @@ export interface PagesSelect<T extends boolean = true> {
                               };
                           suffix?: T;
                           intervalMs?: T;
+                          fontSize?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -999,13 +1121,6 @@ export interface PagesSelect<T extends boolean = true> {
                           blockName?: T;
                         };
                   };
-              id?: T;
-              blockName?: T;
-            };
-        inPageMenuTitle?:
-          | T
-          | {
-              title?: T;
               id?: T;
               blockName?: T;
             };
@@ -1035,6 +1150,9 @@ export interface PagesSelect<T extends boolean = true> {
               floatingOffset?: T;
               margin?: T;
               backgroundColor?: T;
+              fullBleed?: T;
+              darken?: T;
+              darkenStrength?: T;
               roundedCorners?: T;
               id?: T;
               blockName?: T;
@@ -1267,6 +1385,10 @@ export interface SiteSetting {
    */
   siteTitle: string;
   /**
+   * Color used for the site title in the header when no logo is set
+   */
+  titleColor?: string | null;
+  /**
    * Site logo image. If set, this will be displayed in the header instead of the site title
    */
   logo?: (number | null) | Media;
@@ -1402,6 +1524,77 @@ export interface SiteSetting {
     closeable?: boolean | null;
   };
   /**
+   * A floating flash message that pops into a corner of the screen. Use for time-bounded notices: announcements, promotions, transient updates.
+   */
+  toast?: {
+    /**
+     * Master switch — turn the toast on or off without losing its configuration.
+     */
+    enabled?: boolean | null;
+    /**
+     * Toast text. Keep it short — one line reads best. You can insert inline buttons via the toolbar.
+     */
+    content?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    /**
+     * Background color of the toast.
+     */
+    backgroundColor?: string | null;
+    /**
+     * Where the toast appears on screen.
+     */
+    position?: ('bottomRight' | 'bottomLeft' | 'topRight' | 'topLeft') | null;
+    /**
+     * How long to wait after page load before the toast appears. Set to 0 to show immediately.
+     */
+    displayDelaySeconds?: number | null;
+    /**
+     * Show a close button so visitors can dismiss the toast.
+     */
+    dismissible?: boolean | null;
+    /**
+     * Automatically hide the toast after this many seconds. Set to 0 to keep it open until dismissed.
+     */
+    autoDismissSeconds?: number | null;
+    /**
+     * When checked, visitors who dismiss the toast will not see it again (stored in their browser).
+     */
+    rememberDismissal?: boolean | null;
+    /**
+     * A short identifier for this toast. Change it (e.g. "toast-2") to re-show the toast to visitors who already dismissed the previous one.
+     */
+    dismissalKey?: string | null;
+    /**
+     * Choose whether the toast is shown site-wide or only on selected pages.
+     */
+    pageVisibility?: ('all' | 'specific') | null;
+    /**
+     * Pick the pages where the toast should appear.
+     */
+    pages?: (number | Page)[] | null;
+    /**
+     * Optional. The toast will only appear from this date onward. Leave empty to start immediately.
+     */
+    startDate?: string | null;
+    /**
+     * Optional. The toast will stop appearing after this date. Leave empty to keep it active indefinitely.
+     */
+    endDate?: string | null;
+  };
+  /**
    * Configure a landing/entrance page that appears when visitors hit the root URL. It replaces the normal home page and hides the header/footer.
    */
   splashPage?: {
@@ -1445,9 +1638,13 @@ export interface SiteSetting {
                */
               cells: {
                 /**
+                 * What this cell holds. A stat counter shows a large number that counts up from zero when it scrolls into view.
+                 */
+                elementType?: ('richText' | 'counter') | null;
+                /**
                  * Cell content
                  */
-                content: {
+                content?: {
                   root: {
                     type: string;
                     children: {
@@ -1461,7 +1658,7 @@ export interface SiteSetting {
                     version: number;
                   };
                   [k: string]: unknown;
-                };
+                } | null;
                 /**
                  * Truncate this cell with a fade-out and a "Lees meer" button that expands the full content.
                  */
@@ -1470,6 +1667,26 @@ export interface SiteSetting {
                  * How many lines to show before fading out.
                  */
                 collapsedLines?: ('5' | '8' | '12' | '16' | '20') | null;
+                /**
+                 * The target number to count up to.
+                 */
+                counterValue?: number | null;
+                /**
+                 * Show the infinity symbol (∞) instead of a number. The counter still animates up, then cross-fades to ∞.
+                 */
+                counterInfinite?: boolean | null;
+                /**
+                 * Append a "+" after the number (e.g. "8+").
+                 */
+                counterShowPlus?: boolean | null;
+                /**
+                 * Caption shown beneath the number (e.g. "Jaren ervaring").
+                 */
+                counterLabel?: string | null;
+                /**
+                 * Color of the number (the label stays in the muted body color).
+                 */
+                counterColor?: string | null;
                 id?: string | null;
               }[];
               /**
@@ -1504,6 +1721,22 @@ export interface SiteSetting {
                * Stretch every cell in a row to match the tallest one. Most visible when cells render as cards.
                */
               equalRowHeights?: boolean | null;
+              /**
+               * Background color for the whole grid (adds padding around the cells).
+               */
+              backgroundColor?: string | null;
+              /**
+               * Background color stretches horizontally across the full page width (cells stay within the container).
+               */
+              fullBleed?: boolean | null;
+              /**
+               * Draw subtle hairline rules between cells, like the columns of a magazine spread.
+               */
+              cellDividers?: boolean | null;
+              /**
+               * Color of the dividing lines (rendered at low opacity).
+               */
+              cellDividerColor?: string | null;
               id?: string | null;
               blockName?: string | null;
               blockType: 'contentGrid';
@@ -1517,6 +1750,14 @@ export interface SiteSetting {
                * Vertical focal point in % (0 = top, 50 = center, 100 = bottom)
                */
               focalPointY?: number | null;
+              /**
+               * Center the background image horizontally. Uncheck to set a custom horizontal focal point.
+               */
+              centered?: boolean | null;
+              /**
+               * Horizontal focal point in % (0 = left, 50 = center, 100 = right)
+               */
+              focalPointX?: number | null;
               /**
                * Apply a dark or light overlay on the background image to improve text readability
                */
@@ -1557,6 +1798,10 @@ export interface SiteSetting {
                           };
                           [k: string]: unknown;
                         };
+                        /**
+                         * Heading level — matches the WYSIWYG heading sizes.
+                         */
+                        fontSize: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'heroHeadline';
@@ -1628,6 +1873,10 @@ export interface SiteSetting {
                          * How long each word stays on screen, in milliseconds
                          */
                         intervalMs?: number | null;
+                        /**
+                         * Heading level — matches the WYSIWYG heading sizes.
+                         */
+                        fontSize: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
                         id?: string | null;
                         blockName?: string | null;
                         blockType: 'heroRotatingHeadline';
@@ -1730,6 +1979,18 @@ export interface SiteSetting {
                * Background color for this block
                */
               backgroundColor?: string | null;
+              /**
+               * Color stretches horizontally across the full page width (content stays within container)
+               */
+              fullBleed?: boolean | null;
+              /**
+               * Lay a dark overlay over the background (like the hero) to lift text contrast — handy with the checkered pattern.
+               */
+              darken?: boolean | null;
+              /**
+               * Overlay strength in % (0 = transparent, 100 = fully opaque)
+               */
+              darkenStrength?: number | null;
               /**
                * Apply rounded corners to the block
                */
@@ -1998,6 +2259,10 @@ export interface SiteSetting {
      */
     tableBorders?: string | null;
     /**
+     * Default: #373031
+     */
+    bulletPoints?: string | null;
+    /**
      * Default: #B6C9BB
      */
     stickyMessageTxt?: string | null;
@@ -2048,6 +2313,7 @@ export interface SiteSetting {
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteTitle?: T;
+  titleColor?: T;
   logo?: T;
   favicon?: T;
   styling?:
@@ -2095,6 +2361,23 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         content?: T;
         closeable?: T;
       };
+  toast?:
+    | T
+    | {
+        enabled?: T;
+        content?: T;
+        backgroundColor?: T;
+        position?: T;
+        displayDelaySeconds?: T;
+        dismissible?: T;
+        autoDismissSeconds?: T;
+        rememberDismissal?: T;
+        dismissalKey?: T;
+        pageVisibility?: T;
+        pages?: T;
+        startDate?: T;
+        endDate?: T;
+      };
   splashPage?:
     | T
     | {
@@ -2119,9 +2402,15 @@ export interface SiteSettingsSelect<T extends boolean = true> {
                     cells?:
                       | T
                       | {
+                          elementType?: T;
                           content?: T;
                           collapsedByDefault?: T;
                           collapsedLines?: T;
+                          counterValue?: T;
+                          counterInfinite?: T;
+                          counterShowPlus?: T;
+                          counterLabel?: T;
+                          counterColor?: T;
                           id?: T;
                         };
                     numberOfColumns?: T;
@@ -2132,6 +2421,10 @@ export interface SiteSettingsSelect<T extends boolean = true> {
                     cardBackground?: T;
                     cardRoundedCorners?: T;
                     equalRowHeights?: T;
+                    backgroundColor?: T;
+                    fullBleed?: T;
+                    cellDividers?: T;
+                    cellDividerColor?: T;
                     id?: T;
                     blockName?: T;
                   };
@@ -2140,6 +2433,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
                 | {
                     backgroundImage?: T;
                     focalPointY?: T;
+                    centered?: T;
+                    focalPointX?: T;
                     overlay?: T;
                     overlayStrength?: T;
                     alignment?: T;
@@ -2151,6 +2446,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
                             | T
                             | {
                                 text?: T;
+                                fontSize?: T;
                                 id?: T;
                                 blockName?: T;
                               };
@@ -2181,6 +2477,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
                                     };
                                 suffix?: T;
                                 intervalMs?: T;
+                                fontSize?: T;
                                 id?: T;
                                 blockName?: T;
                               };
@@ -2231,6 +2528,9 @@ export interface SiteSettingsSelect<T extends boolean = true> {
                     floatingOffset?: T;
                     margin?: T;
                     backgroundColor?: T;
+                    fullBleed?: T;
+                    darken?: T;
+                    darkenStrength?: T;
                     roundedCorners?: T;
                     id?: T;
                     blockName?: T;
@@ -2332,6 +2632,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         buttonFontHover?: T;
         buttonBgHover?: T;
         tableBorders?: T;
+        bulletPoints?: T;
         stickyMessageTxt?: T;
         stickyMessageBg?: T;
         theme1?: T;

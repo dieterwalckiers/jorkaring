@@ -9,10 +9,12 @@ import {
   ParagraphFeature,
   InlineToolbarFeature,
   FixedToolbarFeature,
+  BlocksFeature,
 } from '@payloadcms/richtext-lexical'
 import { triggerDeploy } from '../hooks/triggerDeploy'
 import { createColorField } from '../fields/colorField'
 import { createHexColorField } from '../fields/hexColorField'
+import { buttonInlineBlock } from '../features/buttonInlineBlock'
 import { ContactForm, ContentGrid, Hero, NewsletterSignup, RichText, Spacer, SplitTextImage, Table, Testimonials, Video } from '../blocks'
 
 export const SiteSettings: GlobalConfig = {
@@ -50,6 +52,12 @@ export const SiteSettings: GlobalConfig = {
                 description: 'The name of your website, displayed in the header when no logo is set',
               },
             },
+            createColorField({
+              name: 'titleColor',
+              label: 'Title Color',
+              defaultValue: 'theme1',
+              description: 'Color used for the site title in the header when no logo is set',
+            }),
             {
               name: 'logo',
               type: 'upload',
@@ -352,6 +360,174 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
         {
+          label: 'Toast',
+          fields: [
+            {
+              name: 'toast',
+              type: 'group',
+              label: false,
+              admin: {
+                description:
+                  'A floating flash message that pops into a corner of the screen. Use for time-bounded notices: announcements, promotions, transient updates.',
+              },
+              fields: [
+                {
+                  name: 'enabled',
+                  type: 'checkbox',
+                  label: 'Enabled',
+                  defaultValue: false,
+                  admin: {
+                    description: 'Master switch — turn the toast on or off without losing its configuration.',
+                  },
+                },
+                {
+                  name: 'content',
+                  type: 'richText',
+                  label: 'Content',
+                  editor: lexicalEditor({
+                    features: () => [
+                      ParagraphFeature(),
+                      BoldFeature(),
+                      ItalicFeature(),
+                      UnderlineFeature(),
+                      StrikethroughFeature(),
+                      LinkFeature(),
+                      BlocksFeature({ inlineBlocks: [buttonInlineBlock] }),
+                      FixedToolbarFeature(),
+                      InlineToolbarFeature(),
+                    ],
+                  }),
+                  admin: {
+                    description: 'Toast text. Keep it short — one line reads best. You can insert inline buttons via the toolbar.',
+                    condition: (data) => data?.toast?.enabled,
+                  },
+                },
+                createColorField({
+                  name: 'backgroundColor',
+                  label: 'Background color',
+                  defaultValue: 'theme1',
+                  description: 'Background color of the toast.',
+                  condition: (data) => Boolean((data as { toast?: { enabled?: boolean } })?.toast?.enabled),
+                }),
+                {
+                  name: 'position',
+                  type: 'select',
+                  label: 'Position',
+                  defaultValue: 'bottomRight',
+                  options: [
+                    { label: 'Bottom right', value: 'bottomRight' },
+                    { label: 'Bottom left', value: 'bottomLeft' },
+                    { label: 'Top right', value: 'topRight' },
+                    { label: 'Top left', value: 'topLeft' },
+                  ],
+                  admin: {
+                    description: 'Where the toast appears on screen.',
+                    condition: (data) => data?.toast?.enabled,
+                  },
+                },
+                {
+                  name: 'displayDelaySeconds',
+                  type: 'number',
+                  label: 'Show after (seconds)',
+                  defaultValue: 0,
+                  min: 0,
+                  max: 600,
+                  admin: {
+                    description: 'How long to wait after page load before the toast appears. Set to 0 to show immediately.',
+                    condition: (data) => data?.toast?.enabled,
+                  },
+                },
+                {
+                  name: 'dismissible',
+                  type: 'checkbox',
+                  label: 'Dismissible',
+                  defaultValue: true,
+                  admin: {
+                    description: 'Show a close button so visitors can dismiss the toast.',
+                    condition: (data) => data?.toast?.enabled,
+                  },
+                },
+                {
+                  name: 'autoDismissSeconds',
+                  type: 'number',
+                  label: 'Auto-dismiss after (seconds)',
+                  defaultValue: 0,
+                  min: 0,
+                  max: 600,
+                  admin: {
+                    description: 'Automatically hide the toast after this many seconds. Set to 0 to keep it open until dismissed.',
+                    condition: (data) => data?.toast?.enabled,
+                  },
+                },
+                {
+                  name: 'rememberDismissal',
+                  type: 'checkbox',
+                  label: 'Remember dismissal',
+                  defaultValue: true,
+                  admin: {
+                    description: 'When checked, visitors who dismiss the toast will not see it again (stored in their browser).',
+                    condition: (data) => data?.toast?.enabled && data?.toast?.dismissible,
+                  },
+                },
+                {
+                  name: 'dismissalKey',
+                  type: 'text',
+                  label: 'Dismissal key',
+                  defaultValue: 'toast-1',
+                  admin: {
+                    description: 'A short identifier for this toast. Change it (e.g. "toast-2") to re-show the toast to visitors who already dismissed the previous one.',
+                    condition: (data) => data?.toast?.enabled && data?.toast?.dismissible && data?.toast?.rememberDismissal,
+                  },
+                },
+                {
+                  name: 'pageVisibility',
+                  type: 'radio',
+                  label: 'Show on',
+                  defaultValue: 'all',
+                  options: [
+                    { label: 'All pages', value: 'all' },
+                    { label: 'Specific pages', value: 'specific' },
+                  ],
+                  admin: {
+                    description: 'Choose whether the toast is shown site-wide or only on selected pages.',
+                    condition: (data) => data?.toast?.enabled,
+                  },
+                },
+                {
+                  name: 'pages',
+                  type: 'relationship',
+                  relationTo: 'pages',
+                  hasMany: true,
+                  admin: {
+                    description: 'Pick the pages where the toast should appear.',
+                    condition: (data) => data?.toast?.enabled && data?.toast?.pageVisibility === 'specific',
+                  },
+                },
+                {
+                  name: 'startDate',
+                  type: 'date',
+                  label: 'Start date',
+                  admin: {
+                    description: 'Optional. The toast will only appear from this date onward. Leave empty to start immediately.',
+                    date: { pickerAppearance: 'dayAndTime' },
+                    condition: (data) => data?.toast?.enabled,
+                  },
+                },
+                {
+                  name: 'endDate',
+                  type: 'date',
+                  label: 'End date',
+                  admin: {
+                    description: 'Optional. The toast will stop appearing after this date. Leave empty to keep it active indefinitely.',
+                    date: { pickerAppearance: 'dayAndTime' },
+                    condition: (data) => data?.toast?.enabled,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
           label: 'Splash Page',
           fields: [
             {
@@ -527,6 +703,11 @@ export const SiteSettings: GlobalConfig = {
                           name: 'tableBorders',
                           label: 'Table Borders',
                           defaultValue: '#EA8928',
+                        }),
+                        createHexColorField({
+                          name: 'bulletPoints',
+                          label: 'Bullet Points',
+                          defaultValue: '#373031',
                         }),
                       ],
                     },

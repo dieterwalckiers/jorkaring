@@ -10,11 +10,11 @@ defineProps<{
   <div class="blocks-container">
     <template v-for="block in blocks" :key="block.id">
       <div class="block-wrap" :data-block-type="block.blockType">
-        <BlocksCalendlyEmbedBlock v-if="block.blockType === 'calendlyEmbed'" :block="block" />
+        <BlocksAnchorBlock v-if="block.blockType === 'anchor'" :block="block" />
+        <BlocksCalendlyEmbedBlock v-else-if="block.blockType === 'calendlyEmbed'" :block="block" />
         <BlocksContactFormBlock v-else-if="block.blockType === 'contactForm'" :block="block" />
         <BlocksContentGridBlock v-else-if="block.blockType === 'contentGrid'" :block="block" />
         <BlocksHeroBlock v-else-if="block.blockType === 'hero'" :block="block" />
-        <BlocksInPageMenuTitleBlock v-else-if="block.blockType === 'inPageMenuTitle'" :block="block" />
         <BlocksLogoMarqueeBlock v-else-if="block.blockType === 'logoMarquee'" :block="block" />
         <BlocksNewsletterSignupBlock v-else-if="block.blockType === 'newsletterSignup'" :block="block" />
         <BlocksRichTextBlock v-else-if="block.blockType === 'richText'" :block="block" />
@@ -55,7 +55,7 @@ defineProps<{
 }
 
 /* Anchors are zero-height; the spacer below them carries the breath */
-.block-wrap[data-block-type="inPageMenuTitle"],
+.block-wrap[data-block-type="anchor"],
 .block-wrap[data-block-type="spacer"] {
   margin-block-start: 0;
 }

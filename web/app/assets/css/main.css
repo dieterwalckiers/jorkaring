@@ -26,6 +26,7 @@
   --color-button-font-hover: #ffffff;
   --color-button-bg-hover: #EA8928;
   --color-table-borders: #EA8928;
+  --color-bullet-points: #373031;
   --color-sticky-message-txt: #B6C9BB;
   --color-sticky-message-bg: #5E6E83;
 
@@ -74,9 +75,10 @@ html.dark {
   --ui-text: var(--color-font);
 }
 
-/* Mobile menu slideover - slightly transparent background */
+/* Mobile menu slideover - use the CMS site background so menu text
+   (which follows --color-font) stays readable instead of off-white-on-white */
 [role="dialog"] {
-  background-color: rgba(255, 255, 255, 0.85) !important;
+  background-color: var(--color-main-bg) !important;
 }
 
 /* Mobile menu slideover - allow header to expand for logo and add padding */
@@ -133,6 +135,69 @@ body {
 .text-color-theme7, .text-color-theme7 * { color: var(--color-theme7); }
 .text-color-theme8, .text-color-theme8 * { color: var(--color-theme8); }
 
+/* ── Block-level styling (block-style editor feature) ─────────────────────
+   Applied to individual paragraphs/headings via Lexical NodeState. Square
+   corners and hairline borders by brand; adjacent blocks sharing a tint read
+   as one surface. */
+.block-bg-theme1 { background-color: var(--color-theme1); }
+.block-bg-theme2 { background-color: var(--color-theme2); }
+.block-bg-theme3 { background-color: var(--color-theme3); }
+.block-bg-theme4 { background-color: var(--color-theme4); }
+.block-bg-theme5 { background-color: var(--color-theme5); }
+.block-bg-theme6 { background-color: var(--color-theme6); }
+.block-bg-theme7 { background-color: var(--color-theme7); }
+.block-bg-theme8 { background-color: var(--color-theme8); }
+.block-bg-base { background-color: var(--color-font); }
+.block-bg-accent { background-color: var(--color-font-accent); }
+.block-bg-black { background-color: #000000; }
+.block-bg-white { background-color: #ffffff; }
+
+.block-border-theme1 { border: 1px solid var(--color-theme1); }
+.block-border-theme2 { border: 1px solid var(--color-theme2); }
+.block-border-theme3 { border: 1px solid var(--color-theme3); }
+.block-border-theme4 { border: 1px solid var(--color-theme4); }
+.block-border-theme5 { border: 1px solid var(--color-theme5); }
+.block-border-theme6 { border: 1px solid var(--color-theme6); }
+.block-border-theme7 { border: 1px solid var(--color-theme7); }
+.block-border-theme8 { border: 1px solid var(--color-theme8); }
+.block-border-base { border: 1px solid var(--color-font); }
+.block-border-accent { border: 1px solid var(--color-font-accent); }
+.block-border-black { border: 1px solid #000000; }
+.block-border-white { border: 1px solid #ffffff; }
+
+.block-pad-small { padding: 0.75rem 1rem; }
+.block-pad-medium { padding: 1.25rem 1.5rem; }
+.block-pad-large { padding: 2rem 2.25rem; }
+
+/* Outer gap. !important so it reliably overrides the per-element defaults
+   (Tailwind `mb-4`, `.block-group`, `.editorial-heading`). */
+.block-margin-none { margin-block: 0 !important; }
+.block-margin-small { margin-block: 0.75rem !important; }
+.block-margin-medium { margin-block: 1.5rem !important; }
+.block-margin-large { margin-block: 3rem !important; }
+
+/* Whole-block link: the anchor wraps the styled box and stays visually neutral,
+   with a quiet brightness lift on hover (matches the site's ease-out-cubic). */
+.block-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: filter 200ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.block-link:hover { filter: brightness(1.05); }
+@media (prefers-reduced-motion: reduce) {
+  .block-link { transition: none; }
+}
+
+/* Wrapper box around a group of blocks. The bg/border/pad classes above are
+   applied to this same element when set. Inner blocks keep their own rhythm,
+   but the box's own first/last child margins collapse so the padding reads
+   evenly. */
+.block-group { margin-block: 1.5rem; }
+.block-group > :first-child { margin-top: 0; }
+.block-group > :last-child { margin-bottom: 0; }
+
 /* Legacy support: keep old class for backwards compatibility */
 .gradient-text {
   background: linear-gradient(to right, var(--color-theme2), var(--color-theme1));
@@ -159,31 +224,49 @@ h1, h2, h3, h4, h5, h6 {
   margin-block-end: clamp(0.9rem, 1.5vw, 1.5rem);
 }
 
-.prose .editorial-heading--h1 {
+.prose .editorial-heading--h1,
+.editorial-heading--h1 {
   font-size: clamp(2rem, 3.25vw + 0.5rem, 3.5rem);
   letter-spacing: -0.022em;
   line-height: 1;
   margin-block: clamp(1.75rem, 3vw, 2.75rem) clamp(1.25rem, 2vw, 2rem);
 }
 
-.prose .editorial-heading--h2 {
+.prose .editorial-heading--h2,
+.editorial-heading--h2 {
   font-size: clamp(1.625rem, 2.25vw + 0.5rem, 2.625rem);
   letter-spacing: -0.018em;
   line-height: 1.05;
   margin-block: clamp(2rem, 3.25vw, 3.25rem) clamp(1rem, 1.75vw, 1.75rem);
 }
 
-.prose .editorial-heading--h3 {
+.prose .editorial-heading--h3,
+.editorial-heading--h3 {
   font-size: clamp(1.25rem, 1.25vw + 0.75rem, 1.75rem);
   letter-spacing: -0.012em;
   line-height: 1.15;
   margin-block: clamp(1.5rem, 2.5vw, 2.25rem) clamp(0.6rem, 1vw, 1rem);
 }
 
-.prose .editorial-heading--h4 {
+.prose .editorial-heading--h4,
+.editorial-heading--h4 {
   font-size: clamp(1.05rem, 0.5vw + 0.9rem, 1.25rem);
   line-height: 1.25;
   margin-block: clamp(1.15rem, 2vw, 1.75rem) 0.5rem;
+}
+
+.prose .editorial-heading--h5,
+.editorial-heading--h5 {
+  font-size: clamp(1rem, 0.3vw + 0.9rem, 1.125rem);
+  line-height: 1.3;
+  margin-block: clamp(1rem, 1.5vw, 1.5rem) 0.5rem;
+}
+
+.prose .editorial-heading--h6,
+.editorial-heading--h6 {
+  font-size: 1rem;
+  line-height: 1.35;
+  margin-block: clamp(0.9rem, 1.25vw, 1.25rem) 0.5rem;
 }
 
 /* First heading inside a prose container shouldn't push a huge top margin
@@ -263,8 +346,13 @@ input[type="checkbox"]:checked {
   font-weight: 600;
   padding: 0.625rem 1.5rem;
   border-radius: 0;
+  margin: 0.5rem 0;
   transition: background-color 150ms, color 150ms;
   text-decoration: none;
+}
+
+.btn-outline-inline + .btn-outline-inline {
+  margin-left: 0.5rem;
 }
 
 .btn-outline-inline:hover {

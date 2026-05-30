@@ -42,10 +42,27 @@ const floatingStyle = computed(() => {
   }
 })
 
+// The checkered pattern is a CSS decoration (see jorkaring.css) toggled via a
+// data attribute rather than an inline background, so it can't go through the
+// regular colour resolution.
+const isCheckered = computed(() => props.block.backgroundColor === 'checkered')
+
 const containerStyle = computed(() => {
-  const bg = resolveColor(props.block.backgroundColor)
-  if (bg === 'transparent') return undefined
-  return { backgroundColor: bg }
+  const style: Record<string, string> = {}
+
+  if (!isCheckered.value) {
+    const bg = resolveColor(props.block.backgroundColor)
+    if (bg !== 'transparent') style.backgroundColor = bg
+  }
+
+  // Darken overlay strength is handed to the ::before pseudo-element (defined in
+  // jorkaring.css) via a custom property, mirroring the hero's darken overlay.
+  if (props.block.darken) {
+    const strength = (props.block.darkenStrength ?? 40) / 100
+    style['--rt-darken'] = `rgba(0, 0, 0, ${strength})`
+  }
+
+  return Object.keys(style).length ? style : undefined
 })
 
 const containerClasses = computed(() => {
@@ -63,8 +80,28 @@ const containerClasses = computed(() => {
       class="prose prose-lg max-w-none mx-auto floating-content"
       :class="[widthClass, marginClass, ...containerClasses, { 'variant-hero': isHero, 'variant-long-form': isLongForm }]"
       :style="{ ...floatingStyle, ...containerStyle }"
+      :data-checkered="isCheckered ? '' : undefined"
+      :data-rt-darken="block.darken ? '' : undefined"
     >
       <RichTextRenderer :content="block.content" />
+    </div>
+  </div>
+  <!-- Full-bleed: background stretches the full viewport width while the
+       content stays within the site container. -->
+  <div
+    v-else-if="block.fullBleed"
+    class="rich-text-full-bleed"
+    :style="containerStyle"
+    :data-checkered="isCheckered ? '' : undefined"
+    :data-rt-darken="block.darken ? '' : undefined"
+  >
+    <div class="rich-text-inner">
+      <div
+        class="prose prose-lg max-w-none mx-auto"
+        :class="[widthClass, marginClass, ...containerClasses, { 'variant-hero': isHero, 'variant-long-form': isLongForm }]"
+      >
+        <RichTextRenderer :content="block.content" />
+      </div>
     </div>
   </div>
   <div
@@ -72,6 +109,8 @@ const containerClasses = computed(() => {
     class="prose prose-lg max-w-none mx-auto"
     :class="[widthClass, marginClass, ...containerClasses, { 'variant-hero': isHero, 'variant-long-form': isLongForm }]"
     :style="containerStyle"
+    :data-checkered="isCheckered ? '' : undefined"
+    :data-rt-darken="block.darken ? '' : undefined"
   >
     <RichTextRenderer :content="block.content" />
   </div>
@@ -148,6 +187,36 @@ const containerClasses = computed(() => {
     padding: 0;
     margin: 0;
     color: inherit;
+  }
+}
+
+/* Full-bleed: background stretches full viewport width */
+.rich-text-full-bleed {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  z-index: 1;
+}
+
+/* Inner content stays within the site container */
+.rich-text-inner {
+  max-width: var(--ui-container, 1536px);
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+  .rich-text-inner {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .rich-text-inner {
+    padding-inline: 2rem;
   }
 }
 </style>

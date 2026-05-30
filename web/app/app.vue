@@ -22,6 +22,31 @@ const splashActive = computed(() =>
   && !!siteSettings.value.splashPage.content?.length
 )
 
+const { currentPage } = useCurrentPage()
+
+const toastShouldShow = computed(() => {
+  const toast = siteSettings.value?.toast
+  if (!toast?.enabled) return false
+  if (!toast.content) return false
+  if (splashActive.value) return false
+
+  const now = Date.now()
+  if (toast.startDate && now < new Date(toast.startDate).getTime()) return false
+  if (toast.endDate && now > new Date(toast.endDate).getTime()) return false
+
+  if (toast.pageVisibility === 'specific') {
+    const pageId = currentPage.value?.id
+    if (!pageId) return false
+    const allowedIds = (toast.pages ?? []).map((p) => {
+      if (p && typeof p === 'object' && 'id' in p) return String(p.id)
+      return String(p)
+    })
+    if (!allowedIds.includes(String(pageId))) return false
+  }
+
+  return true
+})
+
 const faviconUrl = computed(() => {
   const favicon = siteSettings.value?.favicon
   if (!favicon) return undefined
@@ -118,6 +143,7 @@ const themeColorCssVarMap: Record<keyof SiteThemeColors, string> = {
   buttonFontHover: '--color-button-font-hover',
   buttonBgHover: '--color-button-bg-hover',
   tableBorders: '--color-table-borders',
+  bulletPoints: '--color-bullet-points',
   stickyMessageTxt: '--color-sticky-message-txt',
   stickyMessageBg: '--color-sticky-message-bg',
   // Theme
@@ -180,6 +206,19 @@ useHead(() => ({
       v-if="siteSettings?.stickyMessage?.content"
       :content="siteSettings.stickyMessage.content"
       :closeable="siteSettings.stickyMessage.closeable ?? true"
+    />
+
+    <Toast
+      v-if="toastShouldShow && siteSettings?.toast?.content"
+      :key="siteSettings.toast.dismissalKey ?? 'toast'"
+      :content="siteSettings.toast.content"
+      :background-color="siteSettings.toast.backgroundColor ?? 'theme1'"
+      :position="siteSettings.toast.position ?? 'bottomRight'"
+      :display-delay-seconds="siteSettings.toast.displayDelaySeconds ?? 0"
+      :dismissible="siteSettings.toast.dismissible ?? true"
+      :auto-dismiss-seconds="siteSettings.toast.autoDismissSeconds ?? 0"
+      :remember-dismissal="siteSettings.toast.rememberDismissal ?? true"
+      :dismissal-key="siteSettings.toast.dismissalKey ?? 'toast-1'"
     />
 
     <CookieConsent

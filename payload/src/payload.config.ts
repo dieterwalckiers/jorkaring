@@ -5,7 +5,11 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor, UploadFeature, BlocksFeature } from '@payloadcms/richtext-lexical'
 import { TextColorFeature } from './features/text-color'
 import { FontSizeFeature } from './features/font-size'
+import { BlockStyleFeature } from './features/block-style'
 import { StyledUploadFeature } from './features/styled-upload'
+import { IconsFeature } from './features/icons'
+import { buttonInlineBlock } from './features/buttonInlineBlock'
+import { iconInlineBlock } from './features/iconInlineBlock'
 import sharp from 'sharp'
 
 import { Pages } from './collections/Pages'
@@ -60,6 +64,8 @@ export default buildConfig({
       ...defaultFeatures,
       TextColorFeature(),
       FontSizeFeature(),
+      BlockStyleFeature(),
+      IconsFeature(),
       UploadFeature({
         collections: {
           media: {
@@ -111,52 +117,7 @@ export default buildConfig({
         },
       }),
       BlocksFeature({
-        inlineBlocks: [
-          {
-            slug: 'button',
-            labels: {
-              singular: 'Button',
-              plural: 'Buttons',
-            },
-            fields: [
-              {
-                name: 'caption',
-                type: 'text',
-                required: true,
-                admin: {
-                  description: 'Button text',
-                },
-              },
-              {
-                name: 'link',
-                type: 'text',
-                required: true,
-                admin: {
-                  description: 'URL the button links to',
-                },
-              },
-              {
-                name: 'align',
-                type: 'select',
-                defaultValue: 'left',
-                options: [
-                  { label: 'Left', value: 'left' },
-                  { label: 'Center', value: 'center' },
-                  { label: 'Right', value: 'right' },
-                ],
-                admin: {
-                  description: 'Button alignment',
-                },
-              },
-              {
-                name: 'newTab',
-                type: 'checkbox',
-                defaultValue: false,
-                label: 'Open in new tab',
-              },
-            ],
-          },
-        ],
+        inlineBlocks: [buttonInlineBlock, iconInlineBlock],
       }),
     ],
   }),

@@ -81,7 +81,39 @@ export const RichText: Block = {
       label: 'Background Color',
       defaultValue: 'transparent',
       description: 'Background color for this block',
+      includeCheckered: true,
     }),
+    {
+      name: 'fullBleed',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Color stretches horizontally across the full page width (content stays within container)',
+      },
+    },
+    {
+      name: 'darken',
+      type: 'checkbox',
+      label: 'Darken background',
+      defaultValue: false,
+      admin: {
+        description:
+          'Lay a dark overlay over the background (like the hero) to lift text contrast — handy with the checkered pattern.',
+      },
+    },
+    {
+      name: 'darkenStrength',
+      type: 'number',
+      label: 'Darken strength',
+      min: 0,
+      max: 100,
+      defaultValue: 40,
+      admin: {
+        description: 'Overlay strength in % (0 = transparent, 100 = fully opaque)',
+        placeholder: '40',
+        condition: (_, siblingData) => siblingData?.darken === true,
+      },
+    },
     {
       name: 'roundedCorners',
       type: 'checkbox',

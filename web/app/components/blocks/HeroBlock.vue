@@ -48,7 +48,7 @@ const overlayStyle = computed(() => {
       :media="backgroundImage"
       sizes="100vw"
       alt=""
-      :object-position="`center ${block.focalPointY ?? 50}%`"
+      :object-position="`${block.centered === false ? `${block.focalPointX ?? 50}%` : 'center'} ${block.focalPointY ?? 50}%`"
       cover
       priority
       class="z-0"

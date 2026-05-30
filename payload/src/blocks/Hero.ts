@@ -30,6 +30,28 @@ export const Hero: Block = {
       },
     },
     {
+      name: 'centered',
+      type: 'checkbox',
+      defaultValue: true,
+      admin: {
+        description: 'Center the background image horizontally. Uncheck to set a custom horizontal focal point.',
+        condition: (_, siblingData) => Boolean(siblingData?.backgroundImage),
+      },
+    },
+    {
+      name: 'focalPointX',
+      type: 'number',
+      min: 0,
+      max: 100,
+      defaultValue: 50,
+      admin: {
+        description: 'Horizontal focal point in % (0 = left, 50 = center, 100 = right)',
+        placeholder: '50',
+        condition: (_, siblingData) =>
+          Boolean(siblingData?.backgroundImage) && siblingData?.centered === false,
+      },
+    },
+    {
       name: 'overlay',
       type: 'select',
       defaultValue: 'none',

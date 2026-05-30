@@ -25,6 +25,26 @@ import * as migration_20260507_212426_add_hero_height_xxxl from './20260507_2124
 import * as migration_20260507_220000_add_content_grid_render_as_cards from './20260507_220000_add_content_grid_render_as_cards';
 import * as migration_20260508_120000_hero_headlines_to_richtext from './20260508_120000_hero_headlines_to_richtext';
 import * as migration_20260508_140000_add_content_grid_equal_row_heights from './20260508_140000_add_content_grid_equal_row_heights';
+import * as migration_20260526_120000_add_site_title_color from './20260526_120000_add_site_title_color';
+import * as migration_20260526_130000_add_in_page_menu_title_position from './20260526_130000_add_in_page_menu_title_position';
+import * as migration_20260526_140000_add_show_home_in_menu from './20260526_140000_add_show_home_in_menu';
+import * as migration_20260526_150000_add_menu_item_style from './20260526_150000_add_menu_item_style';
+import * as migration_20260526_160000_add_hero_headline_font_size from './20260526_160000_add_hero_headline_font_size';
+import * as migration_20260528_120000_add_toast from './20260528_120000_add_toast';
+import * as migration_20260528_130000_add_rich_text_darken from './20260528_130000_add_rich_text_darken';
+import * as migration_20260528_140000_add_anchor_block from './20260528_140000_add_anchor_block';
+import * as migration_20260529_120000_add_rich_text_full_bleed from './20260529_120000_add_rich_text_full_bleed';
+import * as migration_20260529_130000_add_content_grid_counter from './20260529_130000_add_content_grid_counter';
+import * as migration_20260530_120000_add_content_grid_background_color from './20260530_120000_add_content_grid_background_color';
+import * as migration_20260530_130000_add_content_grid_full_bleed from './20260530_130000_add_content_grid_full_bleed';
+import * as migration_20260530_140000_add_content_grid_cell_dividers from './20260530_140000_add_content_grid_cell_dividers';
+import * as migration_20260530_150000_add_hero_focal_point_x from './20260530_150000_add_hero_focal_point_x';
+import * as migration_20260530_160000_add_menu_label from './20260530_160000_add_menu_label';
+import * as migration_20260530_180000_add_menu_items_override from './20260530_180000_add_menu_items_override';
+import * as migration_20260530_200000_add_menu_item_anchor from './20260530_200000_add_menu_item_anchor';
+import * as migration_20260530_190000_remove_in_page_menu_title_block from './20260530_190000_remove_in_page_menu_title_block';
+import * as migration_20260530_210000_rename_filter_to_override_main_menu from './20260530_210000_rename_filter_to_override_main_menu';
+import * as migration_20260530_220000_add_bullet_points_color from './20260530_220000_add_bullet_points_color';
 
 export const migrations = [
   {
@@ -161,5 +181,105 @@ export const migrations = [
     up: migration_20260508_140000_add_content_grid_equal_row_heights.up,
     down: migration_20260508_140000_add_content_grid_equal_row_heights.down,
     name: '20260508_140000_add_content_grid_equal_row_heights',
+  },
+  {
+    up: migration_20260526_120000_add_site_title_color.up,
+    down: migration_20260526_120000_add_site_title_color.down,
+    name: '20260526_120000_add_site_title_color',
+  },
+  {
+    up: migration_20260526_130000_add_in_page_menu_title_position.up,
+    down: migration_20260526_130000_add_in_page_menu_title_position.down,
+    name: '20260526_130000_add_in_page_menu_title_position',
+  },
+  {
+    up: migration_20260526_140000_add_show_home_in_menu.up,
+    down: migration_20260526_140000_add_show_home_in_menu.down,
+    name: '20260526_140000_add_show_home_in_menu',
+  },
+  {
+    up: migration_20260526_150000_add_menu_item_style.up,
+    down: migration_20260526_150000_add_menu_item_style.down,
+    name: '20260526_150000_add_menu_item_style',
+  },
+  {
+    up: migration_20260526_160000_add_hero_headline_font_size.up,
+    down: migration_20260526_160000_add_hero_headline_font_size.down,
+    name: '20260526_160000_add_hero_headline_font_size',
+  },
+  {
+    up: migration_20260528_120000_add_toast.up,
+    down: migration_20260528_120000_add_toast.down,
+    name: '20260528_120000_add_toast',
+  },
+  {
+    up: migration_20260528_130000_add_rich_text_darken.up,
+    down: migration_20260528_130000_add_rich_text_darken.down,
+    name: '20260528_130000_add_rich_text_darken',
+  },
+  {
+    up: migration_20260528_140000_add_anchor_block.up,
+    down: migration_20260528_140000_add_anchor_block.down,
+    name: '20260528_140000_add_anchor_block',
+  },
+  {
+    up: migration_20260529_120000_add_rich_text_full_bleed.up,
+    down: migration_20260529_120000_add_rich_text_full_bleed.down,
+    name: '20260529_120000_add_rich_text_full_bleed',
+  },
+  {
+    up: migration_20260529_130000_add_content_grid_counter.up,
+    down: migration_20260529_130000_add_content_grid_counter.down,
+    name: '20260529_130000_add_content_grid_counter',
+  },
+  {
+    up: migration_20260530_120000_add_content_grid_background_color.up,
+    down: migration_20260530_120000_add_content_grid_background_color.down,
+    name: '20260530_120000_add_content_grid_background_color',
+  },
+  {
+    up: migration_20260530_130000_add_content_grid_full_bleed.up,
+    down: migration_20260530_130000_add_content_grid_full_bleed.down,
+    name: '20260530_130000_add_content_grid_full_bleed',
+  },
+  {
+    up: migration_20260530_140000_add_content_grid_cell_dividers.up,
+    down: migration_20260530_140000_add_content_grid_cell_dividers.down,
+    name: '20260530_140000_add_content_grid_cell_dividers',
+  },
+  {
+    up: migration_20260530_150000_add_hero_focal_point_x.up,
+    down: migration_20260530_150000_add_hero_focal_point_x.down,
+    name: '20260530_150000_add_hero_focal_point_x',
+  },
+  {
+    up: migration_20260530_160000_add_menu_label.up,
+    down: migration_20260530_160000_add_menu_label.down,
+    name: '20260530_160000_add_menu_label',
+  },
+  {
+    up: migration_20260530_180000_add_menu_items_override.up,
+    down: migration_20260530_180000_add_menu_items_override.down,
+    name: '20260530_180000_add_menu_items_override',
+  },
+  {
+    up: migration_20260530_190000_remove_in_page_menu_title_block.up,
+    down: migration_20260530_190000_remove_in_page_menu_title_block.down,
+    name: '20260530_190000_remove_in_page_menu_title_block',
+  },
+  {
+    up: migration_20260530_200000_add_menu_item_anchor.up,
+    down: migration_20260530_200000_add_menu_item_anchor.down,
+    name: '20260530_200000_add_menu_item_anchor',
+  },
+  {
+    up: migration_20260530_210000_rename_filter_to_override_main_menu.up,
+    down: migration_20260530_210000_rename_filter_to_override_main_menu.down,
+    name: '20260530_210000_rename_filter_to_override_main_menu',
+  },
+  {
+    up: migration_20260530_220000_add_bullet_points_color.up,
+    down: migration_20260530_220000_add_bullet_points_color.down,
+    name: '20260530_220000_add_bullet_points_color',
   },
 ];

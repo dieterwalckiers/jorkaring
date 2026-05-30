@@ -253,7 +253,7 @@ function goTo(idx: number) {
   height: 2.25rem;
   border-radius: 9999px;
   border: 1px solid currentColor;
-  background: transparent;
+  background: var(--color-button-bg);
   color: inherit;
   display: inline-flex;
   align-items: center;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Media } from '~/types/media'
 import { buildSrcset } from '~/composables/useResponsiveImage'
+import { resolveColor } from '~/utils/resolveColor'
 
 const props = defineProps<{
   content: unknown
@@ -63,6 +64,14 @@ interface LexicalNode {
   version?: number
   text?: string
   style?: string
+  // Lexical NodeState — block-level styling set via the block-style editor feature
+  $?: {
+    blockBg?: string
+    blockBorder?: string
+    blockPad?: string
+    blockMargin?: string
+    blockLink?: string
+  }
   children?: LexicalNode[]
   listType?: 'bullet' | 'number' | 'check'
   checked?: boolean
@@ -125,6 +134,43 @@ function getTextColorClass(color: string): string {
   return colorClasses[color] || ''
 }
 
+// Block-level styling stored as Lexical NodeState (node.$) by the block-style
+// editor feature: background tint, hairline border, inset padding, text color.
+// Returns a leading-space-prefixed class string ready to append to a class list.
+function getBlockClasses(node: LexicalNode): string {
+  const state = node.$
+  if (!state) return ''
+  const classes: string[] = []
+  if (state.blockBg) classes.push(`block-bg-${state.blockBg}`)
+  if (state.blockBorder) classes.push(`block-border-${state.blockBorder}`)
+  if (state.blockPad && state.blockPad !== 'none') classes.push(`block-pad-${state.blockPad}`)
+  if (state.blockMargin) classes.push(`block-margin-${state.blockMargin}`)
+  return classes.length ? ` ${classes.join(' ')}` : ''
+}
+
+// Wrap a block's rendered HTML in an anchor when it carries a block link, making
+// the whole block/box clickable (cursor + subtle hover brightness via .block-link).
+function maybeWrapBlockLink(html: string, node: LexicalNode): string {
+  const url = node.$?.blockLink
+  if (!url) return html
+  const href = escapeHtml(prefixInternalUrl(url))
+  const rel = isExternalUrl(url) ? ' target="_blank" rel="noopener noreferrer"' : ''
+  return `<a href="${href}" class="block-link"${rel}>${html}</a>`
+}
+
+// Inline contact/social icons inserted via the Payload "Icons" toolbar dropdown.
+// Line-style (Lucide) glyphs sharing a 24×24 viewBox and uniform 2px stroke,
+// rendered at a uniform 1em and inheriting text colour via stroke: currentColor.
+// Keep in sync with payload/src/features/icons/icons.tsx.
+const ICON_SVG_ATTRS =
+  'xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;width:1em;height:1em;vertical-align:-0.125em"'
+const ICON_SVGS: Record<string, string> = {
+  at: `<svg ${ICON_SVG_ATTRS}><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/></svg>`,
+  phone: `<svg ${ICON_SVG_ATTRS}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
+  instagram: `<svg ${ICON_SVG_ATTRS}><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`,
+  linkedin: `<svg ${ICON_SVG_ATTRS}><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>`,
+}
+
 function renderNode(node: LexicalNode): string {
   if (!node || typeof node !== 'object') return ''
 
@@ -167,17 +213,37 @@ function renderNode(node: LexicalNode): string {
     case 'root':
       return childrenHtml
 
+    case 'blockgroup': {
+      // Wrapper box around a group of blocks (block-style "Wrap in box").
+      // Styling (bg/border/padding/margin) lives in NodeState on this node.
+      const blockClasses = getBlockClasses(node)
+      return maybeWrapBlockLink(`<div class="block-group${blockClasses}">${childrenHtml}</div>`, node)
+    }
+
     case 'paragraph': {
       if (!childrenHtml.trim()) return '<div class="h-[1em]" aria-hidden="true"></div>' // Empty paragraph spacer
-      const align = getTextAlign(node.format)
-      return `<p class="mb-4${align}">${childrenHtml}</p>`
+      let align = getTextAlign(node.format)
+      // A paragraph that contains button inline blocks takes its alignment from the
+      // first button's `align` field. Paragraph-level alignment (often "justify" or
+      // "left" by default) doesn't position buttons meaningfully, and the per-button
+      // align field was the source of truth in the old wrapping-div renderer.
+      const buttonChild = children?.find(
+        (c) => c.type === 'inlineBlock' && (c.fields as Record<string, unknown> | undefined)?.blockType === 'button',
+      )
+      if (buttonChild) {
+        const buttonAlign = (buttonChild.fields as Record<string, unknown> | undefined)?.align
+        if (buttonAlign === 'center') align = ' text-center'
+        else if (buttonAlign === 'right') align = ' text-right'
+        else align = ' text-left'
+      }
+      return maybeWrapBlockLink(`<p class="mb-4${align}${getBlockClasses(node)}">${childrenHtml}</p>`, node)
     }
 
     case 'heading': {
       const level = node.tag?.replace('h', '') || '2'
       const align = getTextAlign(node.format)
       const sizeClass = getHeadingSize(level)
-      return `<h${level} class="editorial-heading editorial-heading--h${level} ${sizeClass} font-bold${align}">${childrenHtml}</h${level}>`
+      return maybeWrapBlockLink(`<h${level} class="editorial-heading editorial-heading--h${level} ${sizeClass} font-bold${align}${getBlockClasses(node)}">${childrenHtml}</h${level}>`, node)
     }
 
     case 'list': {
@@ -188,7 +254,7 @@ function renderNode(node: LexicalNode): string {
       } else if (node.listType === 'check') {
         listClass = 'mb-4 space-y-2'
       } else {
-        listClass = "list-none pl-8 mb-4 space-y-1 [&>li]:flex [&>li]:items-start [&>li]:gap-2 [&>li]:before:content-['–'] [&>li]:before:shrink-0"
+        listClass = "list-none pl-8 mb-4 space-y-1 [&>li]:flex [&>li]:items-start [&>li]:gap-2 [&>li]:before:content-['•'] [&>li]:before:shrink-0 [&>li]:before:text-[1.5em] [&>li]:before:leading-[1] [&>li]:before:text-[var(--color-bullet-points)]"
       }
       return `<${listTag} class="${listClass}">${childrenHtml}</${listTag}>`
     }
@@ -336,21 +402,60 @@ function renderNode(node: LexicalNode): string {
       if (blockType === 'button') {
         const buttonCaption = fields.caption as string | undefined
         const buttonLink = fields.link as string | undefined
-        const buttonAlign = (fields.align as string) || 'left'
         const buttonNewTab = fields.newTab as boolean | undefined
         if (!buttonCaption || !buttonLink) return ''
 
         const target = buttonNewTab ? ' target="_blank" rel="noopener noreferrer"' : ''
-        const button = `<a href="${escapeHtml(prefixInternalUrl(buttonLink))}" class="btn-outline-inline"${target}>${escapeHtml(buttonCaption)}</a>`
 
-        // Wrap in alignment container
-        const alignClasses: Record<string, string> = {
-          left: 'justify-start',
-          center: 'justify-center',
-          right: 'justify-end',
+        const bg = fields.backgroundColor as string | undefined
+        const text = fields.textColor as string | undefined
+        // When the "lighter" checkbox is set, derive the hover colour from the base
+        // colour via color-mix — works directly with theme CSS variables, no hex needed.
+        const lighten = (value: string | undefined): string =>
+          `color-mix(in srgb, ${resolveColor(value)}, white 35%)`
+        const bgHover = fields.backgroundColorHoverLighter
+          ? lighten(bg)
+          : (fields.backgroundColorHover as string | undefined)
+        const textHover = fields.textColorHoverLighter
+          ? lighten(text)
+          : (fields.textColorHover as string | undefined)
+
+        // Per-button colours override the site-default CSS variables that
+        // `.btn-outline-inline` reads (including its `:hover` rule), so hover
+        // behaviour keeps working. Only set a variable when the field is present
+        // — buttons saved before these fields existed keep the CSS defaults.
+        const colorVars: Array<[string, string | undefined]> = [
+          ['--color-button-bg', bg],
+          ['--color-button-font', text],
+          ['--color-button-bg-hover', bgHover],
+          ['--color-button-font-hover', textHover],
+        ]
+        const style = colorVars
+          .filter(([, value]) => value)
+          .map(([prop, value]) => `${prop}:${value!.startsWith('color-mix') ? value : resolveColor(value)}`)
+          .join(';')
+        const styleAttr = style ? ` style="${escapeHtml(style)}"` : ''
+
+        // Render inline so siblings in the same paragraph sit side-by-side, matching
+        // how they appear in the editor. Paragraph-level alignment positions them.
+        return `<a href="${escapeHtml(prefixInternalUrl(buttonLink))}" class="btn-outline-inline"${styleAttr}${target}>${escapeHtml(buttonCaption)}</a>`
+      }
+
+      if (blockType === 'icon') {
+        // Inserted via the Icons toolbar dropdown. All icons render at a uniform
+        // 1em size and inherit the surrounding text colour (fill: currentColor).
+        // Keep these SVGs in sync with payload/src/features/icons/icons.tsx.
+        const iconName = fields.icon as string | undefined
+        const svg = iconName ? ICON_SVGS[iconName] : undefined
+        if (!svg) return ''
+        const iconSpan = `<span class="rich-text-icon" role="img" aria-label="${escapeHtml(iconName!)}">${svg}</span>`
+        const iconLink = fields.link as string | undefined
+        if (iconLink) {
+          const iconNewTab = (fields.newTab as boolean | undefined) ?? isExternalUrl(iconLink)
+          const target = iconNewTab ? ' target="_blank" rel="noopener noreferrer"' : ''
+          return `<a href="${escapeHtml(prefixInternalUrl(iconLink))}" class="rich-text-icon-link"${target}>${iconSpan}</a>`
         }
-        const alignClass = alignClasses[buttonAlign] || alignClasses.left
-        return `<div class="flex w-full ${alignClass} my-4">${button}</div>`
+        return iconSpan
       }
 
       // Unknown inline block type

@@ -20,6 +20,11 @@ const THEME_COLOR_FIELD_MAP: Record<string, string> = {
   theme8: 'theme8',
 }
 
+/** The two-blue checkered ribbon, matching the footer/hero decoration on the frontend. */
+const CHECKERED_KEY = 'checkered'
+const checkeredBackground = (tile: number) =>
+  `conic-gradient(#8FAABA 0 25%, #5D83A2 0 50%, #8FAABA 0 75%, #5D83A2 0 100%) 0 0 / ${tile}px ${tile}px, #5D83A2`
+
 /** Map from THEME_COLORS key to themeColors label field name in site-settings */
 const THEME_COLOR_LABEL_MAP: Record<string, string> = {
   theme1: 'theme1Label',
@@ -47,6 +52,7 @@ function ColorSwatch({
   onClick: () => void
 }) {
   const isTransparent = hex === 'transparent'
+  const isCheckered = hex === CHECKERED_KEY
 
   return (
     <button
@@ -60,7 +66,9 @@ function ColorSwatch({
         border: isSelected ? '2px solid #0070f3' : '1px solid #ccc',
         background: isTransparent
           ? 'repeating-conic-gradient(#ccc 0% 25%, white 0% 50%) 50% / 10px 10px'
-          : hex,
+          : isCheckered
+            ? checkeredBackground(14)
+            : hex,
         cursor: 'pointer',
         padding: 0,
         outline: isSelected ? '2px solid #0070f3' : 'none',
@@ -76,7 +84,8 @@ function ColorSwatch({
 /**
  * Custom color field component with theme color swatches and custom hex input
  */
-export const ColorField: TextFieldClientComponent = ({ field, path }) => {
+export const ColorField: TextFieldClientComponent = ({ field, path, ...rest }) => {
+  const includeCheckered = (rest as { includeCheckered?: boolean }).includeCheckered === true
   const { value, setValue } = useField<string>({ path })
   const { config } = useConfig()
 
@@ -104,7 +113,7 @@ export const ColorField: TextFieldClientComponent = ({ field, path }) => {
 
   // Merge CMS theme colors (hex values and custom labels) into the static THEME_COLORS for display
   const displayColors: ThemeColor[] = useMemo(() => {
-    return THEME_COLORS.map((color) => {
+    const colors = THEME_COLORS.map((color) => {
       let updated = color
       const hexField = THEME_COLOR_FIELD_MAP[color.key]
       if (hexField && cmsColors[hexField]) {
@@ -116,7 +125,21 @@ export const ColorField: TextFieldClientComponent = ({ field, path }) => {
       }
       return updated
     })
-  }, [cmsColors])
+
+    // The checkered pattern is opt-in per field (only some blocks render it).
+    // Slot it right after Transparent so the non-solid options group together.
+    if (includeCheckered) {
+      const checkered: ThemeColor = {
+        key: CHECKERED_KEY,
+        label: 'Checkered',
+        hex: CHECKERED_KEY,
+        cssVar: CHECKERED_KEY,
+      }
+      return [colors[0], checkered, ...colors.slice(1)]
+    }
+
+    return colors
+  }, [cmsColors, includeCheckered])
 
   const handleThemeColorClick = useCallback(
     (colorKey: string) => {
@@ -212,7 +235,9 @@ export const ColorField: TextFieldClientComponent = ({ field, path }) => {
               background:
                 previewHex === 'transparent'
                   ? 'repeating-conic-gradient(#ccc 0% 25%, white 0% 50%) 50% / 6px 6px'
-                  : previewHex,
+                  : previewHex === CHECKERED_KEY
+                    ? checkeredBackground(8)
+                    : previewHex,
             }}
           />
           <span>

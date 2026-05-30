@@ -103,6 +103,7 @@ Longer-form operational notes (gotchas, troubleshooting, undocumented infra beha
 
 - `restore-production-data.md` — pulling production content down into local
 - `restore-local-data-to-production.md` — pushing local content up to production
+- `array-field-migrations.md` — hand-writing migrations for array fields and relationships nested inside them
 
 When you learn something non-obvious about the stack (especially anything that took more than a few minutes to figure out), add or update a doc in that directory rather than only leaving it in a commit message.
 

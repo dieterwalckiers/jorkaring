@@ -1,5 +1,6 @@
 import type { Media } from './media'
 import type { ContentBlock } from './blocks'
+import type { PageRef } from './page'
 
 export type ContainerWidth = 'narrower' | 'default' | 'wider'
 export type HeaderMenuAlignment = 'left' | 'center' | 'right'
@@ -39,6 +40,25 @@ export interface SiteStickyMessage {
   closeable?: boolean
 }
 
+export type ToastPosition = 'bottomRight' | 'bottomLeft' | 'topRight' | 'topLeft'
+export type ToastPageVisibility = 'all' | 'specific'
+
+export interface SiteToast {
+  enabled?: boolean
+  content?: Record<string, unknown>
+  backgroundColor?: string
+  position?: ToastPosition
+  displayDelaySeconds?: number
+  dismissible?: boolean
+  autoDismissSeconds?: number
+  rememberDismissal?: boolean
+  dismissalKey?: string
+  pageVisibility?: ToastPageVisibility
+  pages?: (PageRef | string | number)[]
+  startDate?: string
+  endDate?: string
+}
+
 export interface SiteCookieConsent {
   enabled?: boolean
   message?: string
@@ -69,6 +89,7 @@ export interface SiteThemeColors {
   buttonFontHover?: string
   buttonBgHover?: string
   tableBorders?: string
+  bulletPoints?: string
   stickyMessageTxt?: string
   stickyMessageBg?: string
   // Theme
@@ -85,6 +106,7 @@ export interface SiteThemeColors {
 export interface SiteSettings {
   id: string
   siteTitle: string
+  titleColor?: string
   logo?: Media | string
   favicon?: Media | string
   styling?: SiteStyling
@@ -92,6 +114,7 @@ export interface SiteSettings {
   headContent?: SiteHeadContent
   cookieConsent?: SiteCookieConsent
   stickyMessage?: SiteStickyMessage
+  toast?: SiteToast
   splashPage?: SplashPage
   themeColors?: SiteThemeColors
   createdAt: string

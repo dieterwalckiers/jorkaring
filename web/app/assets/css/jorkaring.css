@@ -52,11 +52,51 @@
   width: 100%;
 }
 
+/* Checkered fill for a rich-text block background — the same two-blue pattern
+   as the ribbon, but tiled across the whole block rather than a single strip.
+   No fixed height: the block grows with its content. */
+[data-checkered] {
+  --checker-light: #8FAABA;
+  --checker-dark: #5D83A2;
+  --checker-size: 70px;
+  background-color: var(--checker-dark);
+  background-image:
+    conic-gradient(
+      var(--checker-light) 0 25%,
+      var(--checker-dark)  0 50%,
+      var(--checker-light) 0 75%,
+      var(--checker-dark)  0 100%
+    );
+  background-size: var(--checker-size) var(--checker-size);
+  background-repeat: repeat;
+  background-position: 0 0;
+}
+
+/* Darken overlay for a rich-text block — mirrors the hero's darken overlay.
+   `isolation: isolate` gives the block its own stacking context so the
+   negative-z pseudo-element sits above the background (checkered or colour)
+   but below the text. `border-radius: inherit` keeps it inside rounded corners. */
+[data-rt-darken] {
+  position: relative;
+  isolation: isolate;
+}
+
+[data-rt-darken]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--rt-darken, rgba(0, 0, 0, 0.4));
+  border-radius: inherit;
+  pointer-events: none;
+}
+
 /* Mobile: scale the bar down so squares stay readable and the ribbon
    doesn't eat too much of an already-cramped viewport. */
 @media (max-width: 767px) {
   [data-splash]::after,
-  [data-checkered-bar] {
+  [data-checkered-bar],
+  [data-checkered] {
     --checker-size: 36px;
   }
 

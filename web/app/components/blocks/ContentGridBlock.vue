@@ -1,9 +1,24 @@
 <script setup lang="ts">
 import type { ContentGridBlock } from '~/types/blocks'
+import { resolveColor } from '~/utils/resolveColor'
 
 const props = defineProps<{
   block: ContentGridBlock
 }>()
+
+const backgroundColor = computed(() => resolveColor(props.block.backgroundColor))
+const hasBackground = computed(() => backgroundColor.value !== 'transparent')
+const isFullBleed = computed(() => hasBackground.value && props.block.fullBleed === true)
+
+const cellDividers = computed(() => props.block.cellDividers === true)
+const dividerColor = computed(() => resolveColor(props.block.cellDividerColor))
+
+const sectionStyle = computed(() => {
+  const style: Record<string, string> = {}
+  if (hasBackground.value) style.backgroundColor = backgroundColor.value
+  if (cellDividers.value) style['--cg-divider'] = dividerColor.value
+  return Object.keys(style).length ? style : undefined
+})
 
 const cells = computed(() => props.block.cells ?? [])
 const numberOfColumns = computed(() => props.block.numberOfColumns ?? '3')
@@ -68,31 +83,46 @@ const cellJustifyClass = computed(() => {
       'cards-darken': renderAsCards && cardBackground === 'darken',
       'cards-rounded': renderAsCards && cardRoundedCorners,
       'has-equal-row-heights': equalRowHeights,
+      'has-background': hasBackground,
+      'is-full-bleed': isFullBleed,
+      'has-dividers': cellDividers,
     }"
+    :style="sectionStyle"
   >
-    <div
-      class="content-grid"
-      :class="[gridClass, verticalAlignmentClass]"
-    >
+    <div class="content-grid-inner">
       <div
-        v-for="(cell, i) in cells"
-        :key="cell.id"
-        class="content-grid-cell"
-        :class="[horizontalAlignmentClass, cellJustifyClass]"
+        class="content-grid"
+        :class="[gridClass, verticalAlignmentClass]"
       >
-        <span
-          v-if="showEditorialNumbers"
-          class="content-grid-number"
-          aria-hidden="true"
+        <div
+          v-for="(cell, i) in cells"
+          :key="cell.id"
+          class="content-grid-cell"
+          :class="[horizontalAlignmentClass, cellJustifyClass]"
         >
-          {{ String(i + 1).padStart(2, '0') }}
-        </span>
-        <div class="content-grid-body">
-          <BlocksContentGridCellBody
-            :content="cell.content"
-            :collapsed-by-default="cell.collapsedByDefault"
-            :collapsed-lines="cell.collapsedLines"
-          />
+          <span
+            v-if="showEditorialNumbers"
+            class="content-grid-number"
+            aria-hidden="true"
+          >
+            {{ String(i + 1).padStart(2, '0') }}
+          </span>
+          <div class="content-grid-body">
+            <BlocksContentGridCounter
+              v-if="cell.elementType === 'counter'"
+              :value="cell.counterValue"
+              :infinite="cell.counterInfinite"
+              :show-plus="cell.counterShowPlus"
+              :label="cell.counterLabel"
+              :color="cell.counterColor"
+            />
+            <BlocksContentGridCellBody
+              v-else
+              :content="cell.content"
+              :collapsed-by-default="cell.collapsedByDefault"
+              :collapsed-lines="cell.collapsedLines"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -104,6 +134,50 @@ const cellJustifyClass = computed(() => {
   padding-block: clamp(0.5rem, 1.5vw, 1.5rem);
 }
 
+/* When a background colour is set, give the cells breathing room inside the
+   coloured panel rather than letting them touch the edges. */
+.content-grid-block.has-background {
+  padding: clamp(1.5rem, 3.5vw, 2.75rem);
+}
+
+/* The inner wrapper is an invisible passthrough until full-bleed kicks in. */
+.content-grid-inner {
+  display: contents;
+}
+
+/* Full-bleed: the coloured section stretches the full viewport width while the
+   cells stay within the site container. Vertical padding lives on the section
+   (the coloured band); horizontal padding moves to the inner container so the
+   content lines up with the rest of the page. Mirrors the RichText full-bleed. */
+.content-grid-block.is-full-bleed {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  padding-inline: 0;
+}
+
+.content-grid-block.is-full-bleed .content-grid-inner {
+  display: block;
+  max-width: var(--ui-container, 1536px);
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+  .content-grid-block.is-full-bleed .content-grid-inner {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .content-grid-block.is-full-bleed .content-grid-inner {
+    padding-inline: 2rem;
+  }
+}
+
 .content-grid {
   display: grid;
   gap: clamp(2rem, 4vw, 3.5rem) clamp(2rem, 3.5vw, 3.5rem);
@@ -112,6 +186,20 @@ const cellJustifyClass = computed(() => {
 .content-grid-cell {
   min-width: 0; /* Prevent grid blowout from long content */
   position: relative;
+}
+
+/* Subtle dividers between cells. Each cell paints a hairline on its top and
+   left edges via box-shadow (sitting in the gutter); clipping the grid hides
+   the outermost lines, so only the rules *between* cells remain — no per-column
+   edge math, and it works at any breakpoint and with transparent backgrounds. */
+.has-dividers .content-grid {
+  overflow: hidden;
+}
+
+.has-dividers .content-grid-cell {
+  box-shadow:
+    -1px 0 0 0 color-mix(in srgb, var(--cg-divider, currentColor) 45%, transparent),
+    0 -1px 0 0 color-mix(in srgb, var(--cg-divider, currentColor) 45%, transparent);
 }
 
 /* Equal row heights: grid stretches cells to the tallest in the row, and

@@ -16,9 +16,10 @@ export const Pages: CollectionConfig = {
   },
   hooks: {
     afterChange: [
-      async ({ collection, doc }) => {
-        // Only trigger deploy when content is published, not on draft saves
-        if (doc._status === 'published') {
+      async ({ collection, doc, context }) => {
+        // Only trigger deploy when content is published, not on draft saves.
+        // `skipDeploy` lets data migrations rewrite docs without firing deploys.
+        if (doc._status === 'published' && !context?.skipDeploy) {
           await triggerDeploy(collection.slug)
         }
       },
@@ -65,6 +66,22 @@ export const Pages: CollectionConfig = {
       },
     },
     {
+      name: 'menuLabel',
+      type: 'text',
+      admin: {
+        description: 'Custom label for the main menu link (uses page title if blank)',
+        condition: (data) => data?.showInMenu,
+      },
+    },
+    {
+      name: 'menuItemStyle',
+      type: 'textarea',
+      admin: {
+        description: 'Optional inline CSS rules applied to this menu item (e.g. "color: #fff; background-color: #ccc;"). Plain CSS declarations only — no selectors or classes.',
+        condition: (data) => data?.showInMenu,
+      },
+    },
+    {
       name: 'showInToolbar',
       type: 'checkbox',
       defaultValue: false,
@@ -90,25 +107,51 @@ export const Pages: CollectionConfig = {
       },
     },
     {
-      name: 'filterMainMenu',
+      name: 'overrideMainMenu',
       type: 'checkbox',
       defaultValue: false,
       admin: {
-        description: 'When enabled, only the pages selected below will appear in the main menu when viewing this page. If none are selected, no page menu items will be shown (in-page menu titles are always shown).',
+        description: 'Override the main menu for this page. When enabled, only the menu items configured below are shown (in this order), instead of the default menu. If none are added, no page menu items appear.',
       },
     },
     {
-      name: 'menuFilter',
-      type: 'relationship',
-      relationTo: 'pages',
-      hasMany: true,
+      name: 'menuItems',
+      type: 'array',
+      label: 'Menu items',
+      labels: { singular: 'Menu item', plural: 'Menu items' },
       admin: {
-        description: 'Select which pages appear in the main menu when viewing this page. Leave empty to hide all page menu items.',
-        condition: (data) => data?.filterMainMenu,
+        description: 'The main menu links shown on this page. Drag to reorder — items appear in this order. Each link can point to any page and use its own label.',
+        condition: (data) => data?.overrideMainMenu,
+        components: {
+          RowLabel: '@/fields/MenuItemRowLabel#MenuItemRowLabel',
+        },
       },
-      filterOptions: {
-        showInMenu: { equals: true },
-      },
+      fields: [
+        {
+          name: 'page',
+          type: 'relationship',
+          relationTo: 'pages',
+          required: true,
+          admin: {
+            description: 'The page this menu link points to.',
+          },
+        },
+        {
+          name: 'label',
+          type: 'text',
+          admin: {
+            description: "Custom label for this link (uses the page's menu label or title if blank).",
+          },
+        },
+        {
+          name: 'anchor',
+          type: 'text',
+          admin: {
+            description:
+              'Optional anchor on the target page to jump to — the id of an Anchor block there (e.g. "about"). Leave blank to link to the top of the page.',
+          },
+        },
+      ],
     },
     {
       name: 'content',

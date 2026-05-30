@@ -20,31 +20,30 @@ function isExternalUrl(url: string | undefined): boolean {
 
 const isExternal = computed(() => isExternalUrl(props.to) || isExternalUrl(props.href))
 
+// In-page anchors (`#id`) render as a plain `<a>`, not `<NuxtLink>`: a router
+// link would resolve the href to a full path and scroll instantly. Smooth
+// scrolling itself is handled globally by the smooth-anchor.client plugin.
 const hashTarget = computed(() => {
   const url = props.to ?? props.href
   return url && url.startsWith('#') ? url : null
 })
-
-function onClick(e: MouseEvent) {
-  if (!hashTarget.value) return
-  const id = hashTarget.value.slice(1)
-  const el = id ? document.getElementById(id) : null
-  if (!el) return
-  e.preventDefault()
-  el.scrollIntoView({ behavior: 'smooth' })
-  history.replaceState(null, '', hashTarget.value)
-}
 </script>
 
 <template>
+  <a
+    v-if="hashTarget"
+    :href="hashTarget"
+    class="btn-outline"
+  >
+    <slot />
+  </a>
   <NuxtLink
-    v-if="isLink"
+    v-else-if="isLink"
     :to="to"
     :href="href"
     :target="isExternal ? '_blank' : undefined"
     :rel="isExternal ? 'noopener noreferrer' : undefined"
     class="btn-outline"
-    @click="onClick"
   >
     <slot />
   </NuxtLink>

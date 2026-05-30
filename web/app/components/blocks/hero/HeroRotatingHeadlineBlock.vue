@@ -15,6 +15,9 @@ const words = computed(() =>
 
 const intervalMs = computed(() => Math.max(800, props.block.intervalMs ?? 2400))
 
+const tag = computed(() => props.block.fontSize ?? 'h1')
+const sizeClass = computed(() => `editorial-heading--${props.block.fontSize ?? 'h1'}`)
+
 const currentIndex = ref(0)
 const currentWord = computed(() => words.value[currentIndex.value] ?? '')
 
@@ -33,16 +36,18 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <h1
-    class="hero-rotating-headline text-color-base text-2xl md:text-3xl lg:text-4xl font-normal tracking-tight"
-    :class="alignment === 'left' ? 'text-left' : alignment === 'right' ? 'text-right' : 'text-center'"
+  <component
+    :is="tag"
+    class="hero-rotating-headline editorial-heading text-color-base font-normal"
+    :class="[sizeClass, alignment === 'left' ? 'text-left' : alignment === 'right' ? 'text-right' : 'text-center']"
   >
     <span v-if="block.prefix">{{ block.prefix }}&nbsp;</span><span class="rotating-slot" aria-live="polite"><Transition name="rotate-word"><span :key="currentWord" class="rotating-word">{{ currentWord }}</span></Transition></span><span v-if="block.suffix">&nbsp;{{ block.suffix }}</span>
-  </h1>
+  </component>
 </template>
 
 <style scoped>
 .hero-rotating-headline {
+  margin-block: 0;
   line-height: 1.1;
 }
 

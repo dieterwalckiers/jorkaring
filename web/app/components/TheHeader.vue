@@ -3,14 +3,14 @@ import type { PagesResponse } from '~/types/page'
 import type { Media } from '~/types/media'
 import type { HeaderMenuAlignment, HeaderHeight, LogoSize } from '~/types/siteSettings'
 import MainMenuItem from '~/components/ui/MainMenuItem.vue'
-import { isHexColor } from '~/utils/resolveColor'
-import { slugify } from '~/utils/slugify'
+import { isHexColor, resolveColor } from '~/utils/resolveColor'
 
 interface NavItem {
   label: string
   to?: string
   href?: string
   active?: boolean
+  style?: string
 }
 
 interface ToolbarItem {
@@ -53,6 +53,11 @@ const { data: toolbarResponse } = await useFetch<PagesResponse>(`${apiUrl}/pages
 const { data: siteSettings } = useSiteSettings()
 
 const siteTitle = computed(() => siteSettings.value?.siteTitle ?? 'My Site')
+
+const siteTitleColor = computed(() => {
+  const value = siteSettings.value?.titleColor
+  return value ? resolveColor(value) : undefined
+})
 
 const logoUrl = computed(() => {
   const logo = siteSettings.value?.logo
@@ -108,18 +113,23 @@ const CONDENSE_THRESHOLD = 50
 
 function onScroll() {
   scrollY.value = window.scrollY
+  // Keep the in-page anchor highlight in sync as the page scrolls.
+  updateActiveAnchor()
 }
 
 onMounted(() => {
   if (typeof window !== 'undefined') {
     window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
     scrollY.value = window.scrollY
+    updateActiveAnchor()
   }
 })
 
 onUnmounted(() => {
   if (typeof window !== 'undefined') {
     window.removeEventListener('scroll', onScroll)
+    window.removeEventListener('resize', onScroll)
   }
 })
 
@@ -194,44 +204,122 @@ const headerStyle = computed(() => {
   return style
 })
 
-const inPageMenuItems = computed<NavItem[]>(() => {
-  const blocks = currentPage.value?.content
-  if (!blocks) return []
-  return blocks
-    .filter((b): b is import('~/types/blocks').InPageMenuTitleBlock => b.blockType === 'inPageMenuTitle')
-    .map((b) => ({
-      label: b.title,
-      href: `#${slugify(b.title)}`,
-    }))
+interface OrderableNavItem extends NavItem {
+  order: number
+  sourceIndex: number
+}
+
+// When several menu items point to anchors on the page we're currently on, we
+// don't want them all lit up at once. `activeAnchor` tracks which anchored
+// section is in view so only that link highlights (scroll-spy, set on mount).
+const activeAnchor = ref('')
+
+// Anchor ids (override items) that target the page we're currently viewing,
+// i.e. the in-page jump links eligible for scroll-spy highlighting.
+const currentPageAnchorIds = computed<string[]>(() => {
+  if (!currentPage.value?.overrideMainMenu) return []
+  return (currentPage.value.menuItems ?? [])
+    .map((item) => {
+      const page = item.page
+      if (!page || typeof page !== 'object') return ''
+      const basePath = page.slug === 'home' ? '/' : `/${page.slug}`
+      if (basePath !== route.path || !item.anchor) return ''
+      return slugify(item.anchor)
+    })
+    .filter(Boolean)
 })
 
 const navItems = computed<NavItem[]>(() => {
-  const pages = response.value?.docs ?? []
-  const menuFilter = currentPage.value?.menuFilter
+  // Override mode: the page defines its own ordered menu via `menuItems`, with
+  // per-link label overrides. Otherwise fall back to the default menu (all
+  // "Show in menu" pages, sorted by their global menu order).
+  const isOverriding = currentPage.value?.overrideMainMenu
 
-  const isFiltering = currentPage.value?.filterMainMenu
-  const filteredPages = isFiltering
-    ? (() => {
-        if (!menuFilter || menuFilter.length === 0) return []
-        const allowedIds = new Set(menuFilter.map((ref) =>
-          typeof ref === 'object' && ref !== null ? ref.id : ref
-        ))
-        return pages.filter((page) => allowedIds.has(page.id))
-      })()
-    : pages
+  const pageItems: OrderableNavItem[] = isOverriding
+    ? (currentPage.value?.menuItems ?? [])
+        .map((item, index) => {
+          const page = item.page
+          // Drop links whose target page wasn't populated (e.g. deleted page).
+          if (!page || typeof page !== 'object') return null
+          const isHome = page.slug === 'home'
+          const basePath = isHome ? '/' : `/${page.slug}`
+          // Optionally jump to an anchor on the target page. Slugify to match the
+          // id rendered by AnchorBlock (`slugify(anchorId)`).
+          const anchor = item.anchor ? slugify(item.anchor) : ''
+          const pagePath = anchor ? `${basePath}#${anchor}` : basePath
+          // On the target page, an anchor link is active only while its section
+          // is in view; a plain page link is active when no anchor section is
+          // (i.e. at the top). Off the target page, never active.
+          const onTargetPage = route.path === basePath
+          const active = onTargetPage && (anchor ? activeAnchor.value === anchor : activeAnchor.value === '')
+          // An anchor on the page we're already on becomes a plain in-page
+          // link (`#anchor`) so it smooth-scrolls from the current position
+          // instead of triggering a router navigation that jumps abruptly.
+          const samePageAnchor = onTargetPage && anchor
+          return {
+            label: item.label || page.menuLabel || page.title,
+            to: samePageAnchor ? undefined : pagePath,
+            href: samePageAnchor ? `#${anchor}` : undefined,
+            active,
+            style: page.menuItemStyle || undefined,
+            // Items appear in the order configured on this page (array order).
+            order: index,
+            sourceIndex: index,
+          }
+        })
+        .filter((item): item is OrderableNavItem => item !== null)
+    : (response.value?.docs ?? []).map((page, index) => {
+        const isHome = page.slug === 'home'
+        const pagePath = isHome ? '/' : `/${page.slug}`
+        return {
+          label: page.menuLabel || page.title,
+          to: pagePath,
+          active: route.path === pagePath,
+          style: page.menuItemStyle || undefined,
+          order: typeof page.menuOrder === 'number' ? page.menuOrder : Number.POSITIVE_INFINITY,
+          sourceIndex: index,
+        }
+      })
 
-  const pageItems: NavItem[] = filteredPages.map((page) => {
-    const isHome = page.slug === 'home'
-    const pagePath = isHome ? '/' : `/${page.slug}`
-    return {
-      label: page.title,
-      to: pagePath,
-      active: route.path === pagePath,
-    }
+  const sorted = [...pageItems].sort((a, b) => {
+    if (a.order !== b.order) return a.order - b.order
+    return a.sourceIndex - b.sourceIndex
   })
 
-  return [...pageItems, ...inPageMenuItems.value]
+  return sorted.map(({ order: _order, sourceIndex: _sourceIndex, ...rest }) => rest)
 })
+
+// Scroll-spy: mark the anchored section nearest below the header as active.
+// Offset matches the anchor markers' `scroll-mt-24` (6rem) so the active link
+// flips as that section reaches the spot the browser scrolls anchors to.
+const ANCHOR_OFFSET = 100
+
+function updateActiveAnchor() {
+  const ids = currentPageAnchorIds.value
+  if (!ids.length) {
+    activeAnchor.value = ''
+    return
+  }
+  let current = ''
+  let currentTop = Number.NEGATIVE_INFINITY
+  for (const id of ids) {
+    const el = document.getElementById(id)
+    if (!el) continue
+    const top = el.getBoundingClientRect().top
+    // The deepest section whose marker has passed the header line wins.
+    if (top - ANCHOR_OFFSET <= 1 && top > currentTop) {
+      current = id
+      currentTop = top
+    }
+  }
+  activeAnchor.value = current
+}
+
+// Re-evaluate when navigating between pages (anchor markers change with the page).
+watch(
+  () => route.path,
+  () => nextTick(updateActiveAnchor),
+)
 
 const toolbarItems = computed<ToolbarItem[]>(() => {
   const pages = toolbarResponse.value?.docs ?? []
@@ -259,7 +347,7 @@ const hasToolbarItems = computed(() => toolbarItems.value.length > 0)
             :alt="siteTitle"
             :class="logoClass"
           />
-          <span v-else class="text-xl font-bold font-display header-title">
+          <span v-else class="text-xl font-bold font-display header-title" :style="{ color: siteTitleColor }">
             {{ siteTitle }}
           </span>
         </NuxtLink>
@@ -271,6 +359,7 @@ const hasToolbarItems = computed(() => toolbarItems.value.length > 0)
             :to="item.to"
             :href="item.href"
             :active="item.active"
+            :style-rules="item.style"
           />
         </nav>
       </div>
@@ -282,7 +371,9 @@ const hasToolbarItems = computed(() => toolbarItems.value.length > 0)
         :key="item.to"
         :label="item.label"
         :to="item.to"
+        :href="item.href"
         :active="item.active"
+        :style-rules="item.style"
       />
     </nav>
 
@@ -305,6 +396,7 @@ const hasToolbarItems = computed(() => toolbarItems.value.length > 0)
             :to="item.to"
             :href="item.href"
             :active="item.active"
+            :style-rules="item.style"
           />
         </nav>
       </div>
@@ -317,7 +409,9 @@ const hasToolbarItems = computed(() => toolbarItems.value.length > 0)
           :key="item.to"
           :label="item.label"
           :to="item.to"
+          :href="item.href"
           :active="item.active"
+          :style-rules="item.style"
         />
         <MainMenuItem
           v-for="item in toolbarItems"

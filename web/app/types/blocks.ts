@@ -9,9 +9,16 @@ export interface CalendlyEmbedBlock {
 
 export interface ContentGridCell {
   id?: string
-  content: unknown // Rich text content (Lexical format)
+  elementType?: 'richText' | 'counter'
+  content?: unknown // Rich text content (Lexical format)
   collapsedByDefault?: boolean
   collapsedLines?: '5' | '8' | '12' | '16' | '20'
+  // Stat counter element
+  counterValue?: number
+  counterInfinite?: boolean
+  counterShowPlus?: boolean
+  counterLabel?: string
+  counterColor?: string
 }
 
 export interface ContentGridBlock {
@@ -26,12 +33,19 @@ export interface ContentGridBlock {
   cardBackground?: 'lighten' | 'darken'
   cardRoundedCorners?: boolean
   equalRowHeights?: boolean
+  backgroundColor?: string
+  fullBleed?: boolean
+  cellDividers?: boolean
+  cellDividerColor?: string
 }
+
+export type HeroHeadlineFontSize = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 
 export interface HeroHeadlineBlock {
   id: string
   blockType: 'heroHeadline'
   text: unknown // Rich text content (Lexical format) — color-only formatting
+  fontSize: HeroHeadlineFontSize
 }
 
 export interface HeroSubheadlineBlock {
@@ -80,6 +94,7 @@ export interface HeroRotatingHeadlineBlock {
   rotatingWords: HeroRotatingHeadlineWord[]
   suffix?: string
   intervalMs?: number
+  fontSize: HeroHeadlineFontSize
 }
 
 export type HeroContentBlock = HeroHeadlineBlock | HeroSubheadlineBlock | HeroRichTextBlock | HeroCtaBlock | HeroRotatingHeadlineBlock | HeroSpacerBlock
@@ -89,6 +104,8 @@ export interface HeroBlock {
   blockType: 'hero'
   backgroundImage?: Media | string
   focalPointY?: number
+  centered?: boolean
+  focalPointX?: number
   overlay?: 'none' | 'darken' | 'lighten'
   overlayStrength?: number
   alignment?: 'left' | 'center' | 'right'
@@ -112,6 +129,9 @@ export interface RichTextBlock {
   floatingOffset?: string
   margin?: RichTextMargin
   backgroundColor?: string
+  fullBleed?: boolean
+  darken?: boolean
+  darkenStrength?: number
   roundedCorners?: boolean
 }
 
@@ -188,16 +208,16 @@ export interface TestimonialsBlock {
   testimonials: Testimonial[]
 }
 
-export interface InPageMenuTitleBlock {
-  id: string
-  blockType: 'inPageMenuTitle'
-  title: string
-}
-
 export interface SpacerBlock {
   id: string
   blockType: 'spacer'
   height: 'xxxs' | 'xxs' | 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl' | 'xxxl'
+}
+
+export interface AnchorBlock {
+  id: string
+  blockType: 'anchor'
+  anchorId: string
 }
 
 export interface ContactFormBlock {
@@ -244,4 +264,4 @@ export interface NewsletterSignupBlock {
 }
 
 // Union type for all block types - add more as they are created
-export type ContentBlock = CalendlyEmbedBlock | ContactFormBlock | ContentGridBlock | HeroBlock | InPageMenuTitleBlock | LogoMarqueeBlock | NewsletterSignupBlock | RichTextBlock | RotatingHeadlineBlock | SpacerBlock | SplitTextImageBlock | TableBlock | TestimonialsBlock | VideoBlock
+export type ContentBlock = AnchorBlock | CalendlyEmbedBlock | ContactFormBlock | ContentGridBlock | HeroBlock | LogoMarqueeBlock | NewsletterSignupBlock | RichTextBlock | RotatingHeadlineBlock | SpacerBlock | SplitTextImageBlock | TableBlock | TestimonialsBlock | VideoBlock

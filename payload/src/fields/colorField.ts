@@ -13,6 +13,10 @@ export interface ColorFieldOptions {
   description?: string
   /** Admin width */
   width?: string
+  /** Offer a "Checkered" option (the two-blue ribbon pattern). Off by default. */
+  includeCheckered?: boolean
+  /** Optional admin.condition predicate (siblingData → boolean). */
+  condition?: (data: Record<string, unknown>, siblingData: Record<string, unknown>) => boolean
 }
 
 /**
@@ -44,6 +48,8 @@ export function createColorField(options: ColorFieldOptions): TextField {
     defaultValue = 'transparent',
     description,
     width,
+    includeCheckered = false,
+    condition,
   } = options
 
   return {
@@ -54,9 +60,11 @@ export function createColorField(options: ColorFieldOptions): TextField {
     admin: {
       description,
       width,
+      ...(condition ? { condition } : {}),
       components: {
         Field: {
           path: '/fields/ColorField#ColorField',
+          clientProps: { includeCheckered },
         },
       },
     },

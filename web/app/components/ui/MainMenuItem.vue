@@ -4,20 +4,16 @@ interface Props {
   to?: string
   href?: string
   active?: boolean
+  styleRules?: string
 }
 
 const props = defineProps<Props>()
 
-function scrollToAnchor(e: Event) {
-  e.preventDefault()
-  const id = props.href?.replace('#', '')
-  if (!id) return
-  const el = document.getElementById(id)
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth' })
-    history.replaceState(null, '', props.href!)
-  }
-}
+const inlineStyle = computed(() => props.styleRules?.trim() || undefined)
+
+// Same-page menu anchors are rendered as plain `<a href="#id">` links (not
+// router `to`) so the smooth-anchor.client plugin can glide to the target
+// rather than jumping.
 </script>
 
 <template>
@@ -26,6 +22,7 @@ function scrollToAnchor(e: Event) {
     :to="to"
     class="main-menu-item"
     :class="{ 'main-menu-item--active': active }"
+    :style="inlineStyle"
   >
     {{ label }}
   </NuxtLink>
@@ -34,7 +31,7 @@ function scrollToAnchor(e: Event) {
     :href="href"
     class="main-menu-item"
     :class="{ 'main-menu-item--active': active }"
-    @click="scrollToAnchor"
+    :style="inlineStyle"
   >
     {{ label }}
   </a>
@@ -42,6 +39,7 @@ function scrollToAnchor(e: Event) {
     v-else
     class="main-menu-item"
     :class="{ 'main-menu-item--active': active }"
+    :style="inlineStyle"
   >
     {{ label }}
   </span>
@@ -56,6 +54,7 @@ function scrollToAnchor(e: Event) {
   letter-spacing: 0.025em;
   font-size: 0.875rem;
   line-height: 1.25rem;
+  white-space: nowrap;
   transition: color 0.2s ease;
 }
 
