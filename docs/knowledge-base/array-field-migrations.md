@@ -64,32 +64,49 @@ Getting this wrong fails at runtime with a query referencing a missing column
 
 ## Porting existing data inside the migration
 
-When converting an old field into a new array, read the old rows with raw SQL
-(the old field is gone from the config, so the local API can't read it) and write
-the new shape through the **local API**, which handles array rows + inline rels
-correctly:
+When converting an old field into a new array, read the old rows with raw SQL and
+write the new shape with **raw SQL too** — do **not** use `payload.update()` / the
+local API.
+
+> ⚠️ **The local-API footgun (this took prod down once — 2026-05-31).**
+> `payload.update()` builds its query from the **current config**, not from the
+> schema state at this point in the migration chain. If a *later* migration adds a
+> column to the same table (here `200000` adds `menu_items.anchor`), then on a
+> fresh DB — production, or any DB migrating the whole batch at once — the local
+> API's SELECT references a column that doesn't exist yet and the migration dies
+> with `column _pages_v_version_menuItems.anchor does not exist`. It "works"
+> locally only because there each migration ran one-at-a-time while the config
+> still matched. Railway runs the batch against the final config, so it fails.
+> Raw SQL touches only the columns you name, so it is immune to this.
 
 ```ts
-const { rows } = await db.execute(sql`
-  SELECT "parent_id", "pages_id" FROM "pages_rels"
-  WHERE "path" = 'menuFilter' AND "pages_id" IS NOT NULL
-  ORDER BY "parent_id", "order"
+// Read old rows, insert the new array rows directly. gen_random_uuid() is in
+// PG16 core (no extension). _order is 1-based via row_number().
+await db.execute(sql`
+  INSERT INTO "pages_menu_items" ("_order", "_parent_id", "id", "page_id")
+  SELECT
+    row_number() OVER (PARTITION BY "parent_id" ORDER BY "order" NULLS LAST, "id"),
+    "parent_id",
+    gen_random_uuid()::text,
+    "pages_id"
+  FROM "pages_rels"
+  WHERE "path" = 'menuFilter' AND "pages_id" IS NOT NULL;
 `)
-// group by parent, then:
-await payload.update({
-  collection: 'pages',
-  id: pageId,
-  data: { menuItems: targets.map((page) => ({ page })) },
-  req,                          // stay inside the migration transaction
-  depth: 0,
-  context: { skipDeploy: true } // see below
-})
 ```
 
-`payload.update` runs `afterChange` hooks. `Pages.ts` fires `triggerDeploy` on
-published saves, which would kick a GitHub Actions deploy **per page** during the
-migration. The hook honours `context.skipDeploy` — always pass it from data
-migrations. `_order` for array rows is 1-based, matching the old `hasMany`
-relationship `order`, so it can be reused directly when reconstructing on `down`.
+If you genuinely must use the local API for a data port (e.g. to run hooks),
+isolate it in its **own** migration placed *after* every schema migration that
+touches the same tables, so the config and schema agree when it runs. Note the
+local API also fires `afterChange` hooks — `Pages.ts`'s `triggerDeploy` would kick
+a GitHub Actions deploy per page; pass `context: { skipDeploy: true }`.
+
+Always validate a destructive/data migration against a **real copy of prod**
+before deploying:
+
+```bash
+docker compose exec -T postgres psql -U payload -d payload -c "CREATE DATABASE prodtest;"
+gunzip -c payload/backups/pgdump-prod-<date>/prod.sql.gz | docker compose exec -T postgres psql -U payload -d prodtest
+docker compose exec -T -e DATABASE_URL="postgresql://payload:payload@postgres:5432/prodtest" payload npm run migrate
+```
 
 Reference migration: `20260530_180000_add_menu_items_override.ts`.

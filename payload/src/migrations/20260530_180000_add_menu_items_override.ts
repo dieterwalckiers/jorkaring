@@ -1,6 +1,6 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
-export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+export async function up({ db }: MigrateUpArgs): Promise<void> {
   // 1. Create the array tables backing the new per-page `menuItems` override.
   //    The single `page` relationship is stored inline as a `page_id` column
   //    (Payload only uses the rels table for hasMany / polymorphic relations).
@@ -34,34 +34,23 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
     CREATE INDEX "_pages_v_version_menu_items_page_idx" ON "_pages_v_version_menu_items" USING btree ("page_id");
   `)
 
-  // 2. Port existing `menuFilter` selections into the new `menuItems` array.
-  //    The old field is gone from the config, so read the relationships straight
-  //    from the rels table, then rewrite each page through the local API so
-  //    Payload stores the array rows and inline relationships in its own shape.
-  const { rows } = await db.execute(sql`
-    SELECT "parent_id", "pages_id"
+  // 2. Port existing `menuFilter` selections into the new `menuItems` array with
+  //    raw SQL. We deliberately avoid `payload.update()` here: the local API
+  //    builds its query from the CURRENT config, which already has the
+  //    `menuItems.anchor` column added by a later migration (200000). Calling it
+  //    mid-chain on a fresh DB — where that column doesn't exist yet — fails with
+  //    `column _pages_v_version_menuItems.anchor does not exist`. Inserting the
+  //    rows directly sidesteps the config/schema version mismatch.
+  await db.execute(sql`
+    INSERT INTO "pages_menu_items" ("_order", "_parent_id", "id", "page_id")
+    SELECT
+      row_number() OVER (PARTITION BY "parent_id" ORDER BY "order" NULLS LAST, "id"),
+      "parent_id",
+      gen_random_uuid()::text,
+      "pages_id"
     FROM "pages_rels"
-    WHERE "path" = 'menuFilter' AND "pages_id" IS NOT NULL
-    ORDER BY "parent_id", "order"
+    WHERE "path" = 'menuFilter' AND "pages_id" IS NOT NULL;
   `)
-
-  const byParent = new Map<number, number[]>()
-  for (const row of rows as Array<{ parent_id: number; pages_id: number }>) {
-    const targets = byParent.get(row.parent_id) ?? []
-    targets.push(row.pages_id)
-    byParent.set(row.parent_id, targets)
-  }
-
-  for (const [pageId, targets] of byParent) {
-    await payload.update({
-      collection: 'pages',
-      id: pageId,
-      data: { menuItems: targets.map((page) => ({ page })) },
-      req,
-      depth: 0,
-      context: { skipDeploy: true },
-    })
-  }
 
   // Drop the now-superseded `menuFilter` relationships (the field no longer exists).
   await db.execute(sql`DELETE FROM "pages_rels" WHERE "path" = 'menuFilter';`)
