@@ -251,6 +251,11 @@ async function restoreContent(): Promise<void> {
   console.log('\n📄 Restoring pages...')
   const pageIdMap = new Map<number, number>()
   const pagesWithMenuFilter: Array<{ oldId: number; menuFilter: number[] }> = []
+  // The new per-page menu override. Each item's `page` references another page by
+  // its (source) id, so — like menuFilter — it must be remapped to the new ids in
+  // a second pass once every page exists. Held back from the create call below.
+  type MenuItem = { page?: number | null; label?: string | null; anchor?: string | null }
+  const pagesWithMenuItems: Array<{ oldId: number; menuItems: MenuItem[] }> = []
   try {
     const pagesContent = await fs.readFile(path.join(backupDir, 'pages.json'), 'utf-8')
     const pages = JSON.parse(pagesContent) as PageDoc[]
@@ -262,8 +267,9 @@ async function restoreContent(): Promise<void> {
     const publishedOldIds = new Set<number>()
     for (const page of pages) {
       const oldId = page.id
-      // Remove fields that Payload manages
-      const { id, createdAt, updatedAt, menuFilter, ...pageData } = page
+      // Remove fields that Payload manages, plus the page-to-page relationship
+      // fields (menuFilter legacy, menuItems current) which are remapped below.
+      const { id, createdAt, updatedAt, menuFilter, menuItems, ...pageData } = page
 
       if (page._status === 'published') {
         publishedOldIds.add(oldId)
@@ -272,6 +278,11 @@ async function restoreContent(): Promise<void> {
       // Track pages that have menuFilter for second pass
       if (Array.isArray(menuFilter) && menuFilter.length > 0) {
         pagesWithMenuFilter.push({ oldId, menuFilter: menuFilter as number[] })
+      }
+
+      // Track pages that have menuItems (new override) for the remap pass
+      if (Array.isArray(menuItems) && menuItems.length > 0) {
+        pagesWithMenuItems.push({ oldId, menuItems: menuItems as MenuItem[] })
       }
 
       // Remap media IDs in content blocks
@@ -318,6 +329,45 @@ async function restoreContent(): Promise<void> {
         }
       }
       console.log(`   ✓ ${pagesWithMenuFilter.length} menuFilter relationships restored`)
+    }
+
+    // Pass 2b: Set menuItems overrides with remapped page ids. Each item's
+    // `page` is remapped; items whose target page wasn't restored are dropped.
+    if (pagesWithMenuItems.length > 0) {
+      console.log('\n🔗 Restoring page relationships (menuItems)...')
+      let menuItemsRestored = 0
+      for (const { oldId, menuItems } of pagesWithMenuItems) {
+        const newId = pageIdMap.get(oldId)
+        if (!newId) continue
+
+        const remappedItems = menuItems
+          .map((item) => {
+            const remappedPage = item.page != null ? pageIdMap.get(item.page) : null
+            // Keep items even if they have no page (a label-only / anchor item).
+            if (item.page != null && remappedPage == null) return null
+            return {
+              page: remappedPage ?? null,
+              label: item.label ?? null,
+              anchor: item.anchor ?? null,
+            }
+          })
+          .filter((item): item is NonNullable<typeof item> => item !== null)
+
+        if (remappedItems.length === 0) continue
+
+        try {
+          await payload.update({
+            collection: 'pages',
+            id: newId,
+            data: { menuItems: remappedItems } as Record<string, unknown>,
+            draft: true,
+          })
+          menuItemsRestored++
+        } catch (error) {
+          console.warn(`   ⚠ Failed to set menuItems for page id=${newId}:`, (error as Error).message)
+        }
+      }
+      console.log(`   ✓ ${menuItemsRestored}/${pagesWithMenuItems.length} menuItems overrides restored`)
     }
 
     // Pass 3: Publish pages that were published in the source
