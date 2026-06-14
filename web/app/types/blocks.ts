@@ -5,6 +5,9 @@ export interface CalendlyEmbedBlock {
   blockType: 'calendlyEmbed'
   url: string
   style?: string
+  text?: unknown // Rich text content (Lexical format) — optional text column
+  textPosition?: 'left' | 'right'
+  textPercentage?: number
 }
 
 export interface ContentGridCell {

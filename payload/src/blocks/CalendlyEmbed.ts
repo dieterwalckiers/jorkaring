@@ -25,5 +25,44 @@ export const CalendlyEmbed: Block = {
         description: 'Inline CSS style for the Calendly widget container',
       },
     },
+    {
+      // Optional text column shown alongside the embed. Inherits the default
+      // lexical editor (same config as SplitTextImage's `text`), so inline
+      // icon blocks, autolinks and font-size render identically.
+      name: 'text',
+      type: 'richText',
+      admin: {
+        description: 'Optional text column shown next to the embed (use headings for the title). Leave empty for an embed-only, full-width layout.',
+      },
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'textPosition',
+          type: 'select',
+          defaultValue: 'left',
+          options: [
+            { label: 'Left', value: 'left' },
+            { label: 'Right', value: 'right' },
+          ],
+          admin: {
+            description: 'Side the text column sits on (the embed takes the other side)',
+            width: '50%',
+          },
+        },
+        {
+          name: 'textPercentage',
+          type: 'number',
+          defaultValue: 45,
+          min: 20,
+          max: 80,
+          admin: {
+            description: 'Width of the text column as a percentage (the embed takes the rest)',
+            width: '50%',
+          },
+        },
+      ],
+    },
   ],
 }

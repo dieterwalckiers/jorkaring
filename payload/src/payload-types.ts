@@ -206,6 +206,32 @@ export interface Page {
              * Inline CSS style for the Calendly widget container
              */
             style?: string | null;
+            /**
+             * Optional text column shown next to the embed (use headings for the title). Leave empty for an embed-only, full-width layout.
+             */
+            text?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            /**
+             * Side the text column sits on (the embed takes the other side)
+             */
+            textPosition?: ('left' | 'right') | null;
+            /**
+             * Width of the text column as a percentage (the embed takes the rest)
+             */
+            textPercentage?: number | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'calendlyEmbed';
@@ -1011,6 +1037,9 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               url?: T;
               style?: T;
+              text?: T;
+              textPosition?: T;
+              textPercentage?: T;
               id?: T;
               blockName?: T;
             };

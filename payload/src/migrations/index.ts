@@ -45,6 +45,7 @@ import * as migration_20260530_200000_add_menu_item_anchor from './20260530_2000
 import * as migration_20260530_190000_remove_in_page_menu_title_block from './20260530_190000_remove_in_page_menu_title_block';
 import * as migration_20260530_210000_rename_filter_to_override_main_menu from './20260530_210000_rename_filter_to_override_main_menu';
 import * as migration_20260530_220000_add_bullet_points_color from './20260530_220000_add_bullet_points_color';
+import * as migration_20260614_140000_item9_calendly_split from './20260614_140000_item9_calendly_split';
 
 export const migrations = [
   {
@@ -281,5 +282,10 @@ export const migrations = [
     up: migration_20260530_220000_add_bullet_points_color.up,
     down: migration_20260530_220000_add_bullet_points_color.down,
     name: '20260530_220000_add_bullet_points_color',
+  },
+  {
+    up: migration_20260614_140000_item9_calendly_split.up,
+    down: migration_20260614_140000_item9_calendly_split.down,
+    name: '20260614_140000_item9_calendly_split',
   },
 ];
