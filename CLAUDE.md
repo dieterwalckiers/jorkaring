@@ -138,10 +138,12 @@ Refined, editorial, considered. The voice is calm and assured — never loud, ne
 
 Moss and sky carry the work; off-white and woody are for surfaces, dividers, secondary type, and small accents. Avoid pushing woody or off-white into primary roles. These values are wired through the CMS theme colors, so reach them via CSS variables (`--color-theme*`, `--color-main-bg`, etc.) rather than hardcoding hex.
 
-**Typography (locked):**
-- Headings: Playfair Display (400, 700) — editorial, serif, confident.
-- Body / UI: Inter (400, 600) — neutral, legible, quiet.
-- The pairing is intentional and preserved. Don't introduce a third family. Use weight and size — not new faces — for hierarchy.
+**Typography (client-locked — Jorka, juni 2026):**
+- H1: **Archivo Black** — bold, confident display weight for the primary headline.
+- H2–H6: **Archivo Narrow** — condensed, editorial subheads.
+- Body / UI: **Raleway** (400, 600) — neutral, legible, quiet.
+- These are wired through the CMS (`SiteSettings.styling.googleFontH1` / `googleFontHeadings` / `googleFontBody`) and applied at runtime in `web/app/app.vue`, which loads the Google Fonts and sets `--font-h1` / `--font-headings`. Reach them via those CSS variables, not hardcoded font-family. Don't introduce a fourth family — use weight and size for hierarchy.
+- _History: the brand originally specified Playfair Display + Inter; the client changed it to Archivo Black / Archivo Narrow / Raleway. The `families` list in `web/nuxt.config.ts` may still preload the old Playfair/Inter — harmless (nothing references them; the runtime fonts win), but trim it to the Archivo/Raleway set when convenient._
 
 **Mode:** Light mode only. Dark mode is explicitly disabled site-wide; don't design for it.
 
