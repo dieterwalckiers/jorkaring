@@ -111,6 +111,17 @@ const logoWidthClasses: Record<LogoSize, string> = {
 const scrollY = ref(0)
 const CONDENSE_THRESHOLD = 50
 
+// Mobile slideover open state. Nuxt UI normally closes it on a route change,
+// but same-page anchor clicks (Contact, Aanbod, …) don't change the route —
+// the smooth-anchor plugin handles them in-page and emits this signal so we
+// can collapse the menu explicitly. Without it the menu stays full-screen and
+// the user can't tell the click did anything.
+const menuOpen = ref(false)
+
+function closeMenu() {
+  menuOpen.value = false
+}
+
 function onScroll() {
   scrollY.value = window.scrollY
   // Keep the in-page anchor highlight in sync as the page scrolls.
@@ -121,6 +132,7 @@ onMounted(() => {
   if (typeof window !== 'undefined') {
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll, { passive: true })
+    document.addEventListener('smooth-anchor:navigate', closeMenu)
     scrollY.value = window.scrollY
     updateActiveAnchor()
   }
@@ -130,6 +142,7 @@ onUnmounted(() => {
   if (typeof window !== 'undefined') {
     window.removeEventListener('scroll', onScroll)
     window.removeEventListener('resize', onScroll)
+    document.removeEventListener('smooth-anchor:navigate', closeMenu)
   }
 })
 
@@ -354,7 +367,7 @@ const hasToolbarItems = computed(() => toolbarItems.value.length > 0)
 </script>
 
 <template>
-  <UHeader :class="headerClass" :style="headerStyle">
+  <UHeader v-model:open="menuOpen" :class="headerClass" :style="headerStyle">
     <template #title>
       <div class="flex items-center gap-6 logo-container">
         <NuxtLink to="/" class="flex items-center">
