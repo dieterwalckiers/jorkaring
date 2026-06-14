@@ -45,6 +45,8 @@ import * as migration_20260530_200000_add_menu_item_anchor from './20260530_2000
 import * as migration_20260530_190000_remove_in_page_menu_title_block from './20260530_190000_remove_in_page_menu_title_block';
 import * as migration_20260530_210000_rename_filter_to_override_main_menu from './20260530_210000_rename_filter_to_override_main_menu';
 import * as migration_20260530_220000_add_bullet_points_color from './20260530_220000_add_bullet_points_color';
+import * as migration_20260613_120000_add_ebook_site_settings from './20260613_120000_add_ebook_site_settings';
+import * as migration_20260614_120000_ebook_tally_to_mailchimp from './20260614_120000_ebook_tally_to_mailchimp';
 import * as migration_20260614_140000_item9_calendly_split from './20260614_140000_item9_calendly_split';
 
 export const migrations = [
@@ -282,6 +284,16 @@ export const migrations = [
     up: migration_20260530_220000_add_bullet_points_color.up,
     down: migration_20260530_220000_add_bullet_points_color.down,
     name: '20260530_220000_add_bullet_points_color',
+  },
+  {
+    up: migration_20260613_120000_add_ebook_site_settings.up,
+    down: migration_20260613_120000_add_ebook_site_settings.down,
+    name: '20260613_120000_add_ebook_site_settings',
+  },
+  {
+    up: migration_20260614_120000_ebook_tally_to_mailchimp.up,
+    down: migration_20260614_120000_ebook_tally_to_mailchimp.down,
+    name: '20260614_120000_ebook_tally_to_mailchimp',
   },
   {
     up: migration_20260614_140000_item9_calendly_split.up,

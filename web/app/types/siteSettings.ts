@@ -67,6 +67,13 @@ export interface SiteCookieConsent {
   policyLinkText?: string
 }
 
+export interface SiteEbook {
+  enabled?: boolean
+  mailchimpActionUrl?: string
+  pdf?: Media | string | number
+  buttonCaption?: string
+}
+
 export type SplashOverlay = 'none' | 'darken' | 'lighten'
 
 export interface SplashPage {
@@ -114,6 +121,7 @@ export interface SiteSettings {
   headContent?: SiteHeadContent
   cookieConsent?: SiteCookieConsent
   stickyMessage?: SiteStickyMessage
+  ebook?: SiteEbook
   toast?: SiteToast
   splashPage?: SplashPage
   themeColors?: SiteThemeColors

@@ -357,6 +357,55 @@ export const SiteSettings: GlobalConfig = {
                 },
               ],
             },
+            {
+              name: 'ebook',
+              type: 'group',
+              label: 'E-book lead capture',
+              admin: {
+                description:
+                  'Configure the free e-book download. Any button or link on the site whose URL is set to "#ebook" opens a popup with a small lead form (name + email). On submit the lead is captured in Mailchimp (client-side, no server) and the PDF downloads instantly in the browser.',
+              },
+              fields: [
+                {
+                  name: 'enabled',
+                  type: 'checkbox',
+                  label: 'Enabled',
+                  defaultValue: false,
+                  admin: {
+                    description: 'Master switch — when off, "#ebook" links do nothing special.',
+                  },
+                },
+                {
+                  name: 'mailchimpActionUrl',
+                  type: 'text',
+                  label: 'Mailchimp action URL',
+                  admin: {
+                    description:
+                      'Mailchimp classic form action URL for the e-book leads audience, e.g. https://xxx.us21.list-manage.com/subscribe/post-json?u=...&id=... — same kind of URL as the Newsletter block. Leave empty to skip lead capture (the PDF still downloads).',
+                    condition: (data) => Boolean((data as { ebook?: { enabled?: boolean } })?.ebook?.enabled),
+                  },
+                },
+                {
+                  name: 'pdf',
+                  type: 'upload',
+                  relationTo: 'media',
+                  label: 'E-book PDF',
+                  admin: {
+                    description: 'The PDF that is offered for download after the lead form is submitted.',
+                    condition: (data) => Boolean((data as { ebook?: { enabled?: boolean } })?.ebook?.enabled),
+                  },
+                },
+                {
+                  name: 'buttonCaption',
+                  type: 'text',
+                  label: 'Default button caption',
+                  admin: {
+                    description: 'Optional. Used as a hint/label where a generic e-book trigger is rendered.',
+                    condition: (data) => Boolean((data as { ebook?: { enabled?: boolean } })?.ebook?.enabled),
+                  },
+                },
+              ],
+            },
           ],
         },
         {

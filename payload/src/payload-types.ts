@@ -1553,6 +1553,27 @@ export interface SiteSetting {
     closeable?: boolean | null;
   };
   /**
+   * Configure the free e-book download. Any button or link on the site whose URL is set to "#ebook" opens a popup with a small lead form (name + email). On submit the lead is captured in Mailchimp (client-side, no server) and the PDF downloads instantly in the browser.
+   */
+  ebook?: {
+    /**
+     * Master switch — when off, "#ebook" links do nothing special.
+     */
+    enabled?: boolean | null;
+    /**
+     * Mailchimp classic form action URL for the e-book leads audience, e.g. https://xxx.us21.list-manage.com/subscribe/post-json?u=...&id=... — same kind of URL as the Newsletter block. Leave empty to skip lead capture (the PDF still downloads).
+     */
+    mailchimpActionUrl?: string | null;
+    /**
+     * The PDF that is offered for download after the lead form is submitted.
+     */
+    pdf?: (number | null) | Media;
+    /**
+     * Optional. Used as a hint/label where a generic e-book trigger is rendered.
+     */
+    buttonCaption?: string | null;
+  };
+  /**
    * A floating flash message that pops into a corner of the screen. Use for time-bounded notices: announcements, promotions, transient updates.
    */
   toast?: {
@@ -2389,6 +2410,14 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | {
         content?: T;
         closeable?: T;
+      };
+  ebook?:
+    | T
+    | {
+        enabled?: T;
+        mailchimpActionUrl?: T;
+        pdf?: T;
+        buttonCaption?: T;
       };
   toast?:
     | T

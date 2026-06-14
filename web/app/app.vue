@@ -221,6 +221,8 @@ useHead(() => ({
       :dismissal-key="siteSettings.toast.dismissalKey ?? 'toast-1'"
     />
 
+    <EbookPopup v-if="siteSettings?.ebook?.enabled" />
+
     <CookieConsent
       v-if="siteSettings?.cookieConsent?.enabled && siteSettings?.cookieConsent?.message"
       :message="siteSettings.cookieConsent.message"
