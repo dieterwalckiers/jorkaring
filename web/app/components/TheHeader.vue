@@ -222,6 +222,9 @@ const currentPageAnchorIds = computed<string[]>(() => {
     .map((item) => {
       const page = item.page
       if (!page || typeof page !== 'object') return ''
+      // Absolute-path anchors (e.g. "/") are real route links, not in-page
+      // jump targets, so they never participate in scroll-spy.
+      if (item.anchor?.trim().startsWith('/')) return ''
       const basePath = page.slug === 'home' ? '/' : `/${page.slug}`
       if (basePath !== route.path || !item.anchor) return ''
       return slugify(item.anchor)
@@ -241,6 +244,20 @@ const navItems = computed<NavItem[]>(() => {
           const page = item.page
           // Drop links whose target page wasn't populated (e.g. deleted page).
           if (!page || typeof page !== 'object') return null
+          // An anchor written as an absolute path (e.g. "/") links straight to
+          // that route, ignoring the target page's slug — this is how a menu
+          // item points at the site root (the splash landing) or any raw path.
+          const absolutePath = item.anchor?.trim().startsWith('/') ? item.anchor.trim() : ''
+          if (absolutePath) {
+            return {
+              label: item.label || page.menuLabel || page.title,
+              to: absolutePath,
+              active: route.path === absolutePath,
+              style: page.menuItemStyle || undefined,
+              order: index,
+              sourceIndex: index,
+            }
+          }
           const isHome = page.slug === 'home'
           const basePath = isHome ? '/' : `/${page.slug}`
           // Optionally jump to an anchor on the target page. Slugify to match the
