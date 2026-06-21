@@ -20,6 +20,13 @@ interface ToolbarItem {
 
 const route = useRoute()
 const { currentPage } = useCurrentPage()
+
+// Production (SSG) serves routes with a trailing slash ("/voor-particulieren/")
+// while we build paths without one, so a raw `===` never matches and scroll-spy
+// / active states silently break in production. Compare paths normalized, the
+// same way the smooth-anchor plugin does.
+const samePath = (a: string, b: string) =>
+  a.replace(/\/+$/, '') === b.replace(/\/+$/, '')
 const apiUrl = usePayloadApiUrl()
 const payloadBaseUrl = usePayloadBaseUrl()
 const draftQuery = useDraftQuery()
@@ -239,7 +246,7 @@ const currentPageAnchorIds = computed<string[]>(() => {
       // jump targets, so they never participate in scroll-spy.
       if (item.anchor?.trim().startsWith('/')) return ''
       const basePath = page.slug === 'home' ? '/' : `/${page.slug}`
-      if (basePath !== route.path || !item.anchor) return ''
+      if (!samePath(basePath, route.path) || !item.anchor) return ''
       return slugify(item.anchor)
     })
     .filter(Boolean)
@@ -265,7 +272,7 @@ const navItems = computed<NavItem[]>(() => {
             return {
               label: item.label || page.menuLabel || page.title,
               to: absolutePath,
-              active: route.path === absolutePath,
+              active: samePath(route.path, absolutePath),
               style: page.menuItemStyle || undefined,
               order: index,
               sourceIndex: index,
@@ -280,7 +287,7 @@ const navItems = computed<NavItem[]>(() => {
           // On the target page, an anchor link is active only while its section
           // is in view; a plain page link is active when no anchor section is
           // (i.e. at the top). Off the target page, never active.
-          const onTargetPage = route.path === basePath
+          const onTargetPage = samePath(route.path, basePath)
           const active = onTargetPage && (anchor ? activeAnchor.value === anchor : activeAnchor.value === '')
           // An anchor on the page we're already on becomes a plain in-page
           // link (`#anchor`) so it smooth-scrolls from the current position
