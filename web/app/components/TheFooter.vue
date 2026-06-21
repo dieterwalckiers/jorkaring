@@ -11,7 +11,7 @@ const cmsFooterLinks = computed(() => {
   const links = siteSettings.value?.footer?.links ?? []
   return links.map((link) => ({
     label: link.text,
-    to: link.url,
+    ...(link.url ? { to: link.url } : {}),
   }))
 })
 </script>

@@ -330,8 +330,16 @@ function updateActiveAnchor() {
     activeAnchor.value = ''
     return
   }
+  // When the last section is shorter than the viewport, its marker can never
+  // reach the header line (the page runs out of scroll first), leaving its link
+  // permanently un-highlighted. Treat "scrolled to the bottom" as that last
+  // section being active so it still lights up.
+  const atBottom =
+    window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2
   let current = ''
   let currentTop = Number.NEGATIVE_INFINITY
+  let lastId = ''
+  let lastTop = Number.NEGATIVE_INFINITY
   for (const id of ids) {
     const el = document.getElementById(id)
     if (!el) continue
@@ -341,8 +349,13 @@ function updateActiveAnchor() {
       current = id
       currentTop = top
     }
+    // Furthest-down marker = last section in document order (for the bottom case).
+    if (top > lastTop) {
+      lastTop = top
+      lastId = id
+    }
   }
-  activeAnchor.value = current
+  activeAnchor.value = atBottom && lastId ? lastId : current
 }
 
 // Re-evaluate when navigating between pages (anchor markers change with the page).

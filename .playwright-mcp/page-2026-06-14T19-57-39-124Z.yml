@@ -1,0 +1,225 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "Rugexpert Jorka Ring" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - link "Rugexpert Jorka Ring" [ref=e8]:
+            - /url: /
+            - generic [ref=e9]: Rugexpert Jorka Ring
+        - button "Open menu" [ref=e11]
+    - main [ref=e13]:
+      - article [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e23]:
+            - heading "Van rugpatient naar partner" [level=1] [ref=e24]:
+              - text: Van rugpatient naar
+              - generic [ref=e26]: partner
+            - heading "Haal alles uit je leven door je rugpijn aan te pakken op een manier die bij je werkt!" [level=2] [ref=e27]
+            - generic [ref=e29]:
+              - link "Ontdek wat bij jou past" [ref=e30] [cursor=pointer]:
+                - /url: "#aanbod"
+              - link "Boek je vrijblijvend gesprek in" [ref=e31] [cursor=pointer]:
+                - /url: /boek-je-gesprek-in
+          - generic [ref=e37]:
+            - paragraph [ref=e38]: "Je wilt voluit leven: bewegen zonder nadenken, doen waar je zin in hebt, maar je rug houd je constant tegen."
+            - paragraph [ref=e39]: Pijnscheuten, stijfheid bij het opstaan, een constante spanning op de achtergrond. Het beïnvloedt je hele dag.
+            - paragraph [ref=e40]: "Je probeert van alles om er vanaf te komen: oefeningen, therapie, houdingen vermijden en eindeloze coretraining. Altijd bezig met je rug, om maar pijn te vermijden."
+            - paragraph [ref=e41]: Langzaam aan voel je je meer patiënt dan mens.
+            - paragraph [ref=e42]: Het is vermoeiend en frustrerend.
+            - paragraph [ref=e43]: Je wil gewoon leven, zonder er constant over na te denken.
+            - paragraph [ref=e44]: Maar de oplossing ligt niet in nog een behandeling, een nieuwe matras of blijven vermijden wat pijn doet.
+            - paragraph [ref=e45]: Echte verandering begint wanneer je je rug leert begrijpen en ze versterkt op jouw tempo, op een manier die bij je leven past.
+            - paragraph [ref=e46]:
+              - text: Zo bouw je opnieuw vertrouwen op in je lichaam, zodat je het leven weer volop kan beleven.
+              - text: Of je nu wil lopen, actief zijn met je gezin of gewoon je dag pijnvrij doorkomen, ik help je daar graag naartoe.
+          - heading "Ga voor alles uit het leven halen, niet voor een leven dat rond je rugklachten draait." [level=3] [ref=e54]
+          - heading "Aanbod" [level=1] [ref=e60]
+          - generic [ref=e66]:
+            - link "1 op 1 rugtraject Meer grip op je rugklachten, zodat je opnieuw kan werken, sporten en genieten zonder dat je rug constant bepaalt wat wel of niet lukt. Samen bouwen we in dit traject aan meer vertrouwen in je lichaam, minder pijn en haalbare gewoontes die passen binnen jouw leven." [ref=e67] [cursor=pointer]:
+              - /url: /aanbod-particulier#1-op-1-rugtraject
+              - generic [ref=e68]:
+                - heading "1 op 1 rugtraject" [level=2] [ref=e69]
+                - paragraph [ref=e70]: Meer grip op je rugklachten, zodat je opnieuw kan werken, sporten en genieten zonder dat je rug constant bepaalt wat wel of niet lukt. Samen bouwen we in dit traject aan meer vertrouwen in je lichaam, minder pijn en haalbare gewoontes die passen binnen jouw leven.
+            - link "1 op 1 gesprek Krijg helderheid over waarom je rugklachten blijven terugkomen en ontdek wat jouw lichaam nodig heeft om rustiger en sterker te functioneren. Je gaat naar huis met concrete inzichten en direct toepasbare stappen waarmee je zelf verschil voelt in het dagelijkse leven." [ref=e71] [cursor=pointer]:
+              - /url: /aanbod-particulier#1-op-1-gesprek
+              - generic [ref=e72]:
+                - heading "1 op 1 gesprek" [level=2] [ref=e73]
+                - paragraph [ref=e74]: Krijg helderheid over waarom je rugklachten blijven terugkomen en ontdek wat jouw lichaam nodig heeft om rustiger en sterker te functioneren. Je gaat naar huis met concrete inzichten en direct toepasbare stappen waarmee je zelf verschil voelt in het dagelijkse leven.
+            - link "1 op 1 ergonomie sessie Ga comfortabeler aan het werk en haal opnieuw meer plezier uit je werkdag. Tijdens deze sessie ontdek je hoe kleine, haalbare aanpassingen in je werkplek en dagelijkse gewoontes een groot verschil kunnen maken in je energie, houding en het verminderen van klachten doorheen de dag." [ref=e75] [cursor=pointer]:
+              - /url: /aanbod-particulier#1-op-1-ergonomische-sessie
+              - generic [ref=e76]:
+                - heading "1 op 1 ergonomie sessie" [level=2] [ref=e77]
+                - paragraph [ref=e78]: Ga comfortabeler aan het werk en haal opnieuw meer plezier uit je werkdag. Tijdens deze sessie ontdek je hoe kleine, haalbare aanpassingen in je werkplek en dagelijkse gewoontes een groot verschil kunnen maken in je energie, houding en het verminderen van klachten doorheen de dag.
+            - paragraph [ref=e79]:
+              - link "Bekijk wat bij jou past" [ref=e80] [cursor=pointer]:
+                - /url: /aanbod-particulier
+          - generic [ref=e86]:
+            - generic [ref=e89]:
+              - generic [ref=e92]:
+                - heading "“Ik kan terug lopen na jaren dit niet te hebben gedaan met mijn hernia!”" [level=2] [ref=e93]
+                - paragraph [ref=e94]: "Linde kwam bij me met aanhoudende nek- en rugklachten na een whiplash en hernia. Haar doel was duidelijk: leren hoe ze op lange termijn zelf met haar rug aan de slag kon."
+                - paragraph [ref=e95]: "Bij ons eerste gesprek bleek:"
+                - list [ref=e96]:
+                  - listitem [ref=e97]:
+                    - text: •
+                    - generic [ref=e98]: Autoritten langer dan 30 minuten waren niet haalbaarSociaal leven was sterk verminderd door pijn
+                  - listitem [ref=e99]:
+                    - text: •
+                    - generic [ref=e100]: Lopen en joggen lukten niet meer
+                  - listitem [ref=e101]:
+                    - text: •
+                    - generic [ref=e102]: Lang staan (>30 min) was onmogelijk
+                  - listitem [ref=e103]:
+                    - text: •
+                    - generic [ref=e104]: Tuinieren en tillen (zoals kinderen) gaf klachten
+                  - listitem [ref=e105]:
+                    - text: •
+                    - generic [ref=e106]: Werken gebeurde op 50% door nek- en rugpijn.
+                - paragraph [ref=e107]: Stap voor stap werkten we aan inzicht in haar klachten, het opbouwen van kracht en belastbaarheid, en uiteindelijk preventief leren handelen. Ze leerde haar lichaam beter begrijpen en kreeg opnieuw vertrouwen in wat mogelijk is.
+                - paragraph [ref=e108]:
+                  - strong [ref=e109]: Resultaat
+                - paragraph [ref=e110]: "Na een traject van gerichte opbouw en begeleiding:"
+                - list [ref=e111]:
+                  - listitem [ref=e112]:
+                    - text: •
+                    - generic [ref=e113]: Van geen 500 meter kunnen stappen naar opnieuw rustig opbouwen met wandelen en lopen
+                  - listitem [ref=e114]:
+                    - text: •
+                    - generic [ref=e115]: Van maximaal 1 uur staan naar onbeperkt staan
+                  - listitem [ref=e116]:
+                    - text: •
+                    - generic [ref=e117]: Van een sterk beperkt sociaal leven naar opnieuw actief deelnemen
+                  - listitem [ref=e118]:
+                    - text: •
+                    - generic [ref=e119]: Opnieuw vlot langere autoritten kunnen doen
+                - paragraph [ref=e120]: Er is af en toe nog pijn, maar Linde heeft haar vrijheid grotendeels terug en weet hoe ze er zelfstandig mee omgaat.
+              - button "Lees meer" [ref=e121] [cursor=pointer]
+            - generic [ref=e124]:
+              - generic [ref=e127]:
+                - heading "“Zelfs uren rechtstaan op een festival tijdens onze huwelijksreis ging eindelijk weer zonder klachten.”" [level=2] [ref=e128]:
+                  - text: “
+                  - strong [ref=e129]: Zelfs uren rechtstaan op een festival tijdens onze huwelijksreis ging eindelijk weer zonder klachten.”
+                - paragraph [ref=e131]: P. is zaakvoerder van een klimzaak en kampte al jarenlang met aanhoudende rugklachten door scoliose. Ondanks kinesitherapie, oefeningen, osteopathie en andere aanpakken bleef de pijn aanwezig.
+                - paragraph [ref=e132]: Samen gingen we eerst op zoek naar meer inzicht in zijn klachten en leerde hij hoe hij zijn rugpijn sneller kon opvangen en beïnvloeden. Daarna focusten we op het versterken van de onderrug en de spieren rond de romp, gecombineerd met betere belastingverdeling en nieuwe gewoontes.
+                - paragraph [ref=e133]: Vooral de combinatie van een andere mindset en gerichte krachtopbouw maakte een groot verschil.
+                - paragraph [ref=e134]:
+                  - strong [ref=e135]: "Vooral:"
+                - list [ref=e136]:
+                  - listitem [ref=e137]:
+                    - text: •
+                    - generic [ref=e138]: Concerten langer dan 1 uur volgen
+                  - listitem [ref=e139]:
+                    - text: •
+                    - generic [ref=e140]: Langer dan 30 minuten gamen
+                  - listitem [ref=e141]:
+                    - text: •
+                    - generic [ref=e142]: Organisatie van zware klimweekends
+                - paragraph [ref=e143]: …vormden een probleem.
+                - paragraph [ref=e144]:
+                  - strong [ref=e145]: "Resultaten:"
+                - list [ref=e146]:
+                  - listitem [ref=e147]:
+                    - text: •
+                    - generic [ref=e148]: Concerten volgen lukt opnieuw zonder probleem
+                  - listitem [ref=e149]:
+                    - text: •
+                    - generic [ref=e150]: Langer gamen zonder toename van klachten
+                  - listitem [ref=e151]:
+                    - text: •
+                    - generic [ref=e152]: Meer inzicht en controle over zijn rugpijn
+                  - listitem [ref=e153]:
+                    - text: •
+                    - generic [ref=e154]: Betere belastingverdeling tijdens drukke periodes
+                  - listitem [ref=e155]:
+                    - text: •
+                    - generic [ref=e156]: Sterkere onderrug en meer vertrouwen in bewegen
+                - paragraph [ref=e157]: Volledig pijnvrij is P. niet, maar de manier waarop hij met zijn rugklachten omgaat is sterk veranderd.
+              - button "Lees meer" [ref=e159] [cursor=pointer]
+          - paragraph [ref=e163]:
+            - link "Wil jij dit ook, laten we kennismaken." [ref=e164] [cursor=pointer]:
+              - /url: /boek-je-gesprek-in
+          - region "Testimonials" [ref=e166]:
+            - generic [ref=e167]:
+              - generic: “
+              - generic [ref=e170]:
+                - blockquote [ref=e171]: “Ik ging van bewegingsangst en vermijding owv dagelijkse rugpijn naar voelen wat mijn lichaam nodig heeft en daarop kunnen anticiperen met de juiste oefeningen. De begeleiding van Jorka heeft me meer inzicht gegeven in mijn lichaam en de pijnklachten en hoe ik ermee moet omgaan. Eindelijk terug meer controle over mijn rug en vertrouwen in mijn lichaam :-) en ik durf nu ook weer veel meer te ondernemen, mijn rug voelt niet meer als een ‘beperking’.”
+                - generic [ref=e174]: Linde
+              - generic [ref=e175]:
+                - button "Previous testimonial" [ref=e176] [cursor=pointer]:
+                  - img [ref=e177]
+                - list [ref=e179]:
+                  - listitem [ref=e180]:
+                    - button [ref=e181] [cursor=pointer]
+                  - listitem [ref=e182]:
+                    - button [ref=e183] [cursor=pointer]
+                  - listitem [ref=e184]:
+                    - button [ref=e185] [cursor=pointer]
+                - generic [ref=e186]: 01/03
+                - button "Next testimonial" [ref=e187] [cursor=pointer]:
+                  - img [ref=e188]
+          - generic [ref=e195]:
+            - heading "Wie ben ik" [level=2] [ref=e196]
+            - paragraph [ref=e197]: Ik streef ernaar dat mijn rugpatiënten zich mens voelen in plaats van diagnose.
+            - paragraph [ref=e198]: Ik zie nog te vaak gebeuren dat er enkel beslissingen worden gemaakt ter verbetering van de rug, maar zonder rekening te houden met hoe hun leven eruitziet, wat zij belangrijk vinden en waar zij energie van krijgen.
+            - paragraph [ref=e199]: Programma’s of therapieën die hen vertellen dat ze hun favoriete sport niet meer mogen beoefenen, tiltechnieken die ervoor zorgen dat ze bij elke beweging moeten nadenken. Alles ten goede van de rug, maar niet ten goede van de levenskwaliteit.
+            - paragraph [ref=e200]: Daarom is het mijn missie om rugpatiënten zelf het inzicht en controle (terug) geven over hun lijf en leven. Zodat zij niet enkel leren wat hun rug ze probeert te vertellen, maar ook hoe zij dit kunnen verhelpen op een manier die bijdraagt aan hun leven.
+            - paragraph [ref=e201]: Geen quick fixes, geen afhankelijkheid van therapie.
+            - paragraph [ref=e202]: Wél inzicht, vrijheid en duurzame verandering. Levenslang.
+            - paragraph [ref=e203]: Zodat ze terug met een glimlach in het leven kunnen staan en hun leven kunnen gaan beleven!
+            - paragraph [ref=e204]: .
+            - paragraph [ref=e205]:
+              - link "Leer me kennen" [ref=e206] [cursor=pointer]:
+                - /url: /over-mij
+          - generic [ref=e214]:
+            - generic [ref=e216]:
+              - heading "Ben je klaar om alles uit het leven te halen en je rug je leven niet te laten bepalen?" [level=2] [ref=e217]
+              - paragraph [ref=e218]: Boek dan je vrijblijvende kennismakingsgesprek met me in via de knop hieronder.
+              - paragraph [ref=e219]: "Nog vragen of bedenkingen? Neem gerust eerst contact met me op:"
+              - paragraph [ref=e220]:
+                - img "at" [ref=e221]:
+                  - img [ref=e222]
+                - link "jorka.ring@gmail.com" [ref=e225] [cursor=pointer]:
+                  - /url: mailto:jorka.ring@gmail.com
+              - paragraph [ref=e226]:
+                - img "phone" [ref=e227]:
+                  - img [ref=e228]
+                - text: "0479730195"
+              - paragraph [ref=e230]:
+                - link "instagram" [ref=e231] [cursor=pointer]:
+                  - /url: https://www.instagram.com/jorkaring/
+                  - img "instagram" [ref=e232]:
+                    - img [ref=e233]
+                - link "linkedin" [ref=e236] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/in/jorka-ring-35972b333/
+                  - img "linkedin" [ref=e237]:
+                    - img [ref=e238]
+            - link "Boek je vrijblijvend gesprek in" [ref=e243] [cursor=pointer]:
+              - /url: /boek-je-gesprek-in
+    - contentinfo [ref=e246]:
+      - generic [ref=e247]:
+        - navigation "Main" [ref=e249]:
+          - list [ref=e251]:
+            - listitem [ref=e252]:
+              - link "Algemene voorwaarden" [ref=e253] [cursor=pointer]:
+                - /url: /algemene-voorwaarden
+                - generic [ref=e254]: Algemene voorwaarden
+            - listitem [ref=e255]:
+              - link "Privacybeleid" [ref=e256] [cursor=pointer]:
+                - /url: /privacybeleid
+                - generic [ref=e257]: Privacybeleid
+            - listitem [ref=e258]:
+              - link "Cookiebeleid" [ref=e259] [cursor=pointer]:
+                - /url: /cookiebeleid
+                - generic [ref=e260]: Cookiebeleid
+        - paragraph [ref=e262]: © 2026 jorkaring
+    - status [ref=e263]:
+      - generic [ref=e265]:
+        - paragraph [ref=e266]: Ga in 10 dagen naar minder hinder in je rug.
+        - paragraph [ref=e267]:
+          - link "Download hier je gratis e-book" [ref=e268] [cursor=pointer]:
+            - /url: "#ebook"
+      - button "Dismiss" [ref=e269]:
+        - img [ref=e270]
+  - region "Notifications (F8)":
+    - list

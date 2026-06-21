@@ -544,6 +544,10 @@ export interface Page {
              * Pause the marquee when the user hovers over it
              */
             pauseOnHover?: boolean | null;
+            /**
+             * Show logos in muted grayscale, revealing full color on hover. Disable to show logos in full color always.
+             */
+            colorizeOnHover?: boolean | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'logoMarquee';
@@ -1166,6 +1170,7 @@ export interface PagesSelect<T extends boolean = true> {
               logoSize?: T;
               speed?: T;
               pauseOnHover?: T;
+              colorizeOnHover?: T;
               id?: T;
               blockName?: T;
             };
@@ -1480,9 +1485,9 @@ export interface SiteSetting {
            */
           text: string;
           /**
-           * URL the link points to (can be internal like /about or external like https://example.com)
+           * URL the link points to (can be internal like /about or external like https://example.com). Leave empty to render as a plain label.
            */
-          url: string;
+          url?: string | null;
           id?: string | null;
         }[]
       | null;

@@ -1,0 +1,163 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link "Rugexpert Jorka Ringv-if":
+          - /url: /
+        - generic [ref=e6]:
+          - link "Rugexpert Jorka Ringv-if":
+            - /url: /
+          - link "Rugexpert Jorka Ring" [ref=e7] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e8]: Rugexpert Jorka Ring
+      - navigation [ref=e11]:
+        - link "Home" [ref=e12] [cursor=pointer]:
+          - /url: /voor-particulieren
+        - link "Aanbod" [ref=e13] [cursor=pointer]:
+          - /url: /aanbod-particulier
+        - link "Over mij" [ref=e14] [cursor=pointer]:
+          - /url: /over-mij
+        - link "Resultaten" [ref=e15] [cursor=pointer]:
+          - /url: /voor-particulieren#resultaten
+        - link "Boek je gesprek in" [ref=e16] [cursor=pointer]:
+          - /url: /boek-je-gesprek-in
+  - main [ref=e17]:
+    - article [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e22]:
+          - img [ref=e24]
+          - generic [ref=e28]:
+            - heading "Van rugpatient naar partner" [level=1] [ref=e29]:
+              - text: Van rugpatient naar
+              - generic [ref=e31]: partner
+            - heading "Of je nu opnieuw wil lopen, actief wil zijn met je gezin of gewoon pijnvrij je dag wil doorkomen, samen werken we daar naartoe." [level=2] [ref=e32]
+            - link "boek je vrijblijvende gesprek met me in" [ref=e35] [cursor=pointer]:
+              - /url: /boek-je-gesprek-in
+        - heading "Aanbod" [level=1] [ref=e39]
+        - generic [ref=e42]:
+          - heading "1 op 1 rugtraject" [level=2] [ref=e43]
+          - paragraph [ref=e44]: In dit traject krijg je opnieuw meer grip op je rugklachten, zodat je niet langer constant moet nadenken over wat wel of niet kan. Je leert begrijpen wat jouw lichaam nodig heeft en ontdekt hoe kleine, haalbare aanpassingen al een groot verschil kunnen maken in je dagelijkse leven.
+          - paragraph [ref=e45]: Stap voor stap bouw je meer vertrouwen op in bewegen en belasten, waardoor je lichaam sterker, stabieler en veerkrachtiger wordt. Je leert beter omgaan met moeilijke dagen en weet hoe je klachten sneller kan opvangen, zonder paniek of frustratie.
+          - paragraph [ref=e46]: "Dit traject geeft je niet alleen oefeningen en tips, maar vooral de tools om zelfstandig sterker te worden in je aanpak:"
+          - list [ref=e47]:
+            - listitem [ref=e48]:
+              - text: –
+              - generic [ref=e49]: Minder beperkingen in werk, hobby’s en sociale activiteiten
+            - listitem [ref=e50]:
+              - text: –
+              - generic [ref=e51]: Praktische gewoontes die haalbaar blijven op lange termijn
+            - listitem [ref=e52]:
+              - text: –
+              - generic [ref=e53]: Je rug niet langer zien als beperking, maar als iets dat je kan ondersteunen in wat je wil doen
+            - listitem [ref=e54]:
+              - text: –
+              - generic [ref=e55]: Meer inzicht in je eigen rugklachten
+            - listitem [ref=e56]:
+              - text: –
+              - generic [ref=e57]: Een sterker lichaam dat beter bestand is tegen belasting
+            - listitem [ref=e58]:
+              - text: –
+              - generic [ref=e59]: Meer rust in je hoofd rond rugpijn
+          - paragraph [ref=e60]: Zodat jij opnieuw de regie neemt over je rug en alles uit het leven kan halen!
+        - paragraph [ref=e66]:
+          - link "laten we aan de slag gaan samen" [ref=e67] [cursor=pointer]:
+            - /url: /boek-je-gesprek-in
+        - heading "Hoe we werken?" [level=3] [ref=e71]
+        - generic [ref=e75]:
+          - generic [ref=e81]:
+            - figure [ref=e83]
+            - 'heading "Fase 1: Verlichten" [level=3] [ref=e84]'
+            - paragraph [ref=e85]: We brengen samen in kaart wat je klachten uitlokt en hoe ze ontstaan. Met kleine aanpassingen gaan we voor meer comfort en bewegingsvrijheid zodat je meer rust en minder frustratie ervaart in je dagelijkse leven.
+          - generic [ref=e91]:
+            - figure [ref=e93]
+            - 'heading "Fase 2 : Vooruit" [level=3] [ref=e94]'
+            - paragraph [ref=e95]: We bouwen gewoontes en kracht verder uit en gaan voor evolutie/vooruitgang. Je lichaam voelt sterker, stabieler en beter bestand tegen dagelijkse belasting.
+          - generic [ref=e101]:
+            - figure [ref=e103]
+            - 'heading "Fase 3: Vieren" [level=3] [ref=e104]'
+            - paragraph [ref=e105]: Durven nieuwe dingen te proberen en kunnen genieten van het leven, ondanks rugproblemen.
+        - heading "Op eigen tempo naar het leven volop beleven" [level=3] [ref=e109]
+        - generic [ref=e112]:
+          - generic [ref=e116]:
+            - heading "1 op 1 gesprek" [level=2] [ref=e117]
+            - paragraph [ref=e118]:
+              - text: Krijg meer duidelijkheid over je rugklachten en ontdek wat jouw lichaam nodig heeft om met meer rust, vertrouwen en minder pijn door het leven te gaan.
+              - text: Tijdens dit gesprek bekijken we samen waar je klachten vandaan komen en welke kleine aanpassingen meteen verschil kunnen maken. Zodat jij kan genieten van het leven zonder dat je rug je hierin remt.
+            - heading "Wat haal je eruit?" [level=3] [ref=e119]:
+              - strong [ref=e121]: Wat haal je eruit?
+            - list [ref=e122]:
+              - listitem [ref=e123]:
+                - text: –
+                - generic [ref=e124]: Meer inzicht in je rugklachten
+              - listitem [ref=e125]:
+                - text: –
+                - generic [ref=e126]: Praktische tips die direct toepasbaar zijn
+              - listitem [ref=e127]:
+                - text: –
+                - generic [ref=e128]: Meer grip op moeilijke momenten of opflakkeringen
+              - listitem [ref=e129]:
+                - text: –
+                - generic [ref=e130]: Meer vertrouwen in bewegen en belasten
+              - listitem [ref=e131]:
+                - text: –
+                - generic [ref=e132]: Concrete stappen richting minder hinder in het dagelijkse leven
+          - img [ref=e135]
+        - generic [ref=e138]:
+          - heading "1 op 1 ergonomie sessie" [level=2] [ref=e139]
+          - paragraph [ref=e140]: Worstel je tijdens het werk regelmatig met rugklachten, spanning of vermoeidheid? Dan helpt een 1-op-1 ergonomiesessie je om opnieuw comfortabeler, energieker en met meer gemak te werken.
+          - paragraph [ref=e141]: Dit is een praktische sessie, waarbij we niet alleen praten, maar vooral oefenen en uitproberen. Samen bekijken we jouw werkhouding, bewegingen en typische werkhandelingen, en testen we meteen hoe kleine aanpassingen in houding en techniek een groot verschil kunnen maken in hoe je lichaam aanvoelt.
+          - paragraph [ref=e142]: "Tijdens deze sessie leer je sneller herkennen wanneer spanning opbouwt en hoe je daar op een eenvoudige en haalbare manier op kan reageren in je werk: door je houding, beweging of werkwijze slim aan te passen."
+          - paragraph [ref=e143]: "De grootste winst zit in wat je daarna dagelijks begint te voelen:"
+          - list [ref=e144]:
+            - listitem [ref=e145]:
+              - text: –
+              - generic [ref=e146]: Meer comfort tijdens het werken
+            - listitem [ref=e147]:
+              - text: –
+              - generic [ref=e148]: Minder spanning in rug, nek en schouders
+            - listitem [ref=e149]:
+              - text: –
+              - generic [ref=e150]: Meer energie op het einde van de werkdag
+            - listitem [ref=e151]:
+              - text: –
+              - generic [ref=e152]: Minder vermoeidheid door langdurige of herhaalde houdingen
+            - listitem [ref=e153]:
+              - text: –
+              - generic [ref=e154]: Meer inzicht in hoe jouw lichaam reageert op werkbelasting
+            - listitem [ref=e155]:
+              - text: –
+              - generic [ref=e156]: Zelf je werkhouding en werkplek kunnen bijsturen, waar je ook werkt
+            - listitem [ref=e157]:
+              - text: –
+              - generic [ref=e158]: Meer rust, controle en vertrouwen tijdens drukke werkdagen
+          - paragraph [ref=e159]: Zo wordt werken minder belastend voor je lichaam en hou je meer energie over voor alles wat naast je werk belangrijk is.
+        - generic [ref=e161]:
+          - img [ref=e163]
+          - generic [ref=e169]:
+            - paragraph [ref=e170]: Wil je terug kunnen doen wat je graag doet, met vertrouwen in je lichaam, zonder dat je rug je tegenhoudt?
+            - paragraph [ref=e171]:
+              - text: "Contactgegevens:"
+              - text: ✉
+              - link "jorka.ring@gmail.com" [ref=e172] [cursor=pointer]:
+                - /url: mailto:jorka.ring@gmail.com
+            - paragraph [ref=e173]: ☎ 0479730195
+        - paragraph [ref=e177]:
+          - link "Plan je kennismakingsgesprek in" [ref=e178] [cursor=pointer]:
+            - /url: /boek-je-gesprek-in
+  - contentinfo [ref=e181]:
+    - generic [ref=e182]:
+      - navigation "Main" [ref=e184]:
+        - list [ref=e186]:
+          - listitem [ref=e187]:
+            - link "Algemene voorwaarden" [ref=e188] [cursor=pointer]:
+              - /url: /algemene-voorwaarden
+              - generic [ref=e189]: Algemene voorwaarden
+          - listitem [ref=e190]:
+            - link "Privacybeleid" [ref=e191] [cursor=pointer]:
+              - /url: /privacybeleid
+              - generic [ref=e192]: Privacybeleid
+          - listitem [ref=e193]:
+            - link "Cookiebeleid" [ref=e194] [cursor=pointer]:
+              - /url: /cookiebeleid
+              - generic [ref=e195]: Cookiebeleid
+      - paragraph [ref=e197]: © 2026 jorkaring

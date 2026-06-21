@@ -1,0 +1,71 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link "Rugexpert Jorka Ringv-if":
+          - /url: /
+        - generic [ref=e6]:
+          - link "Rugexpert Jorka Ringv-if":
+            - /url: /
+          - link "Rugexpert Jorka Ring" [ref=e7] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e8]: Rugexpert Jorka Ring
+      - navigation [ref=e11]:
+        - link "Home" [ref=e12] [cursor=pointer]:
+          - /url: /voor-particulieren
+        - link "Aanbod" [ref=e13] [cursor=pointer]:
+          - /url: /voor-particulieren#aanbod
+        - link "Over mij" [ref=e14] [cursor=pointer]:
+          - /url: /over-mij
+        - link "Resultaten" [ref=e15] [cursor=pointer]:
+          - /url: /voor-particulieren#resultaten
+        - link "Contact" [ref=e16] [cursor=pointer]:
+          - /url: "#contact"
+        - link "Boek je gesprek in" [ref=e17] [cursor=pointer]:
+          - /url: /boek-je-gesprek-in
+  - main [ref=e18]:
+    - article [ref=e20]:
+      - generic [ref=e23]:
+        - generic [ref=e25]:
+          - generic [ref=e27]:
+            - heading "Ben je klaar om alles uit het leven te halen en je rug je leven niet te laten bepalen?" [level=2] [ref=e28]
+            - paragraph [ref=e29]: Boek dan je vrijblijvende kennismakingsgesprek met me in via de knop hieronder.
+            - paragraph [ref=e30]: "Nog vragen of bedenkingen? Neem gerust eerst contact met me op:"
+            - paragraph [ref=e31]:
+              - img "at" [ref=e32]:
+                - img [ref=e33]
+              - link "jorka.ring@gmail.com" [ref=e36] [cursor=pointer]:
+                - /url: mailto:jorka.ring@gmail.com
+            - paragraph [ref=e37]:
+              - img "phone" [ref=e38]:
+                - img [ref=e39]
+              - text: "0479730195"
+            - paragraph [ref=e41]:
+              - link "instagram" [ref=e42] [cursor=pointer]:
+                - /url: https://www.instagram.com/jorkaring/
+                - img "instagram" [ref=e43]:
+                  - img [ref=e44]
+              - link "linkedin" [ref=e47] [cursor=pointer]:
+                - /url: https://www.linkedin.com/in/jorka-ring-35972b333/
+                - img "linkedin" [ref=e48]:
+                  - img [ref=e49]
+          - link "Boek je vrijblijvend gesprek in" [ref=e54] [cursor=pointer]:
+            - /url: /boek-je-gesprek-in
+        - img [ref=e57]
+  - contentinfo [ref=e58]:
+    - generic [ref=e59]:
+      - navigation "Main" [ref=e61]:
+        - list [ref=e63]:
+          - listitem [ref=e64]:
+            - link "Algemene voorwaarden" [ref=e65] [cursor=pointer]:
+              - /url: /algemene-voorwaarden
+              - generic [ref=e66]: Algemene voorwaarden
+          - listitem [ref=e67]:
+            - link "Privacybeleid" [ref=e68] [cursor=pointer]:
+              - /url: /privacybeleid
+              - generic [ref=e69]: Privacybeleid
+          - listitem [ref=e70]:
+            - link "Cookiebeleid" [ref=e71] [cursor=pointer]:
+              - /url: /cookiebeleid
+              - generic [ref=e72]: Cookiebeleid
+      - paragraph [ref=e74]: © 2026 jorkaring

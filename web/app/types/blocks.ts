@@ -253,6 +253,7 @@ export interface LogoMarqueeBlock {
   logoSize?: 'small' | 'medium' | 'large'
   speed?: 'slow' | 'medium' | 'fast'
   pauseOnHover?: boolean
+  colorizeOnHover?: boolean
 }
 
 export interface NewsletterSignupBlock {

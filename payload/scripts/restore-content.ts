@@ -442,7 +442,11 @@ function remapMediaIds(content: unknown[], mediaIdMap: Map<number, number>): unk
       // restored (file missing in backup), null the reference so we don't
       // violate foreign keys against stale production IDs.
       if (
-        (key === 'image' || key === 'backgroundImage' || key === 'logo' || key === 'favicon') &&
+        (key === 'image' ||
+          key === 'backgroundImage' ||
+          key === 'logo' ||
+          key === 'favicon' ||
+          key === 'pdf') &&
         typeof value === 'number'
       ) {
         return mediaIdMap.get(value) ?? null

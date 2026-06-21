@@ -220,9 +220,8 @@ export const SiteSettings: GlobalConfig = {
                     {
                       name: 'url',
                       type: 'text',
-                      required: true,
                       admin: {
-                        description: 'URL the link points to (can be internal like /about or external like https://example.com)',
+                        description: 'URL the link points to (can be internal like /about or external like https://example.com). Leave empty to render as a plain label.',
                       },
                     },
                   ],

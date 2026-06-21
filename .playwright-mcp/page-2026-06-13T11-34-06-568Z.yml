@@ -1,0 +1,167 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link "Rugexpert Jorka Ringv-if":
+          - /url: /
+        - generic [ref=e6]:
+          - link "Rugexpert Jorka Ringv-if":
+            - /url: /
+          - link "Rugexpert Jorka Ring" [ref=e7] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e8]: Rugexpert Jorka Ring
+      - navigation [ref=e11]:
+        - link "Home" [ref=e12] [cursor=pointer]:
+          - /url: /voor-bedrijven
+        - link "Aanbod" [ref=e13] [cursor=pointer]:
+          - /url: "#aanbod"
+        - link "Over mij" [ref=e14] [cursor=pointer]:
+          - /url: /over-mij
+        - link "Reviews" [ref=e15] [cursor=pointer]:
+          - /url: "#reviews"
+        - link "Voor particulieren" [ref=e16] [cursor=pointer]:
+          - /url: /voor-particulieren
+        - link "Contact" [ref=e17] [cursor=pointer]:
+          - /url: "#contact"
+  - main [ref=e18]:
+    - article [ref=e20]:
+      - generic [ref=e21]:
+        - generic [ref=e23]:
+          - img [ref=e25]
+          - generic [ref=e29]:
+            - heading "Minder uitval, meer efficiëntie en tevreden medewerkers door een gezonde ergonomische omgeving" [level=2] [ref=e30]
+            - generic [ref=e32]:
+              - link "Aanbod" [ref=e33] [cursor=pointer]:
+                - /url: "#aanbod"
+              - link "Neem contact op" [ref=e34] [cursor=pointer]:
+                - /url: "#contact"
+        - generic [ref=e38]:
+          - generic [ref=e41]:
+            - generic [ref=e42]:
+              - generic [ref=e43]: "0"
+              - generic [ref=e44]: +
+            - generic [ref=e45]: Jaren Ervaring
+            - generic [ref=e46]: 0+ Jaren Ervaring
+          - generic [ref=e49]:
+            - generic [ref=e50]:
+              - generic [ref=e51]: "0"
+              - generic [ref=e52]: +
+            - generic [ref=e53]: Medewerkers geholpen
+            - generic [ref=e54]: 0+ Medewerkers geholpen
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - generic [ref=e59]: "0"
+              - generic [ref=e60]: +
+            - generic [ref=e61]: Bedrijven ondersteund
+            - generic [ref=e62]: 0+ Bedrijven ondersteund
+        - marquee "Logo carousel" [ref=e64]
+        - generic [ref=e68]:
+          - generic [ref=e72]:
+            - heading "Van uitval en onderbrekingen naar een sterk en veerkrachtig team" [level=2] [ref=e73]
+            - paragraph [ref=e74]
+            - paragraph [ref=e75]: Wil jij ook een lager ziekteverzuim, hogere productiviteit en meer werkplezier op de werkvloer?
+            - paragraph [ref=e76]: Maar merk je dat de continuïteit binnen je bedrijf onder druk komt te staan doordat medewerkers regelmatig uitvallen met rugklachten?
+            - paragraph [ref=e77]: Daardoor stijgt de werkdruk voor collega’s die moeten inspringen, raken teams overbelast en daalt de tevredenheid op de werkvloer. Je blijft brandjes blussen, terwijl de klachten zich blijven opstapelen.
+            - paragraph [ref=e78]: Terwijl medewerkers hun gezondheid niet zouden mogen opofferen om hun job te kunnen doen.
+            - paragraph [ref=e80]: Daarom geloof ik niet in eindeloze houdingslessen, honderden aanpassingen of dure ergonomische gadgets.
+            - paragraph [ref=e81]: Wel in duidelijke inzichten, direct toepasbare tips en workshops die volledig afgestemd zijn op jouw medewerkers en hun dagelijkse taken.
+            - paragraph [ref=e82]: Zo wordt het aanpakken van rugklachten geen extra belasting, maar een vanzelfsprekend onderdeel van de dagelijkse werking.
+            - paragraph [ref=e83]: Medewerkers voelen zich sterker, zekerder en minder beperkt, en jouw bedrijf draait verder zonder onnodige onderbrekingen.
+          - img [ref=e87]
+        - heading "Aanbod" [level=2] [ref=e91]
+        - generic [ref=e93]:
+          - generic [ref=e97]:
+            - link "Workshop ergonomie in je bedrijf Medewerkers krijgen meer inzicht in hun eigen werkhouding en gewoontes, waardoor ze sneller herkennen wat spanning en klachten veroorzaakt. Ze leren praktische en haalbare aanpassingen die direct toepasbaar zijn op de werkvloer, met als resultaat minder rug-, nek- en polsklachten, minder uitval en meer energie doorheen de werkdag." [ref=e98] [cursor=pointer]:
+              - /url: /aanbod-bedrijf#workshop-ergonomie-in-je-bedrijf
+              - generic [ref=e99]:
+                - heading "Workshop ergonomie in je bedrijf" [level=2] [ref=e100]
+                - paragraph [ref=e101]: Medewerkers krijgen meer inzicht in hun eigen werkhouding en gewoontes, waardoor ze sneller herkennen wat spanning en klachten veroorzaakt. Ze leren praktische en haalbare aanpassingen die direct toepasbaar zijn op de werkvloer, met als resultaat minder rug-, nek- en polsklachten, minder uitval en meer energie doorheen de werkdag.
+            - 'link "Lezing ‘Ergonomie in je werkdag: praktisch, klantgericht en met plezier’ Medewerkers begrijpen waarom klachten steeds terugkomen en hoe ze daar zelf eenvoudig invloed op kunnen uitoefenen. Ze gaan naar huis met duidelijke inzichten en praktische tools om hun werkdag comfortabeler te maken, zodat ze met minder klachten, meer gemak en meer werkplezier aan de slag gaan." [ref=e102] [cursor=pointer]':
+              - /url: /aanbod-bedrijf#lezing-ergonomie-in-je-werkdag
+              - generic [ref=e103]:
+                - 'heading "Lezing ‘Ergonomie in je werkdag: praktisch, klantgericht en met plezier’" [level=2] [ref=e104]'
+                - paragraph [ref=e105]: Medewerkers begrijpen waarom klachten steeds terugkomen en hoe ze daar zelf eenvoudig invloed op kunnen uitoefenen. Ze gaan naar huis met duidelijke inzichten en praktische tools om hun werkdag comfortabeler te maken, zodat ze met minder klachten, meer gemak en meer werkplezier aan de slag gaan.
+            - paragraph [ref=e106]:
+              - link "Bekijk wat bij jou past" [ref=e107] [cursor=pointer]:
+                - /url: /aanbod-bedrijf
+          - img [ref=e110]
+        - heading "Minder rugklachten, meer werkplezier en een efficiëntere werkvloer" [level=3] [ref=e114]
+        - region "Testimonials" [ref=e116]:
+          - generic [ref=e117]:
+            - generic: “
+            - blockquote [ref=e121]: “Ik leerde vandaag kleine trucs die me echt vooruit gaan helpen in het werk!”
+            - generic [ref=e124]:
+              - button "Previous testimonial" [ref=e125] [cursor=pointer]:
+                - img [ref=e126]
+              - list [ref=e128]:
+                - listitem [ref=e129]:
+                  - button [ref=e130] [cursor=pointer]
+                - listitem [ref=e131]:
+                  - button [ref=e132] [cursor=pointer]
+                - listitem [ref=e133]:
+                  - button [ref=e134] [cursor=pointer]
+              - generic [ref=e135]: 01/03
+              - button "Next testimonial" [ref=e136] [cursor=pointer]:
+                - img [ref=e137]
+        - generic [ref=e140]:
+          - generic [ref=e142]:
+            - generic [ref=e144]:
+              - heading "Wie ben ik" [level=2] [ref=e145]
+              - paragraph [ref=e146]: Ik streef ernaar dat bedrijven niet voortdurend moeten reageren op rugklachten en uitval, maar kunnen bouwen op medewerkers die duurzaam inzetbaar blijven.
+              - paragraph [ref=e147]:
+                - text: "Ik zie nog te vaak gebeuren dat rugklachten op de werkvloer worden aangepakt met losse oplossingen: een ergonomische tool, een houdingsposter of een eenmalige opleiding."
+                - text: Goed bedoeld, maar vaak zonder blijvende impact op hoe medewerkers werken, bewegen en omgaan met belasting tijdens hun job.
+              - paragraph [ref=e148]: Daardoor blijven klachten terugkomen, stijgt de werkdruk binnen teams en gaat kostbare energie verloren aan het opvangen van uitval en onderbrekingen.
+              - paragraph [ref=e149]: Daarom geloof ik niet in ingewikkelde regels, perfecte houdingen of dure ergonomische snufjes.
+              - paragraph [ref=e150]: Wel in praktische inzichten en haalbare veranderingen die aansluiten bij de realiteit van de werkvloer. Zodat medewerkers slimmer leren omgaan met belasting, fysieke klachten verminderen en bedrijven kunnen rekenen op meer continuïteit, productiviteit en werkbaarheid.
+              - paragraph [ref=e151]:
+                - text: Geen tijdelijke oplossingen of symptoombestrijding.
+                - text: Wél duurzame verandering die zowel medewerkers als de werking van het bedrijf versterkt.
+              - paragraph [ref=e152]: Zodat mensen met meer energie en een glimlach kunnen werken, en bedrijven minder tijd verliezen aan klachten en uitval.
+            - link "Leer me kennen" [ref=e155] [cursor=pointer]:
+              - /url: /over-mij
+          - img [ref=e158]
+        - generic [ref=e162]:
+          - generic [ref=e164]:
+            - generic [ref=e166]:
+              - heading "Wil jij ook een lager ziekteverzuim, hogere productiviteit en meer werkplezier op de werkvloer?" [level=2] [ref=e167]
+              - paragraph [ref=e168]: Neem gerust contact op via e-mail of plan een vrijblijvende videocall in. Samen bekijken we hoe ergonomie, beweging en duurzame gewoontes kunnen bijdragen aan een gezonde en productieve werkvloer.
+              - paragraph [ref=e169]: "Neem gerust contact op:"
+              - paragraph [ref=e170]:
+                - img "at" [ref=e171]:
+                  - img [ref=e172]
+                - link "jorka.ring@gmail.com" [ref=e175] [cursor=pointer]:
+                  - /url: mailto:jorka.ring@gmail.com
+              - paragraph [ref=e176]:
+                - img "phone" [ref=e177]:
+                  - img [ref=e178]
+                - text: "0479730195"
+              - paragraph [ref=e180]:
+                - link "instagram" [ref=e181] [cursor=pointer]:
+                  - /url: https://www.instagram.com/jorkaring/
+                  - img "instagram" [ref=e182]:
+                    - img [ref=e183]
+                - link "linkedin" [ref=e186] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/in/jorka-ring-35972b333/
+                  - img "linkedin" [ref=e187]:
+                    - img [ref=e188]
+            - link "Boek je vrijblijvend gesprek in" [ref=e193] [cursor=pointer]:
+              - /url: /boek-je-gesprek-in
+          - img [ref=e196]
+  - contentinfo [ref=e197]:
+    - generic [ref=e198]:
+      - navigation "Main" [ref=e200]:
+        - list [ref=e202]:
+          - listitem [ref=e203]:
+            - link "Algemene voorwaarden" [ref=e204] [cursor=pointer]:
+              - /url: /algemene-voorwaarden
+              - generic [ref=e205]: Algemene voorwaarden
+          - listitem [ref=e206]:
+            - link "Privacybeleid" [ref=e207] [cursor=pointer]:
+              - /url: /privacybeleid
+              - generic [ref=e208]: Privacybeleid
+          - listitem [ref=e209]:
+            - link "Cookiebeleid" [ref=e210] [cursor=pointer]:
+              - /url: /cookiebeleid
+              - generic [ref=e211]: Cookiebeleid
+      - paragraph [ref=e213]: © 2026 jorkaring

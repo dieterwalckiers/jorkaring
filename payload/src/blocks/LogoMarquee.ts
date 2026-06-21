@@ -69,5 +69,13 @@ export const LogoMarquee: Block = {
         description: 'Pause the marquee when the user hovers over it',
       },
     },
+    {
+      name: 'colorizeOnHover',
+      type: 'checkbox',
+      defaultValue: true,
+      admin: {
+        description: 'Show logos in muted grayscale, revealing full color on hover. Disable to show logos in full color always.',
+      },
+    },
   ],
 }
