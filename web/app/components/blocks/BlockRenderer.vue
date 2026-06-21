@@ -60,6 +60,12 @@ defineProps<{
   margin-block-start: 0;
 }
 
+/* A leading anchor is transparent: the block after it becomes the real first
+   child, so it must not inherit a section break. */
+.block-wrap[data-block-type="anchor"]:first-child + .block-wrap {
+  margin-block-start: 0;
+}
+
 /* When the editor placed a spacer, that is the intended gap — don't add more */
 .block-wrap[data-block-type="spacer"] + .block-wrap {
   margin-block-start: 0;
