@@ -7,8 +7,8 @@ services:
     plan: free
     region: frankfurt
     rootDir: payload
-    dockerfilePath: ./payload/Dockerfile
-    dockerContext: ./payload
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     healthCheckPath: /admin
     envVars:
       - key: DATABASE_URL
