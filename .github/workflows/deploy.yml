@@ -70,6 +70,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuxt-
 
+      # The CMS sleeps when idle (Render free plan); wait until the API answers
+      # with JSON, since a waking service may serve an HTML loading page first.
+      - name: Wake CMS
+        env:
+          PAYLOAD_API_URL: ${{ secrets.PAYLOAD_API_URL }}
+        run: |
+          for i in $(seq 30); do
+            curl -sS --max-time 30 "$PAYLOAD_API_URL/pages?limit=1" | grep -q '"docs"' && exit 0
+            sleep 10
+          done
+          echo "CMS did not wake up" >&2; exit 1
+
       - name: Download media from Payload
         working-directory: web
         env:
@@ -85,7 +97,7 @@ jobs:
           NUXT_PAYLOAD_API_URL: ${{ secrets.PAYLOAD_API_URL }}
           NUXT_PUBLIC_PAYLOAD_API_URL: ${{ secrets.PAYLOAD_API_URL }}
           # Media files are bundled into the static site at public/api/media/file/,
-          # so media URLs should be same-origin (no Railway domain prefix)
+          # so media URLs should be same-origin (no CMS domain prefix)
           NUXT_PUBLIC_STATIC_MEDIA: 'true'
           NODE_OPTIONS: '--max-old-space-size=8192'
         run: pnpm run generate

@@ -2,6 +2,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { s3Storage } from '@payloadcms/storage-s3'
 import { lexicalEditor, UploadFeature, BlocksFeature } from '@payloadcms/richtext-lexical'
 import { TextColorFeature } from './features/text-color'
 import { FontSizeFeature } from './features/font-size'
@@ -53,6 +54,25 @@ export default buildConfig({
   },
   collections: [Pages, Media, Users],
   globals: [SiteSettings],
+  plugins: [
+    // Off without S3_BUCKET, so local dev keeps writing to public/uploads
+    s3Storage({
+      enabled: Boolean(process.env.S3_BUCKET),
+      collections: { media: true },
+      bucket: process.env.S3_BUCKET || '',
+      config: {
+        endpoint: process.env.S3_ENDPOINT,
+        region: 'auto',
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+        },
+        // R2 rejects the AWS SDK's default trailing checksums
+        requestChecksumCalculation: 'WHEN_REQUIRED',
+        responseChecksumValidation: 'WHEN_REQUIRED',
+      },
+    }),
+  ],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL || '',

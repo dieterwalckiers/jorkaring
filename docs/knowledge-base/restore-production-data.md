@@ -1,12 +1,26 @@
 # Restoring production data to local
 
-How to pull the current production content (pages, media metadata, site settings) from Railway into your local Docker stack. For the reverse (local → prod), see [restore-local-data-to-production.md](./restore-local-data-to-production.md).
+How to pull the current production content (pages, media metadata, site settings) from production (Render + Neon + R2) into your local Docker stack. For the reverse (local → prod), see [restore-local-data-to-production.md](./restore-local-data-to-production.md).
 
 ## Prerequisites
 
 - Local stack running: `docker compose up`
-- Railway CLI installed and logged in: `railway login`
-- Project linked: `railway link` (the project is `jorkaring`; any service in it is fine — the scripts pass `--service jorkaring` explicitly when reading Railway variables)
+- `~/.config/jorkaring/prod.env` filled in (see below)
+
+## `~/.config/jorkaring/prod.env`
+
+The `--production` paths read production values from this file (outside the repo, `chmod 600`; override the path with `PROD_ENV=...`). Same keys as the Render service:
+
+```sh
+DATABASE_URL=postgresql://...neon.tech/neondb?sslmode=require   # Neon direct (non-pooled) string
+PAYLOAD_PUBLIC_SERVER_URL=https://jorkaring-cms.onrender.com
+S3_BUCKET=jorkaring-media
+S3_ENDPOINT=https://<accountid>.r2.cloudflarestorage.com
+S3_ACCESS_KEY_ID=...
+S3_SECRET_ACCESS_KEY=...
+GITHUB_TOKEN=...
+GITHUB_REPO=dieterwalckiers/jorkaring
+```
 
 ## Happy path
 
@@ -20,10 +34,8 @@ There are two scripts:
 ./restore-content.sh prod-YYYYMMDD-HHMMSS --force
 ```
 
-If your service is named something other than `jorkaring`, export `RAILWAY_SERVICE=<name>` before running.
-
 The export script (with `--production`):
-1. Pulls `DATABASE_PUBLIC_URL` and `PAYLOAD_PUBLIC_SERVER_URL` from the `jorkaring` Railway service and passes both into the payload container — the latter is required so generated media URLs target production rather than `localhost`
+1. Reads `DATABASE_URL` and `PAYLOAD_PUBLIC_SERVER_URL` from `prod.env` and passes both into the payload container (the latter so generated media URLs target production rather than `localhost`), after waking the CMS (Render free plan sleeps after 15 min idle; the first request takes about a minute)
 2. Dumps pages, media metadata, and site settings from the production DB into `backups/<name>/`
 3. Copies the local container's `payload/public/uploads/` into `backups/<name>/uploads/`, then walks every media doc (and each size variant) and downloads any file missing from the backup via its public `url`. The result is a self-contained backup with full media
 
@@ -44,27 +56,21 @@ Verify the frontend at `http://localhost:3201/` and the admin at `http://localho
 
 ## Troubleshooting
 
-### `Could not retrieve production DATABASE_PUBLIC_URL from Railway`
+### `prod.env not found` / `DATABASE_URL or PAYLOAD_PUBLIC_SERVER_URL missing`
 
-`export-content.sh` runs `railway variables --service "$RAILWAY_SERVICE" --json` (default `RAILWAY_SERVICE=jorkaring`) and greps for `DATABASE_PUBLIC_URL`. If it comes back empty:
+Create or complete `~/.config/jorkaring/prod.env` (see above). The values are also in the Render dashboard (service `jorkaring-cms`, Environment) and the Neon console (direct connection string).
 
-- Confirm the variable exists: `railway variables --service jorkaring --json | grep DATABASE_PUBLIC_URL`. It should — setting it requires enabling public networking on the Postgres service and copying the URL onto the `jorkaring` service.
-- If the service is named something else in your project, override: `RAILWAY_SERVICE=<name> ./export-content.sh … --production`.
-- As a last resort, build the URL manually from the Postgres service's `RAILWAY_TCP_PROXY_DOMAIN`, `RAILWAY_TCP_PROXY_PORT`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` and pass it directly:
+### `CMS did not wake up`
 
-  ```bash
-  docker compose exec -T \
-    -e DATABASE_URL="postgresql://payload:<password>@<proxy-domain>:<proxy-port>/payload" \
-    payload pnpm export:content prod-$(date +%Y%m%d-%H%M%S)
-  ```
+The script polls `<PAYLOAD_PUBLIC_SERVER_URL>/api/pages?limit=1` for 5 minutes. Check the Render dashboard for a failed deploy or a suspended free service (750 instance hours per month per workspace).
 
 ### `⚠ Skipping "<filename>": file not found in backup` (during restore)
 
 `export-content.sh --production` is supposed to make this unreachable for prod-sourced backups: after copying local uploads, it iterates every media doc and `fetch()`es any missing file from its public URL into the backup dir. If a restore still warns about missing files, the export step almost certainly logged a corresponding `⚠ Failed to fetch …` or `⚠ Error fetching …` line — re-read that output. Common causes:
 
-- **Production volume actually missing the file** (HTTP 404 from `https://jorkaring-production.up.railway.app/api/media/file/<filename>`). The DB row is real but the file isn't on disk — typically a previously-broken upload, or a file that pre-dates the Railway volume mount and was lost at the redeploy that introduced it. Fix it on production (re-upload via the admin) and re-export, or accept the broken reference locally.
-- **`PAYLOAD_PUBLIC_SERVER_URL` not set on the `jorkaring` Railway service** (or returned empty by `railway variables`). Without it the export-script env var falls back to localhost, generated media URLs point at the local container, and `fetch()` returns 404. Verify with `railway variables --service jorkaring --json | grep PAYLOAD_PUBLIC_SERVER_URL` — should be `https://jorkaring-production.up.railway.app` (or the current public domain).
-- **Container can't reach the public domain** (network policy, DNS). Sanity-check with `docker compose exec payload wget -q --spider https://jorkaring-production.up.railway.app/api/media/file/<filename>; echo $?` (0 = ok).
+- **R2 bucket actually missing the file** (HTTP 404 from `<PAYLOAD_PUBLIC_SERVER_URL>/api/media/file/<filename>`). The DB row is real but the object isn't in `jorkaring-media`, typically a previously-broken upload. Fix it on production (re-upload via the admin) and re-export, or accept the broken reference locally.
+- **Wrong `PAYLOAD_PUBLIC_SERVER_URL` in `prod.env`**: generated media URLs point somewhere else and `fetch()` fails. It must be the Render origin, e.g. `https://jorkaring-cms.onrender.com`.
+- **Container can't reach the public domain** (network policy, DNS). Sanity-check with `docker compose exec payload wget -q --spider <PAYLOAD_PUBLIC_SERVER_URL>/api/media/file/<filename>; echo $?` (0 = ok).
 
 If you genuinely want to restore with the missing files left as `null` references, the existing fallback still applies: `restore-content.ts` skips media with no file on disk, and `remapMediaIds` rewrites any dangling references to `null` so foreign keys don't blow up.
 
@@ -88,5 +94,5 @@ The restore script logs `[Deploy Hook] Skipping: GITHUB_TOKEN or GITHUB_REPO not
 
 - `export-content.sh`, `restore-content.sh` — shell wrappers
 - `payload/scripts/export-content.ts`, `payload/scripts/restore-content.ts` — actual logic
-- `payload/src/collections/Media.ts` — upload config (`staticDir: './public/uploads'`)
+- `payload/src/collections/Media.ts` — upload config (`staticDir: './public/uploads'` locally; R2 via `@payloadcms/storage-s3` in `payload.config.ts` when `S3_BUCKET` is set)
 - `.github/workflows/deploy.yml` — the `pnpm run download-media` step that bundles media into the static build

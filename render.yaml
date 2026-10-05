@@ -1,0 +1,39 @@
+# Render Blueprint for the Payload CMS. Values for sync:false keys are
+# entered once in the Render dashboard when the Blueprint is created.
+services:
+  - type: web
+    name: jorkaring-cms
+    runtime: docker
+    plan: free
+    region: frankfurt
+    rootDir: payload
+    dockerfilePath: ./payload/Dockerfile
+    dockerContext: ./payload
+    healthCheckPath: /admin
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: PAYLOAD_SECRET
+        sync: false
+      - key: PAYLOAD_PUBLIC_SERVER_URL
+        sync: false
+      - key: PREVIEW_URL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: GITHUB_REPO
+        sync: false
+      - key: PAYLOAD_ADMIN_EMAIL
+        sync: false
+      - key: PAYLOAD_ADMIN_PASSWORD
+        sync: false
+      - key: S3_BUCKET
+        sync: false
+      - key: S3_ENDPOINT
+        sync: false
+      - key: S3_ACCESS_KEY_ID
+        sync: false
+      - key: S3_SECRET_ACCESS_KEY
+        sync: false

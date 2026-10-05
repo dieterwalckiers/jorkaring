@@ -5,10 +5,9 @@
 BACKUP_NAME=""
 PRODUCTION=false
 
-# Railway service that hosts the Payload app (where DATABASE_PUBLIC_URL is
-# set). Override via the RAILWAY_SERVICE env var if your service is named
-# differently or if `railway link` happens to point at the Postgres service.
-RAILWAY_SERVICE="${RAILWAY_SERVICE:-jorkaring}"
+# Production values (DATABASE_URL, PAYLOAD_PUBLIC_SERVER_URL, ...) live
+# outside the repo. Override the path via PROD_ENV.
+PROD_ENV="${PROD_ENV:-$HOME/.config/jorkaring/prod.env}"
 
 # Parse arguments
 for arg in "$@"; do
@@ -28,28 +27,29 @@ done
 BACKUP_NAME="${BACKUP_NAME:-backup-$(date +%Y%m%d-%H%M%S)}"
 
 if [ "$PRODUCTION" = true ]; then
-  # Fetch production DATABASE_PUBLIC_URL and PAYLOAD_PUBLIC_SERVER_URL from
-  # Railway. The latter is needed so Payload generates media URLs that point at
-  # the production server — without it, URLs come back as localhost and the
-  # missing-file fetch step in export-content.ts can't reach the real files.
-  PROD_VARS_JSON=$(railway variables --service "$RAILWAY_SERVICE" --json 2>/dev/null)
-  PROD_DB_URL=$(echo "$PROD_VARS_JSON" | grep -o '"DATABASE_PUBLIC_URL": "[^"]*"' | cut -d'"' -f4)
-  PROD_PUBLIC_URL=$(echo "$PROD_VARS_JSON" | grep -o '"PAYLOAD_PUBLIC_SERVER_URL": "[^"]*"' | cut -d'"' -f4)
+  # PAYLOAD_PUBLIC_SERVER_URL is needed so Payload generates media URLs that
+  # point at the production server; export-content.ts fetches the files there.
+  if [ ! -f "$PROD_ENV" ]; then
+    echo "❌ $PROD_ENV not found (see docs/knowledge-base/restore-production-data.md)"
+    exit 1
+  fi
+  . "$PROD_ENV"
+  PROD_DB_URL="$DATABASE_URL"
+  PROD_PUBLIC_URL="$PAYLOAD_PUBLIC_SERVER_URL"
 
-  if [ -z "$PROD_DB_URL" ]; then
-    echo "❌ Could not retrieve production DATABASE_PUBLIC_URL from Railway"
-    echo ""
-    echo "Make sure you have:"
-    echo "  1. Railway CLI installed and logged in (railway login)"
-    echo "  2. Linked to your project (railway link)"
-    echo "  3. DATABASE_PUBLIC_URL set on your payload service"
-    echo "     (Enable public networking on your Postgres service in Railway dashboard)"
+  if [ -z "$PROD_DB_URL" ] || [ -z "$PROD_PUBLIC_URL" ]; then
+    echo "❌ DATABASE_URL or PAYLOAD_PUBLIC_SERVER_URL missing in $PROD_ENV"
     exit 1
   fi
 
-  if [ -z "$PROD_PUBLIC_URL" ]; then
-    echo "⚠️  Could not retrieve production PAYLOAD_PUBLIC_SERVER_URL — media file fetch may use localhost URLs and fail"
-  fi
+  # The CMS sleeps when idle; until it answers with JSON, file fetches would
+  # get Render's HTML loading page.
+  echo "⏳ Waking production CMS..."
+  for i in $(seq 30); do
+    curl -sS --max-time 30 "$PROD_PUBLIC_URL/api/pages?limit=1" | grep -q '"docs"' && break
+    [ "$i" = 30 ] && { echo "❌ CMS did not wake up"; exit 1; }
+    sleep 10
+  done
 
   echo "🚀 Exporting from PRODUCTION database"
   docker compose exec -T \
