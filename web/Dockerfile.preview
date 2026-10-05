@@ -47,7 +47,7 @@ COPY --from=builder /app/.output ./.output
 
 USER nuxtjs
 
-# Railway sets PORT dynamically
+# The host sets PORT (Render: 10000)
 ENV PORT=3000
 ENV HOST=0.0.0.0
 

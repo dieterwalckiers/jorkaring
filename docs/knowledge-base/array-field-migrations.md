@@ -76,7 +76,7 @@ local API.
 > API's SELECT references a column that doesn't exist yet and the migration dies
 > with `column _pages_v_version_menuItems.anchor does not exist`. It "works"
 > locally only because there each migration ran one-at-a-time while the config
-> still matched. Railway runs the batch against the final config, so it fails.
+> still matched. Production runs the batch against the final config, so it fails.
 > Raw SQL touches only the columns you name, so it is immune to this.
 
 ```ts

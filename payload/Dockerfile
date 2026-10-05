@@ -38,16 +38,15 @@ COPY --from=builder /app/src ./src
 COPY --from=builder /app/tsconfig.json ./tsconfig.json
 COPY --from=builder /app/next.config.mjs ./next.config.mjs
 
-# Create uploads directory. Container runs as root so a Railway-mounted
-# volume at /app/public/uploads (root-owned by default) is writable.
+# Local fallback when S3_BUCKET is unset; production stores media in Neon Object Storage
 RUN mkdir -p ./public/uploads
 
-# Railway sets PORT dynamically - use shell form to expand variable
+# The host sets PORT (Render: 10000); shell form below expands it
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
 EXPOSE 3000
 
-# Run migrations then start the app on Railway's PORT
+# Run migrations then start the app on $PORT
 # Note: 'next start' instead of 'npm run start' to avoid running migrate twice
 CMD ["sh", "-c", "npm run migrate && npx next start -p ${PORT:-3000}"]
