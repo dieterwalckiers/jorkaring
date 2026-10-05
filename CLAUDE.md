@@ -93,9 +93,9 @@ See `.env.example`. Key variables:
 
 ## Deployment
 
-- **CMS**: Render free web service `jorkaring-cms` (`render.yaml`, builds `payload/Dockerfile`), database on Neon, media in the private R2 bucket `jorkaring-media` via `@payloadcms/storage-s3` (enabled only when `S3_BUCKET` is set; local dev stores to `payload/public/uploads`). The service sleeps after 15 min idle; the first request after that takes about a minute.
+- **CMS**: Render free web service `jorkaring-cms` (`render.yaml`, builds `payload/Dockerfile`), database on Neon, media in the private Neon Object Storage bucket `jorkaring-media` (same Neon project, production branch) via `@payloadcms/storage-s3` (enabled only when `S3_BUCKET` is set; local dev stores to `payload/public/uploads`). The service sleeps after 15 min idle; the first request after that takes about a minute.
 - **Frontend**: Static site built by GitHub Actions and deployed to GitHub Pages (`.github/workflows/deploy.yml`). The workflow wakes the CMS first, then bundles all media into the build (`download-media`), so the live site never calls the CMS.
-- **Content backup**: `./export-content.sh` / `./restore-content.sh` (supports `--production`, reading production values from `~/.config/jorkaring/prod.env`, outside the repo). Production restores run inside the payload container and upload media straight to R2.
+- **Content backup**: `./export-content.sh` / `./restore-content.sh` (supports `--production`, reading production values from `~/.config/jorkaring/prod.env`, outside the repo). Production restores run inside the payload container and upload media straight to the bucket.
 
 ## Knowledge base
 

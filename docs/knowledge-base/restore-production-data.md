@@ -1,6 +1,6 @@
 # Restoring production data to local
 
-How to pull the current production content (pages, media metadata, site settings) from production (Render + Neon + R2) into your local Docker stack. For the reverse (local → prod), see [restore-local-data-to-production.md](./restore-local-data-to-production.md).
+How to pull the current production content (pages, media metadata, site settings) from production (Render + Neon Postgres + Neon Object Storage) into your local Docker stack. For the reverse (local → prod), see [restore-local-data-to-production.md](./restore-local-data-to-production.md).
 
 ## Prerequisites
 
@@ -16,7 +16,8 @@ The `--production` paths read production values from this file (outside the repo
 DATABASE_URL='postgresql://...neon.tech/neondb?sslmode=require&channel_binding=require'   # Neon direct (non-pooled)
 PAYLOAD_PUBLIC_SERVER_URL=https://jorkaring-cms.onrender.com
 S3_BUCKET=jorkaring-media
-S3_ENDPOINT=https://<accountid>.r2.cloudflarestorage.com
+S3_ENDPOINT='https://<branch-id>.storage.<cell>.eu-central-1.aws.neon.tech'   # AWS_ENDPOINT_URL_S3 from `neon env pull`
+S3_REGION=eu-central-1
 S3_ACCESS_KEY_ID=...
 S3_SECRET_ACCESS_KEY=...
 GITHUB_TOKEN=...
@@ -69,7 +70,7 @@ The script polls `<PAYLOAD_PUBLIC_SERVER_URL>/api/pages?limit=1` for 5 minutes. 
 
 `export-content.sh --production` is supposed to make this unreachable for prod-sourced backups: after copying local uploads, it iterates every media doc and `fetch()`es any missing file from its public URL into the backup dir. If a restore still warns about missing files, the export step almost certainly logged a corresponding `⚠ Failed to fetch …` or `⚠ Error fetching …` line — re-read that output. Common causes:
 
-- **R2 bucket actually missing the file** (HTTP 404 from `<PAYLOAD_PUBLIC_SERVER_URL>/api/media/file/<filename>`). The DB row is real but the object isn't in `jorkaring-media`, typically a previously-broken upload. Fix it on production (re-upload via the admin) and re-export, or accept the broken reference locally.
+- **Bucket actually missing the file** (HTTP 404 from `<PAYLOAD_PUBLIC_SERVER_URL>/api/media/file/<filename>`). The DB row is real but the object isn't in `jorkaring-media`, typically a previously-broken upload. Fix it on production (re-upload via the admin) and re-export, or accept the broken reference locally.
 - **Wrong `PAYLOAD_PUBLIC_SERVER_URL` in `prod.env`**: generated media URLs point somewhere else and `fetch()` fails. It must be the Render origin, e.g. `https://jorkaring-cms.onrender.com`.
 - **Container can't reach the public domain** (network policy, DNS). Sanity-check with `docker compose exec payload wget -q --spider <PAYLOAD_PUBLIC_SERVER_URL>/api/media/file/<filename>; echo $?` (0 = ok).
 
@@ -95,5 +96,5 @@ The restore script logs `[Deploy Hook] Skipping: GITHUB_TOKEN or GITHUB_REPO not
 
 - `export-content.sh`, `restore-content.sh` — shell wrappers
 - `payload/scripts/export-content.ts`, `payload/scripts/restore-content.ts` — actual logic
-- `payload/src/collections/Media.ts` — upload config (`staticDir: './public/uploads'` locally; R2 via `@payloadcms/storage-s3` in `payload.config.ts` when `S3_BUCKET` is set)
+- `payload/src/collections/Media.ts` — upload config (`staticDir: './public/uploads'` locally; Neon Object Storage via `@payloadcms/storage-s3` in `payload.config.ts` when `S3_BUCKET` is set)
 - `.github/workflows/deploy.yml` — the `pnpm run download-media` step that bundles media into the static build

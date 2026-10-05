@@ -1,6 +1,6 @@
 # Restoring local data to production
 
-How to push your local Payload content (pages, media, site settings) up to production (Neon database, R2 media) and kick off a frontend redeploy. This is the inverse of [restore-production-data.md](./restore-production-data.md).
+How to push your local Payload content (pages, media, site settings) up to production (Neon database and Neon Object Storage) and kick off a frontend redeploy. This is the inverse of [restore-production-data.md](./restore-production-data.md).
 
 ## When to use this
 
@@ -38,25 +38,25 @@ Two scripts, run from the repo root:
 1. Reads `DATABASE_URL`, `S3_*` and `GITHUB_*` from `prod.env`
 2. Runs `payload/scripts/restore-content.ts` **inside the payload container** (`docker compose exec -T -e DATABASE_URL=… -e S3_…=… payload pnpm restore:content …`), so file operations on `/app/public/uploads` happen as root and don't hit host-vs-container ownership issues. The TS script:
    - Migrates the prod schema
-   - Deletes all existing pages, media, and site settings (with `S3_*` set, the media files are deleted from R2 too)
+   - Deletes all existing pages, media, and site settings (with `S3_*` set, the media files are deleted from the bucket too)
    - Copies `backups/<name>/uploads/` into `/app/public/uploads` (inside the container)
-   - Recreates media via `payload.create({ filePath })`, which uploads each original and its sizes straight to R2; then pages (as drafts first), `menuFilter` page-to-page relationships, then republishes pages that were published in the source. Media IDs are remapped to the new auto-increment IDs
+   - Recreates media via `payload.create({ filePath })`, which uploads each original and its sizes straight to the bucket; then pages (as drafts first), `menuFilter` page-to-page relationships, then republishes pages that were published in the source. Media IDs are remapped to the new auto-increment IDs
    - Recreates site settings with deep media-ID remapping
 3. Triggers a `repository_dispatch` (`event_type: content_update`) against the GitHub repo, which starts the `Build and Deploy` workflow that regenerates the static site and deploys it to GitHub Pages
 
 ## Gotchas
 
-### Media lives in R2, served through Payload
+### Media lives in Neon Object Storage, served through Payload
 
-Uploads are stored in the private R2 bucket `jorkaring-media` (object key = filename, no prefix) and served by Payload at `/api/media/file/<filename>`, so media URLs have the same shape as before the move off Railway. The Render container's disk is ephemeral; nothing is kept there.
+Uploads are stored in the private bucket `jorkaring-media` (object key = filename, no prefix) and served by Payload at `/api/media/file/<filename>`, on the production branch of the `jorkaring` Neon project, so media URLs have the same shape as before the move off Railway. The bucket branches with the database: a Neon branch gets a copy-on-write snapshot of both. The Render container's disk is ephemeral; nothing is kept there.
 
 Caveats worth knowing:
-- The static site build downloads media via `pnpm run download-media` at build time. If Payload can't serve a file (missing in R2, or 500 for other reasons), that file is silently skipped and won't appear on the static site.
-- A raw bucket snapshot independent of the DB: `docker run --rm -v "$PWD/r2:/data" -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_REQUEST_CHECKSUM_CALCULATION=when_required -e AWS_RESPONSE_CHECKSUM_VALIDATION=when_required amazon/aws-cli s3 sync s3://jorkaring-media /data --endpoint-url "$S3_ENDPOINT" --region auto` (with the `S3_*` values exported as `AWS_*`).
+- The static site build downloads media via `pnpm run download-media` at build time. If Payload can't serve a file (missing in the bucket, or 500 for other reasons), that file is silently skipped and won't appear on the static site.
+- List or fetch raw objects with the Neon CLI: `neon bucket object list jorkaring-media --project-id damp-mouse-79639859`, `neon bucket object get ...`.
 
 ### Safety backup's media dir
 
-`export-content.sh … --production` first copies `payload/public/uploads/` from the local container into the backup, then walks every media doc and HTTP-fetches any file missing from the backup via its public `url`. So the safety backup is self-contained for everything the production DB references, *as long as R2 actually holds those files*. If a media row points at a missing object (HTTP 404 during fetch), the export logs a `⚠ Failed to fetch` line and continues; that file won't be in the safety backup either.
+`export-content.sh … --production` first copies `payload/public/uploads/` from the local container into the backup, then walks every media doc and HTTP-fetches any file missing from the backup via its public `url`. So the safety backup is self-contained for everything the production DB references, *as long as the bucket actually holds those files*. If a media row points at a missing object (HTTP 404 during fetch), the export logs a `⚠ Failed to fetch` line and continues; that file won't be in the safety backup either.
 
 ### Permissions on `payload/public/uploads/`
 

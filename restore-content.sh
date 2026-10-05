@@ -3,7 +3,7 @@
 #
 # Usage:
 #   ./restore-content.sh <backup-name>              # Local restore (Docker)
-#   ./restore-content.sh <backup-name> --production # Production restore (Neon + R2)
+#   ./restore-content.sh <backup-name> --production # Production restore (Neon)
 #
 # Options:
 #   --production    Restore to production (reads ~/.config/jorkaring/prod.env)
@@ -65,7 +65,7 @@ if [ "$PRODUCTION" = true ]; then
   fi
   . "$PROD_ENV"
 
-  for var in DATABASE_URL S3_BUCKET S3_ENDPOINT S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY; do
+  for var in DATABASE_URL S3_BUCKET S3_ENDPOINT S3_REGION S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY; do
     if [ -z "${!var}" ]; then
       echo "Error: $var missing in $PROD_ENV"
       exit 1
@@ -90,12 +90,13 @@ if [ "$PRODUCTION" = true ]; then
   # Run restore inside the payload container so file operations on
   # payload/public/uploads (which Docker created with root ownership) don't
   # fail with EACCES. With the S3_* vars set, payload.create uploads media
-  # straight to R2. GitHub credentials are NOT passed so hooks don't fire
+  # straight to the bucket. GitHub credentials are NOT passed so hooks don't fire
   # per-item; we trigger a single deploy manually after restore completes.
   docker compose exec -T \
     -e DATABASE_URL="$DATABASE_URL" \
     -e S3_BUCKET="$S3_BUCKET" \
     -e S3_ENDPOINT="$S3_ENDPOINT" \
+    -e S3_REGION="$S3_REGION" \
     -e S3_ACCESS_KEY_ID="$S3_ACCESS_KEY_ID" \
     -e S3_SECRET_ACCESS_KEY="$S3_SECRET_ACCESS_KEY" \
     payload pnpm restore:content "$BACKUP_NAME" $FORCE

@@ -62,14 +62,13 @@ export default buildConfig({
       bucket: process.env.S3_BUCKET || '',
       config: {
         endpoint: process.env.S3_ENDPOINT,
-        region: 'auto',
+        region: process.env.S3_REGION,
+        // Neon Object Storage only supports path-style addressing
+        forcePathStyle: true,
         credentials: {
           accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
           secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
         },
-        // R2 rejects the AWS SDK's default trailing checksums
-        requestChecksumCalculation: 'WHEN_REQUIRED',
-        responseChecksumValidation: 'WHEN_REQUIRED',
       },
     }),
   ],
