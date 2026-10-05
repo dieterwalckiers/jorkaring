@@ -12,7 +12,8 @@ How to pull the current production content (pages, media metadata, site settings
 The `--production` paths read production values from this file (outside the repo, `chmod 600`; override the path with `PROD_ENV=...`). Same keys as the Render service:
 
 ```sh
-DATABASE_URL=postgresql://...neon.tech/neondb?sslmode=require   # Neon direct (non-pooled) string
+# Single-quote values: the file is sourced by bash and Neon URLs contain '&'
+DATABASE_URL='postgresql://...neon.tech/neondb?sslmode=require&channel_binding=require'   # Neon direct (non-pooled)
 PAYLOAD_PUBLIC_SERVER_URL=https://jorkaring-cms.onrender.com
 S3_BUCKET=jorkaring-media
 S3_ENDPOINT=https://<accountid>.r2.cloudflarestorage.com
