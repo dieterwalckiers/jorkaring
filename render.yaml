@@ -26,7 +26,7 @@ services:
       - key: PAYLOAD_PUBLIC_SERVER_URL
         sync: false
       - key: PREVIEW_URL
-        sync: false
+        value: https://jorkaring-web-preview.onrender.com
       - key: GITHUB_TOKEN
         sync: false
       - key: GITHUB_REPO
@@ -45,3 +45,30 @@ services:
         sync: false
       - key: S3_SECRET_ACCESS_KEY
         sync: false
+
+  # Live preview for the admin: Nuxt in SSR mode with draft content. Sleeps
+  # like the CMS; the first preview after idle takes about a minute.
+  - type: web
+    name: jorkaring-web-preview
+    runtime: docker
+    plan: free
+    region: frankfurt
+    rootDir: web
+    dockerfilePath: ./Dockerfile.preview
+    dockerContext: .
+    healthCheckPath: /
+    buildFilter:
+      paths:
+        - web/**
+    envVars:
+      # Also passed as Docker build args; Dockerfile.preview bakes them in
+      - key: NUXT_PAYLOAD_API_URL
+        value: https://jorkaring-cms.onrender.com/api
+      - key: NUXT_PUBLIC_PAYLOAD_API_URL
+        value: https://jorkaring-cms.onrender.com/api
+      - key: PAYLOAD_API_URL
+        value: https://jorkaring-cms.onrender.com/api
+      - key: NUXT_PUBLIC_PAYLOAD_SERVER_URL
+        value: https://jorkaring-cms.onrender.com
+      - key: NUXT_PUBLIC_PREVIEW_MODE
+        value: "true"
