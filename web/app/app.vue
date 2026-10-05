@@ -3,7 +3,7 @@ import type { Media } from '~/types/media'
 import type { BlockSpacing, ContainerWidth, SiteSettings, SiteThemeColors } from '~/types/siteSettings'
 
 const { data: initialSettings } = useSiteSettings()
-const payloadBaseUrl = usePayloadBaseUrl()
+const resolveMediaUrl = useMediaUrlResolver()
 const route = useRoute()
 
 // Live preview for site settings: updates in real time when editing in Payload admin
@@ -51,10 +51,7 @@ const faviconUrl = computed(() => {
   const favicon = siteSettings.value?.favicon
   if (!favicon) return undefined
   if (typeof favicon === 'string') return undefined
-  const url = (favicon as Media).url
-  if (!url) return undefined
-  if (url.startsWith('http://') || url.startsWith('https://')) return url
-  return `${payloadBaseUrl}${url}`
+  return resolveMediaUrl((favicon as Media).url)
 })
 
 const googleFontBody = computed(() => siteSettings.value?.styling?.googleFontBody)

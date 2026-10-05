@@ -6,7 +6,7 @@ const props = defineProps<{
   block: LogoMarqueeBlockType
 }>()
 
-const baseUrl = usePayloadBaseUrl()
+const resolveMediaUrl = useMediaUrlResolver()
 
 const containerRef = ref<HTMLElement | null>(null)
 const trackRef = ref<HTMLElement | null>(null)
@@ -15,10 +15,7 @@ const measured = ref(false)
 
 const getImageUrl = (media: Media | string): string | undefined => {
   if (typeof media === 'string') return undefined
-  const url = media.sizes?.small?.url || media.url
-  if (!url) return undefined
-  if (url.startsWith('http://') || url.startsWith('https://')) return url
-  return `${baseUrl}${url}`
+  return resolveMediaUrl(media.sizes?.small?.url || media.url)
 }
 
 const getImageAlt = (logo: { image: Media | string; alt?: string }): string => {

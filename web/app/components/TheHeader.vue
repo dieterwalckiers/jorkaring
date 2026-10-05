@@ -28,7 +28,7 @@ const { currentPage } = useCurrentPage()
 const samePath = (a: string, b: string) =>
   a.replace(/\/+$/, '') === b.replace(/\/+$/, '')
 const apiUrl = usePayloadApiUrl()
-const payloadBaseUrl = usePayloadBaseUrl()
+const resolveMediaUrl = useMediaUrlResolver()
 const draftQuery = useDraftQuery()
 
 const { data: response } = await useFetch<PagesResponse>(`${apiUrl}/pages`, {
@@ -71,10 +71,7 @@ const logoUrl = computed(() => {
   if (!logo) return null
   if (typeof logo === 'string') return null
   const media = logo as Media
-  const url = media.sizes?.small?.url || media.sizes?.thumbnail?.url || media.url
-  if (!url) return null
-  if (url.startsWith('http://') || url.startsWith('https://')) return url
-  return `${payloadBaseUrl}${url}`
+  return resolveMediaUrl(media.sizes?.small?.url || media.sizes?.thumbnail?.url || media.url) ?? null
 })
 
 const menuAlignment = computed<HeaderMenuAlignment>(() => {

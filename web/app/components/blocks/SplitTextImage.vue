@@ -179,13 +179,8 @@ onUnmounted(() => {
 const imageSizes = computed(() => '(max-width: 768px) 100vw, 50vw')
 
 // Original image URL for natural sizing (avoids cropped responsive versions)
-const originalImageUrl = computed(() => {
-  if (!image.value?.url) return null
-  const baseUrl = usePayloadBaseUrl()
-  const url = image.value.url
-  if (url.startsWith('http://') || url.startsWith('https://')) return url
-  return `${baseUrl}${url}`
-})
+const resolveMediaUrl = useMediaUrlResolver()
+const originalImageUrl = computed(() => resolveMediaUrl(image.value?.url) ?? null)
 
 // Configuration with defaults
 const imagePosition = computed(() => props.block.imagePosition ?? 'right')

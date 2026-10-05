@@ -10,6 +10,10 @@ services:
     dockerfilePath: ./Dockerfile
     dockerContext: .
     healthCheckPath: /admin
+    # Only CMS changes redeploy; frontend pushes don't burn free build minutes
+    buildFilter:
+      paths:
+        - payload/**
     envVars:
       - key: DATABASE_URL
         sync: false

@@ -29,16 +29,9 @@ function usePayloadOrigin(): string {
   return config.public.payloadApiUrl.replace(/\/api$/, '')
 }
 
-// Returns the public payload base URL (for media URLs that need to work in the browser).
-// When staticMedia is enabled, returns '' so relative media URLs (e.g. /api/media/file/foo.avif)
-// pass through unchanged and are served from the same origin as the static site.
-export function usePayloadBaseUrl() {
-  return useStaticMedia() ? '' : usePayloadOrigin()
-}
-
 // Returns a resolver that normalizes a media URL into the form to embed in the rendered HTML.
 // In staticMedia mode, absolute URLs pointing at the Payload origin are rewritten to same-origin
-// relative paths — otherwise the static build still triggers cross-origin Railway fetches per request.
+// relative paths — otherwise the static build still triggers cross-origin CMS fetches per request.
 // The returned function is pure and safe to call inside computed/watch.
 export function useMediaUrlResolver(): (url: string | undefined | null) => string | undefined {
   const isStatic = useStaticMedia()
