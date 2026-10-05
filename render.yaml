@@ -15,6 +15,10 @@ services:
       paths:
         - payload/**
     envVars:
+      # Node gives each address of Neon's multi-IP host only 250 ms by default;
+      # on the 0.1 CPU free instance under load that can fail a DB connect.
+      - key: NODE_OPTIONS
+        value: --network-family-autoselection-attempt-timeout=2000
       - key: DATABASE_URL
         sync: false
       - key: PAYLOAD_SECRET
