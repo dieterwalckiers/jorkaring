@@ -1,8 +1,8 @@
 'use client'
 
 import { createClientFeature } from '@payloadcms/richtext-lexical/client'
-import { $patchStyleText } from '@lexical/selection'
-import { $getSelection, $isRangeSelection, type LexicalEditor } from 'lexical'
+import { $patchStyleText } from '@payloadcms/richtext-lexical/lexical/selection'
+import { $getSelection, $isRangeSelection, type LexicalEditor } from '@payloadcms/richtext-lexical/lexical'
 
 // Font size steps (in em units for scalability)
 const FONT_SIZE_STEPS = [

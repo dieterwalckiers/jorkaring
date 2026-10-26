@@ -33,7 +33,9 @@ import { FixedToolbarFeatureClient as FixedToolbarFeatureClient_e70f5e05f09f93e0
 import { HexColorField as HexColorField_69c7870344a325daf3bfa8790806bb3e } from '../../../fields/HexColorField'
 import { ThemeColorProvider as ThemeColorProvider_0dc51704687e55124abe2d121bf5f078 } from '@/components/ThemeColorProvider'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
+import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
 
+/** @type import('payload').ImportMap */
 export const importMap = {
   "@/fields/SlugField#SlugField": SlugField_95916a33066184e841b929a11d527ad9,
   "@/fields/MenuItemRowLabel#MenuItemRowLabel": MenuItemRowLabel_37783f46533b44dd67dfaf86dfb47bca,
@@ -69,5 +71,6 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#FixedToolbarFeatureClient": FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "/fields/HexColorField#HexColorField": HexColorField_69c7870344a325daf3bfa8790806bb3e,
   "@/components/ThemeColorProvider#ThemeColorProvider": ThemeColorProvider_0dc51704687e55124abe2d121bf5f078,
-  "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
+  "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1,
+  "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24
 }

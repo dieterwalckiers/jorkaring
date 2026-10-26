@@ -1,8 +1,8 @@
 'use client'
 
 import { createClientFeature } from '@payloadcms/richtext-lexical/client'
-import { $patchStyleText } from '@lexical/selection'
-import { $getSelection, $isRangeSelection, type LexicalEditor } from 'lexical'
+import { $patchStyleText } from '@payloadcms/richtext-lexical/lexical/selection'
+import { $getSelection, $isRangeSelection, type LexicalEditor } from '@payloadcms/richtext-lexical/lexical'
 
 /**
  * Module-level cache for custom color labels fetched from Site Settings.

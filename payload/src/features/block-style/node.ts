@@ -5,7 +5,7 @@ import {
   type LexicalNode,
   type LexicalUpdateJSON,
   type SerializedElementNode,
-} from 'lexical'
+} from '@payloadcms/richtext-lexical/lexical'
 
 export type SerializedBlockGroupNode = SerializedElementNode
 

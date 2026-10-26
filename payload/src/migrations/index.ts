@@ -49,6 +49,7 @@ import * as migration_20260613_120000_add_ebook_site_settings from './20260613_1
 import * as migration_20260614_120000_ebook_tally_to_mailchimp from './20260614_120000_ebook_tally_to_mailchimp';
 import * as migration_20260614_140000_item9_calendly_split from './20260614_140000_item9_calendly_split';
 import * as migration_20260621_120000_add_logo_marquee_colorize_on_hover from './20260621_120000_add_logo_marquee_colorize_on_hover';
+import * as migration_20261026_120000_payload_3_92_security_upgrade from './20261026_120000_payload_3_92_security_upgrade';
 
 export const migrations = [
   {
@@ -305,5 +306,10 @@ export const migrations = [
     up: migration_20260621_120000_add_logo_marquee_colorize_on_hover.up,
     down: migration_20260621_120000_add_logo_marquee_colorize_on_hover.down,
     name: '20260621_120000_add_logo_marquee_colorize_on_hover',
+  },
+  {
+    up: migration_20261026_120000_payload_3_92_security_upgrade.up,
+    down: migration_20261026_120000_payload_3_92_security_upgrade.down,
+    name: '20261026_120000_payload_3_92_security_upgrade',
   },
 ];
