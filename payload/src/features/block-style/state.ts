@@ -1,4 +1,4 @@
-import { createState } from 'lexical'
+import { createState } from '@payloadcms/richtext-lexical/lexical'
 
 /**
  * Custom node state attached to block-level element nodes (paragraph, heading).

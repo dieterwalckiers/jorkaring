@@ -1,7 +1,7 @@
 'use client'
 
 import { createClientFeature, $createInlineBlockNode } from '@payloadcms/richtext-lexical/client'
-import { $insertNodes, type LexicalEditor } from 'lexical'
+import { $insertNodes, type LexicalEditor } from '@payloadcms/richtext-lexical/lexical'
 import { AtIcon, PhoneIcon, InstagramIcon, LinkedInIcon } from './icons'
 
 /**

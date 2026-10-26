@@ -15,7 +15,7 @@ import {
   type LexicalEditor,
   type LexicalNode,
   type StateConfig,
-} from 'lexical'
+} from '@payloadcms/richtext-lexical/lexical'
 import {
   blockBgState,
   blockBorderState,
