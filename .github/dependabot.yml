@@ -1,0 +1,14 @@
+# Opens a PR when a newer node:22.x-alpine image is released, so security
+# patches reach Render without anyone watching. Majors (22 -> 24) are left
+# for manual review since they can break Payload or Nuxt.
+version: 2
+updates:
+  - package-ecosystem: docker
+    directories:
+      - /payload
+      - /web
+    schedule:
+      interval: daily
+    ignore:
+      - dependency-name: node
+        update-types: [version-update:semver-major]
