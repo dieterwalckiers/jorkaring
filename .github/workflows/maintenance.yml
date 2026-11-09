@@ -1,0 +1,36 @@
+# Monthly safety net for what Dependabot can't do. A failed job makes GitHub
+# email whoever last changed this file.
+name: Monthly maintenance
+
+on:
+  schedule:
+    - cron: '17 4 1 * *'
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        directory: [payload, web]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fail on critical vulnerabilities
+        working-directory: ${{ matrix.directory }}
+        run: npx -y pnpm@10.27.0 audit --prod --audit-level=critical
+
+  # Render only rebuilds on a push, and may reuse a cached base image.
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rebuild Render services with a cleared cache
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: |
+          for service in srv-db1mrpu0tbcc73bju3f0 srv-db1o837avr4c73csfq7g; do
+            curl --fail-with-body -sS -X POST "https://api.render.com/v1/services/$service/deploys" \
+              -H "Authorization: Bearer $RENDER_API_KEY" \
+              -H 'Content-Type: application/json' \
+              -d '{"clearCache": "clear"}'
+          done

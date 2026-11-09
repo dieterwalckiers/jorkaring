@@ -57,8 +57,7 @@ export default defineNuxtConfig({
       try {
         const response = await fetch(`${apiUrl}/pages?limit=500`)
         if (!response.ok) {
-          console.warn(`[prerender] Failed to fetch pages: ${response.status}`)
-          return
+          throw new Error(`HTTP ${response.status}`)
         }
 
         const data = await response.json() as { docs: Array<{ slug: string }> }
@@ -70,6 +69,11 @@ export default defineNuxtConfig({
         console.log(`[prerender] Added ${routes.length} page routes:`, routes)
       }
       catch (error) {
+        // `nuxt generate` must not publish a site without its pages; a plain
+        // build or dev server can start with the CMS asleep.
+        if (nitroConfig.static) {
+          throw error
+        }
         console.warn('[prerender] Could not fetch pages from Payload:', error)
       }
     },

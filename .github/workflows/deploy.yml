@@ -102,6 +102,25 @@ jobs:
           NODE_OPTIONS: '--max-old-space-size=8192'
         run: pnpm run generate
 
+      # A CMS hiccup during prerender (429 while Render restarts it, for example)
+      # only warns and still produces a site with the placeholder homepage and no
+      # subpages. Stop here so the last good deploy stays live.
+      - name: Check generated site
+        working-directory: web
+        env:
+          PAYLOAD_API_URL: ${{ secrets.PAYLOAD_API_URL }}
+        run: |
+          if grep -q 'Create a page with' .output/public/index.html; then
+            echo "Generated site has the placeholder homepage" >&2; exit 1
+          fi
+          pages=$(curl -fsS --retry 5 --retry-all-errors "$PAYLOAD_API_URL/pages?limit=500&depth=0")
+          slugs=$(echo "$pages" | jq -r '.docs[].slug | select(. != "home")')
+          for slug in $slugs; do
+            if [ ! -f ".output/public/$slug/index.html" ]; then
+              echo "Page missing from generated site: $slug" >&2; exit 1
+            fi
+          done
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
