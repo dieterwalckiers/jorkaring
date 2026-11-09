@@ -82,7 +82,9 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       routes: ['/'],
-      failOnError: false
+      failOnError: false,
+      // The free-tier CMS times out under Nitro's default concurrency
+      concurrency: 2
     },
     routeRules: {
       '/api/**': {

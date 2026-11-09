@@ -116,6 +116,11 @@ export function usePage(slug: MaybeRefOrGetter<string>) {
   }
 }
 
+// The free-tier CMS can take tens of seconds to answer while prerendering
+export const payloadFetchOptions = import.meta.prerender
+  ? { timeout: 60000, retry: 2, retryDelay: 5000 }
+  : { timeout: 10000, retry: 1 }
+
 export function useSiteSettings() {
   const apiUrl = usePayloadApiUrl()
   const draftQuery = useDraftQuery()
@@ -127,8 +132,7 @@ export function useSiteSettings() {
     },
     key: 'siteSettings',
     dedupe: 'defer',
-    timeout: 10000,
-    retry: 1,
+    ...payloadFetchOptions,
   })
 
   return {

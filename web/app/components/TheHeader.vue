@@ -40,8 +40,7 @@ const { data: response } = await useFetch<PagesResponse>(`${apiUrl}/pages`, {
   },
   key: 'menuPages',
   dedupe: 'defer',
-  timeout: 10000,
-  retry: 1,
+  ...payloadFetchOptions,
 })
 
 const { data: toolbarResponse } = await useFetch<PagesResponse>(`${apiUrl}/pages`, {
@@ -53,8 +52,7 @@ const { data: toolbarResponse } = await useFetch<PagesResponse>(`${apiUrl}/pages
   },
   key: 'toolbarPages',
   dedupe: 'defer',
-  timeout: 10000,
-  retry: 1,
+  ...payloadFetchOptions,
 })
 
 const { data: siteSettings } = useSiteSettings()
